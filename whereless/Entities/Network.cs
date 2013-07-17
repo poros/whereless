@@ -13,10 +13,16 @@ namespace whereless.Entities
         public virtual string Ssid { get; set; }
 
         public abstract void UpdateStats(IMeasure measure);
+        
         public virtual bool IsSameNetwork(IMeasure measure)
         {
             if (measure.Ssid == null) throw new ArgumentNullException("measure");
             return Ssid.Equals(measure.Ssid, System.StringComparison.Ordinal);
+        }
+        
+        public override string ToString()
+        {
+            return (base.ToString() + ": " + "Ssid = " + Ssid);
         }
     }
 }

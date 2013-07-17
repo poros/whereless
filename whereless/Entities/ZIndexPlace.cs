@@ -12,7 +12,7 @@ namespace whereless.Entities
         private IDictionary<string, Network> NetworksDictionary { get; set; }
         public virtual IList<Network> Networks {
             get { return NetworksDictionary.Values.ToList(); }
-            set { NetworksDictionary = value.ToDictionary(m => m.Ssid); }
+            protected set { NetworksDictionary = value.ToDictionary(m => m.Ssid); }
         }
 
         //the two constant to change in order to refine recognition precision
@@ -100,11 +100,10 @@ namespace whereless.Entities
             }
         }
 
-        //public virtual Location LocationReference { get; set; }
         public virtual void AddNetwork(string ssid, Network net)
         {
             NetworksDictionary.Add(ssid, net);
-            //((GaussianNetwork) net).PlaceReference = this;
+            //net.PlaceReference = this;
         }
     }
 }

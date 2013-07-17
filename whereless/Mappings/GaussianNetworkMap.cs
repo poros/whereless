@@ -17,7 +17,6 @@ namespace whereless.Mappings
             Map(x => x.N);
             Map(x => x.Mean);
             Map(x => x.StdDev);
-            //References(x => x.PlaceReference);
         }
     }
 }

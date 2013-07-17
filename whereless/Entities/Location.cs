@@ -13,8 +13,14 @@ namespace whereless.Entities
 
         public virtual int Id { get; protected set; }
         public virtual string Name { get; set; }
+        public virtual ulong Time { get; set; }
 
         public abstract bool TestInput(IList<IMeasure> measures);
         public abstract void UpdateStats(IList<IMeasure> measures);
+        
+        public override string ToString()
+        {
+            return (base.ToString() + ": " + "Name = " + Name + "; Time = " + Time);
+        }
     }
 }

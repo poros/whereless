@@ -38,6 +38,10 @@ namespace whereless.Entities
             StdDev = StdDev + delta * (sample - Mean);
         }
 
-        //public virtual Place PlaceReference { get; set; }
+        public override string ToString()
+        {
+            return (typeof (GaussianNetwork) + ": Ssid = " + Ssid + "; Mean = " + Mean + "; StdDev = " + StdDev +
+                    "; N = " + N);
+        }
     }
 }

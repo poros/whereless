@@ -10,6 +10,7 @@ namespace whereless.Entities
     public abstract class Place
     {
         public virtual int Id { get; protected set; }
+        //public virtual Location LocationReference { get; set; }
 
         //I have no time for studying a depency injection framework and it should not be the case
         //Consider abstract factory pattern over factory/template pattern (actually commented) if things get messy

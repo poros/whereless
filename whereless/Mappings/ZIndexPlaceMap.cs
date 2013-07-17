@@ -16,7 +16,6 @@ namespace whereless.Mappings
 
             HasMany(x => x.Networks)
                 .Cascade.All();
-            //References(x => x.LocationReference);
         }
     }
 }

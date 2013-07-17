@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using whereless.NativeWiFi;
 
 namespace whereless.Entities
@@ -11,56 +8,69 @@ namespace whereless.Entities
     public class MultiPlacesLocation : Location
     {
         public virtual ulong N { get; set; }
-        public virtual ulong Time
-        {
-            get { return N * Location.T; }
-            set { N = value / Location.T; }
-        }
 
-        //Locations are saved from most recent to oldest,
-        //because in case of locations with similar footprints (test may pass for both)
-        //more recent ones MUST be preferred, since the algorithm look for locations in order!!!
-        //(users are stupid, they can register the same location twice,
-        //let's give them the last, it would be the less disappointing thing to do)
-        private Stack<Place> PlacesStack { get; set; }
+        // Locations are saved from most recent to oldest,
+        // because in case of locations with similar footprints (test may pass for both)
+        // more recent ones MUST be preferred, since the algorithm look for locations in order!!!
+        // (users are stupid, they can register the same location twice,
+        // let's give them the last, it would be the less disappointing thing to do)
+        private Stack<Place> _places;
+
         public virtual IList<Place> Places
         {
-            get { return PlacesStack.ToList(); }
-            set { PlacesStack = new Stack<Place>(value); }
-        } 
-        private Place currPlace;
+            get { return _places.ToList(); }
+            set { _places = new Stack<Place>(value); }
+        }
+
+        private Place _currPlace;
 
         protected virtual Place PlaceFactory(IList<IMeasure> measures)
         {
             return new ZIndexPlace(measures);
         }
 
-        protected MultiPlacesLocation() { }
+        public virtual void AddPlace(Place place)
+        {
+            _places.Push(place);
+            //place.LocationReference = this;
+        }
+
+
+        protected MultiPlacesLocation()
+        {
+        }
 
         public MultiPlacesLocation(String name)
         {
             this.Name = name;
-            PlacesStack = new Stack<Place>();
+            _places = new Stack<Place>();
         }
 
         public MultiPlacesLocation(string name, IList<IMeasure> measures)
         {
             this.Name = name;
-            PlacesStack = new Stack<Place>();
-            AddPlace(PlaceFactory(measures));           
+            _places = new Stack<Place>();
+            AddPlace(PlaceFactory(measures));
+        }
+
+        public override ulong Time
+        {
+            get { return N*Location.T; }
+            set { N = value/Location.T; }
         }
 
         public override bool TestInput(IList<IMeasure> measures)
         {
-            if (currPlace != null && currPlace.TestInput(measures))
+            if (_currPlace != null && _currPlace.TestInput(measures))
             {
                 return true;
             }
-            var oldPlace = currPlace;
-            currPlace = null;
-            foreach (var place in PlacesStack.Where(place => place != oldPlace).Where(place => place.TestInput(measures)))
+            var oldPlace = _currPlace;
+            _currPlace = null;
+            foreach (
+                var place in _places.Where(place => place != oldPlace).Where(place => place.TestInput(measures)))
             {
-                currPlace = place;
+                _currPlace = place;
                 return true;
             }
             return false;
@@ -69,18 +79,12 @@ namespace whereless.Entities
         public override void UpdateStats(IList<IMeasure> measures)
         {
             //just to be sure that a current place is set
-            if (currPlace == null && !TestInput(measures))
+            if (_currPlace == null && !TestInput(measures))
             {
-                currPlace = PlacesStack.Peek();
+                _currPlace = _places.Peek();
             }
-            currPlace.UpdateStats(measures);
+            _currPlace.UpdateStats(measures);
             N += 1;
-        }
-
-        public virtual void AddPlace(Place place)
-        {
-            PlacesStack.Push(place);
-            //((ZIndexPlace) place).LocationReference = this;
         }
     }
 }

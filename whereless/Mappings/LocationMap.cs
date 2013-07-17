@@ -13,7 +13,10 @@ namespace whereless.Mappings
         public LocationMap()
         {
             Id(x => x.Id);
-            Map(x => x.Name);
+            Map(x => x.Name)
+                .Not.Nullable()
+                .Unique();
+            Map(x => x.Time);
             DiscriminateSubClassesOnColumn("type");
         }
     }

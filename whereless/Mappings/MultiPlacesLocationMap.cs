@@ -14,10 +14,8 @@ namespace whereless.Mappings
         {
             DiscriminatorValue("MultiplePlacesMap");
             Map(x => x.N);
-            Map(x => x.Time);
             HasMany(x => x.Places)
                 .Cascade.All();
-
         }
     }
 }

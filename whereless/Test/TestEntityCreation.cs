@@ -79,6 +79,14 @@ namespace whereless.Test
                     {
                         WriteLocationPretty(tmp);
                     }
+
+                    var networks = session.CreateCriteria(typeof(Network))
+                        .List<Network>();
+
+                    foreach (var network in networks)
+                    {
+                        Console.WriteLine(network.ToString());
+                    }
                 }
             }
         }
@@ -125,7 +133,8 @@ namespace whereless.Test
                     .UsingFile(DbFile))
                .Mappings(m =>
                     m.FluentMappings.AddFromAssemblyOf<App>()
-                    .Conventions.Add(DefaultCascade.All()))
+                    //.Conventions.Add(DefaultCascade.All())
+                    )
                 .ExposeConfiguration(BuildSchema)
                 .BuildSessionFactory();
         }
