@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.CompilerServices;
 using FluentNHibernate.Automapping;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
@@ -11,21 +12,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using whereless.Entities;
+using whereless.Model.Entities;
+using whereless.Model.Factory;
 using whereless.NativeWiFi;
 
-namespace whereless.Test
+namespace whereless.Model.Test
 {
     using NUnit.Framework;
 
+    
     [TestFixture]
     class TestEntityCreation
     {
         private const string DbFile = "firstTest.db";
 
         [Test]
-        public void TestNetworkCreate()
+        public void DummyTest()
         {
+            var entitiesFactory = EntitiesFactory.Factory;
+
             // create our NHibernate session factory
             var sessionFactory = CreateSessionFactory();
 
@@ -34,19 +39,28 @@ namespace whereless.Test
                 // populate the database
                 using (var transaction = session.BeginTransaction())
                 {
-                    Network net = new GaussianNetwork(new SimpleMeasure("ReteA", 10U));
+                    List<IMeasure> input = new List<IMeasure> {new SimpleMeasure("ReteA", 10U)};
+                    Location loc = entitiesFactory.CreateLocation("Location1", input);
 
-                    ZIndexPlace pl = new ZIndexPlace();
-                    pl.AddNetwork(net.Ssid, net);
-
-                    MultiPlacesLocation loc = new MultiPlacesLocation("Location1");
-                    loc.AddPlace(pl);
-
-
-                    // save both stores, this saves everything else via cascading
-                    //session.SaveOrUpdate(net);
-                    //session.SaveOrUpdate(pl);
+                    //this saves everything else via cascading
                     session.SaveOrUpdate(loc);
+
+                    transaction.Commit();
+                }
+            }
+
+            using (var session = sessionFactory.OpenSession())
+            {
+                using (var transaction = session.BeginTransaction())
+                {
+                    var locations = session.CreateCriteria(entitiesFactory.LocationType)
+                                           .List<Location>();
+
+                    foreach (var location in locations)
+                    {
+                        Console.WriteLine(location.ToString());
+                        session.Delete(location);
+                    }
 
                     transaction.Commit();
                 }
@@ -56,61 +70,15 @@ namespace whereless.Test
             {
                 using (session.BeginTransaction())
                 {
-                    //var networks = session.CreateCriteria(typeof(GaussianNetwork))
-                    //    .List<GaussianNetwork>();
 
-                    //foreach (var tmp in networks)
-                    //{
-                    //    WriteNetworkPretty(tmp);
-                    //}
-
-                    //var places = session.CreateCriteria(typeof(ZIndexPlace))
-                    //    .List<ZIndexPlace>();
-
-                    //foreach (var tmp in places)
-                    //{
-                    //    WritePlacePretty(tmp);
-                    //}
-                    
-                    var locations = session.CreateCriteria(typeof(MultiPlacesLocation))
-                        .List<MultiPlacesLocation>();
-
-                    foreach (var tmp in locations)
-                    {
-                        WriteLocationPretty(tmp);
-                    }
-
-                    var networks = session.CreateCriteria(typeof(Network))
-                        .List<Network>();
+                    var networks = session.CreateCriteria(entitiesFactory.NetworkType)
+                            .List<Network>();
 
                     foreach (var network in networks)
                     {
                         Console.WriteLine(network.ToString());
                     }
                 }
-            }
-        }
-
-        private static void WriteNetworkPretty(GaussianNetwork network)
-        {
-            Console.WriteLine(network.Ssid + " " + network.Mean + " " + network.StdDev + " " + network.N);
-        }
-
-        private static void WritePlacePretty(ZIndexPlace place)
-        {
-            Console.WriteLine("Place " + place.Id + ":");
-            foreach (var network in place.Networks)
-            {
-                WriteNetworkPretty((GaussianNetwork)network);
-            }
-        }
-
-        private static void WriteLocationPretty(MultiPlacesLocation location)
-        {
-            Console.WriteLine("Location "+ location.Name + ":");
-            foreach (var place in location.Places)
-            {
-                WritePlacePretty((ZIndexPlace)place);
             }
         }
 
@@ -133,7 +101,7 @@ namespace whereless.Test
                     .UsingFile(DbFile))
                .Mappings(m =>
                     m.FluentMappings.AddFromAssemblyOf<App>()
-                    //.Conventions.Add(DefaultCascade.All())
+                //.Conventions.Add(DefaultCascade.All())
                     )
                 .ExposeConfiguration(BuildSchema)
                 .BuildSessionFactory();

@@ -68,10 +68,12 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.SQLite">
+    <Reference Include="System.Data.SQLite, Version=1.0.87.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\System.Data.SQLite.1.0.87.0\lib\net45\System.Data.SQLite.dll</HintPath>
     </Reference>
-    <Reference Include="System.Data.SQLite.Linq">
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.87.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\System.Data.SQLite.1.0.87.0\lib\net45\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
@@ -91,26 +93,29 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Entities\Location.cs">
+    <Compile Include="Model\Entities\Location.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Entities\MultiPlacesLocation.cs">
+    <Compile Include="Model\Entities\MultiPlacesLocation.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Entities\Place.cs">
+    <Compile Include="Model\Entities\Place.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Entities\ZIndexPlace.cs">
+    <Compile Include="Model\Entities\ZIndexPlace.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Mappings\GaussianNetworkMap.cs" />
-    <Compile Include="Mappings\LocationMap.cs" />
-    <Compile Include="Mappings\MultiPlacesLocationMap.cs" />
-    <Compile Include="Mappings\NetworkMap.cs" />
-    <Compile Include="Mappings\PlaceMap.cs" />
-    <Compile Include="Mappings\ZIndexPlaceMap.cs" />
+    <Compile Include="Model\Factory\EntitiesFactory.cs" />
+    <Compile Include="Model\Factory\MplZipGn.cs" />
+    <Compile Include="Model\Mappings\GaussianNetworkMap.cs" />
+    <Compile Include="Model\Mappings\LocationMap.cs" />
+    <Compile Include="Model\Mappings\MultiPlacesLocationMap.cs" />
+    <Compile Include="Model\Mappings\NetworkMap.cs" />
+    <Compile Include="Model\Mappings\PlaceMap.cs" />
+    <Compile Include="Model\Mappings\ZIndexPlaceMap.cs" />
+    <Compile Include="Model\Model.cs" />
     <Compile Include="NativeWiFi\SimpleMeasure.cs" />
-    <Compile Include="Test\TestEntityCreation.cs" />
+    <Compile Include="Model\Test\TestEntityCreation.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -119,9 +124,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CascadeConvention.cs" />
-    <Compile Include="Entities\GaussianNetwork.cs" />
-    <Compile Include="Entities\Network.cs" />
+    <Compile Include="Model\Entities\GaussianNetwork.cs" />
+    <Compile Include="Model\Entities\Network.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -166,6 +170,9 @@
     <Content Include="x86\SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Model\Repository\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

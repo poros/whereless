@@ -1,20 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using whereless.NativeWiFi;
 
-namespace whereless.Entities
+namespace whereless.Model.Entities
 {
     public class MultiPlacesLocation : Location
     {
-        public virtual ulong N { get; set; }
-
         // Locations are saved from most recent to oldest,
         // because in case of locations with similar footprints (test may pass for both)
         // more recent ones MUST be preferred, since the algorithm look for locations in order!!!
         // (users are stupid, they can register the same location twice,
         // let's give them the last, it would be the less disappointing thing to do)
         private Stack<Place> _places;
+        private Place _currPlace;
+
+        
+        public virtual ulong N { get; set; }
+        
+        public override ulong Time
+        {
+            get { return N * Location.T; }
+            set { N = value / Location.T; }
+        }
+
 
         public virtual IList<Place> Places
         {
@@ -22,13 +32,7 @@ namespace whereless.Entities
             set { _places = new Stack<Place>(value); }
         }
 
-        private Place _currPlace;
-
-        protected virtual Place PlaceFactory(IList<IMeasure> measures)
-        {
-            return new ZIndexPlace(measures);
-        }
-
+        //NHibernate specific in case of double-side reference
         public virtual void AddPlace(Place place)
         {
             _places.Push(place);
@@ -36,13 +40,11 @@ namespace whereless.Entities
         }
 
 
-        protected MultiPlacesLocation()
-        {
-        }
+        protected MultiPlacesLocation() { }
 
         public MultiPlacesLocation(String name)
         {
-            this.Name = name;
+            Name = name;
             _places = new Stack<Place>();
         }
 
@@ -50,14 +52,9 @@ namespace whereless.Entities
         {
             this.Name = name;
             _places = new Stack<Place>();
-            AddPlace(PlaceFactory(measures));
+            AddPlace(Factory.CreatePlace(measures));
         }
 
-        public override ulong Time
-        {
-            get { return N*Location.T; }
-            set { N = value/Location.T; }
-        }
 
         public override bool TestInput(IList<IMeasure> measures)
         {
@@ -85,6 +82,16 @@ namespace whereless.Entities
             }
             _currPlace.UpdateStats(measures);
             N += 1;
+        }
+
+        public override string ToString()
+        {
+            StringBuilder buffer = new StringBuilder();
+            foreach (var place in Places)
+            {
+                buffer.AppendLine(place.ToString());
+            }
+            return (base.ToString() + " N = " + N + "; Places = {\n" + buffer + "} ");
         }
     }
 }

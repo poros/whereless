@@ -2,39 +2,49 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using whereless.NativeWiFi;
 
-namespace whereless.Entities
+namespace whereless.Model.Entities
 {
     public class ZIndexPlace : Place
     {
-        private IDictionary<string, Network> NetworksDictionary { get; set; }
-        public virtual IList<Network> Networks {
-            get { return NetworksDictionary.Values.ToList(); }
-            protected set { NetworksDictionary = value.ToDictionary(m => m.Ssid); }
-        }
-
         //the two constant to change in order to refine recognition precision
         private static readonly double bigZ = 4D;
         private static readonly double k = 1.96D;
+        
 
-        protected override Network NetworkFactory(IMeasure measure)
+        private IDictionary<string, Network> _networks;
+        
+
+        public virtual IList<Network> Networks
         {
-            return new GaussianNetwork(measure);
+            get { return _networks.Values.ToList(); }
+            protected set { _networks = value.ToDictionary(m => m.Ssid); }
         }
 
-        protected ZIndexPlace() { }
-
-        public ZIndexPlace(IList<IMeasure> measures = null)
+        //NHibernate specific in case of double-side reference
+        public virtual void AddNetwork(string ssid, Network net)
         {
-            NetworksDictionary = new Dictionary<string, Network>();
+            _networks.Add(ssid, net);
+            //net.PlaceReference = this;
+        }
+  
+
+        public ZIndexPlace()
+        {
+            _networks = new Dictionary<string, Network>();
+        }
+
+        public ZIndexPlace(IList<IMeasure> measures)
+        {
+            _networks = new Dictionary<string, Network>();
             if (measures == null) return;
             foreach (var measure in measures)
             {
-                AddNetwork(measure.Ssid, NetworkFactory(measure));
+                AddNetwork(measure.Ssid, Factory.CreateNetwork(measure));
             }
         }
+
 
         public override bool TestInput(IList<IMeasure> measures)
         {
@@ -42,7 +52,7 @@ namespace whereless.Entities
             double zIndex = 0;
             ulong n = 0;
 
-            foreach (var gNet in NetworksDictionary.Values.Select(net => net as GaussianNetwork))
+            foreach (var gNet in _networks.Values.Select(net => net as GaussianNetwork))
             {
                 if (gNet == null)
                 {
@@ -58,7 +68,7 @@ namespace whereless.Entities
                 {
                     stdDev = gNet.StdDev;
                 }
-                IMeasure measure = null;
+                IMeasure measure;
                 if(dMeasures.TryGetValue(gNet.Ssid, out measure))
                 {
                     zIndex += (gNet.N + 1) * Math.Abs((measure.SignalQuality - gNet.Mean) / stdDev);
@@ -72,7 +82,7 @@ namespace whereless.Entities
 
             foreach (var measure in dMeasures.Values)
             {
-                if (!NetworksDictionary.ContainsKey(measure.Ssid))
+                if (!_networks.ContainsKey(measure.Ssid))
                 {
                     n += 1;
                     zIndex += (measure.SignalQuality / GaussianNetwork.SignalQualityMax) * bigZ; //penalty
@@ -88,22 +98,27 @@ namespace whereless.Entities
         {
             foreach (IMeasure measure in measures)
             {
-                Network net = null;
-                if (NetworksDictionary.TryGetValue(measure.Ssid, out net))
+                Network net;
+                if (_networks.TryGetValue(measure.Ssid, out net))
                 {
                     net.UpdateStats(measure);
                 }
                 else
                 {
-                    AddNetwork(measure.Ssid, NetworkFactory(measure));
+                    AddNetwork(measure.Ssid, Factory.CreateNetwork(measure));
                 }
             }
         }
 
-        public virtual void AddNetwork(string ssid, Network net)
+
+        public override string ToString()
         {
-            NetworksDictionary.Add(ssid, net);
-            //net.PlaceReference = this;
+            StringBuilder buffer = new StringBuilder();
+            foreach (var network in Networks)
+            {
+                buffer.AppendLine(network.ToString());
+            }
+            return (base.ToString() + " Networks = {\n" + buffer + "} ");
         }
     }
 }

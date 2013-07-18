@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using whereless.Model.Factory;
 using whereless.NativeWiFi;
 
-namespace whereless.Entities
+namespace whereless.Model.Entities
 {
     public abstract class Location
     {
+        protected static readonly EntitiesFactory Factory = EntitiesFactory.Factory;
         protected static readonly ulong T = 1000; //ms between probes TO BE MOVED
 
         public virtual int Id { get; protected set; }
@@ -20,7 +18,7 @@ namespace whereless.Entities
         
         public override string ToString()
         {
-            return (base.ToString() + ": " + "Name = " + Name + "; Time = " + Time);
+            return (this.GetType().Name + ": " + "Name = " + Name + "; Time = " + Time + ";");
         }
     }
 }

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FluentNHibernate.Mapping;
-using whereless.Entities;
+﻿using FluentNHibernate.Mapping;
+using whereless.Model.Entities;
 
-namespace whereless.Mappings
+namespace whereless.Model.Mappings
 {
     class LocationMap : ClassMap<Location>
     {
