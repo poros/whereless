@@ -6,10 +6,14 @@ using whereless.NativeWiFi;
 
 namespace whereless.Model.Entities
 {
+    // implements a check of compatibility based on the z-score of the input measure of each network
+    // weighted by the number of observation collected per each network
     public class ZIndexPlace : Place
     {
-        //the two constant to change in order to refine recognition precision
+        // the two constant to change in order to refine recognition precision
+        // define the penalty in terms of standard deviation for just discovered networks
         private static readonly double bigZ = 4D;
+        // defines the range of input acceptability (99.99%)
         private static readonly double k = 1.96D;
         
 
@@ -52,6 +56,7 @@ namespace whereless.Model.Entities
             double zIndex = 0;
             ulong n = 0;
 
+            // foreach network already registered
             foreach (var gNet in _networks.Values.Select(net => net as GaussianNetwork))
             {
                 if (gNet == null)
@@ -64,15 +69,18 @@ namespace whereless.Model.Entities
                 //for a location first setup 
                 n += gNet.N + 1;
                 double stdDev = GaussianNetwork.SignalQualityMax;
+                // in order to avoid 0 division for newly added networks (standard dev = 0)
                 if(!gNet.StdDev.Equals(0D))
                 {
                     stdDev = gNet.StdDev;
                 }
                 IMeasure measure;
+                // if the network is present in the input measures
                 if(dMeasures.TryGetValue(gNet.Ssid, out measure))
                 {
                     zIndex += (gNet.N + 1) * Math.Abs((measure.SignalQuality - gNet.Mean) / stdDev);
                 }
+                // if not consider a measure with signal quality equal to 0
                 else
                 {
                     //consider also gNet + 1 (change n above for coherence)
@@ -80,12 +88,14 @@ namespace whereless.Model.Entities
                 }
             }
 
+            // foreach just discovered network
             foreach (var measure in dMeasures.Values)
             {
                 if (!_networks.ContainsKey(measure.Ssid))
                 {
+                    // accounts for a big z-score (is it enough???)
                     n += 1;
-                    zIndex += (measure.SignalQuality / GaussianNetwork.SignalQualityMax) * bigZ; //penalty
+                    zIndex += (measure.SignalQuality / GaussianNetwork.SignalQualityMax) * bigZ;
                 }
             }
 

@@ -3,10 +3,12 @@ using whereless.NativeWiFi;
 
 namespace whereless.Model.Entities
 {
-    //a normal distribution of the power of a network over time is assumed
+    // a normal distribution of the power of a network over time is assumed
     public class GaussianNetwork : Network
     {
+        // range of acceptance (corresponds to 99.99%)
         private static readonly double k = 1.96D;
+        // signal quality varies between 0 and 100
         private static readonly double signalQualityMax = 100D;
         
 
@@ -51,6 +53,7 @@ namespace whereless.Model.Entities
 
         public override bool TestInput(IMeasure measure)
         {
+            // SSIDs have not a standard character set 
             if (Ssid.Equals(measure.Ssid, StringComparison.Ordinal))
             {
                 double dist = Math.Abs((measure.SignalQuality - Mean));

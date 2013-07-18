@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using whereless.NativeWiFi;
@@ -16,13 +17,14 @@ namespace whereless.Model.Entities
         private Stack<Place> _places;
         private Place _currPlace;
 
-        
+        // number of observations
         public virtual ulong N { get; set; }
         
+        //time is given in terms of observations and default time between them
         public override ulong Time
         {
-            get { return N * Location.T; }
-            set { N = value / Location.T; }
+            get { return N * T; }
+            set { N = value / T; }
         }
 
 
@@ -42,22 +44,21 @@ namespace whereless.Model.Entities
 
         protected MultiPlacesLocation() { }
 
-        public MultiPlacesLocation(String name)
+        public MultiPlacesLocation(String name) : base(name)
         {
-            Name = name;
             _places = new Stack<Place>();
         }
 
-        public MultiPlacesLocation(string name, IList<IMeasure> measures)
+        public MultiPlacesLocation(string name, IList<IMeasure> measures) : base(name)
         {
-            this.Name = name;
             _places = new Stack<Place>();
             AddPlace(Factory.CreatePlace(measures));
         }
 
-
+        // REMARK side effect: always set current place if return true
         public override bool TestInput(IList<IMeasure> measures)
         {
+            // proximity preference
             if (_currPlace != null && _currPlace.TestInput(measures))
             {
                 return true;
@@ -70,6 +71,7 @@ namespace whereless.Model.Entities
                 _currPlace = place;
                 return true;
             }
+            // REMARK current place was not set up
             return false;
         }
 
@@ -80,6 +82,8 @@ namespace whereless.Model.Entities
             {
                 _currPlace = _places.Peek();
             }
+            // TODO find a better way than a side effect
+            Debug.Assert(_currPlace != null, "_currPlace != null");
             _currPlace.UpdateStats(measures);
             N += 1;
         }

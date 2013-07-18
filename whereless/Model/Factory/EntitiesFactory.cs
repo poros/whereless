@@ -10,9 +10,15 @@ namespace whereless.Model.Factory
     // Things got messy :P
     public abstract class EntitiesFactory
     {
-        private static readonly EntitiesFactory Instance = new MplZipGn();
+        private static readonly EntitiesFactory Instance = InstantiateFactory();
 
         protected EntitiesFactory() {}
+
+        // TODO implement logic in order to instantiate the correct factory
+        private static EntitiesFactory InstantiateFactory()
+        {
+            return new MplZipGn();
+        }
 
         public static EntitiesFactory Factory
         {

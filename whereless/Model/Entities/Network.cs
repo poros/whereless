@@ -23,8 +23,9 @@ namespace whereless.Model.Entities
             _ssid = measure.Ssid;
         }
 
-
+        // test if the input measures are compatible with the network
         public abstract bool TestInput(IMeasure measure);
+        // update statistics of the network with the input measures
         public abstract void UpdateStats(IMeasure measure);
        
 
