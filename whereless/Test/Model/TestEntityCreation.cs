@@ -8,6 +8,7 @@ using FluentNHibernate.Cfg.Db;
 using FluentNHibernate.Conventions.Helpers;
 using NHibernate;
 using NHibernate.Cfg;
+
 using NHibernate.Tool.hbm2ddl;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,9 +36,6 @@ namespace whereless.Test.Model
         [Test]
         public void DummyTest()
         {
-            // BasicConfigurator replaced with XmlConfigurator.
-            XmlConfigurator.Configure();
-            
             var entitiesFactory = EntitiesFactory.Factory;
 
             // create our NHibernate session factory
@@ -48,7 +46,7 @@ namespace whereless.Test.Model
                 // populate the database
                 using (var transaction = session.BeginTransaction())
                 {
-                    List<IMeasure> input = new List<IMeasure> {new SimpleMeasure("ReteA", 10U)};
+                    List<IMeasure> input = new List<IMeasure> { new SimpleMeasure("ReteA", 10U) };
                     Location loc = entitiesFactory.CreateLocation("Location1", input);
 
                     //this saves everything else via cascading

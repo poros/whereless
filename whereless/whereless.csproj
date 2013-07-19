@@ -118,6 +118,7 @@
     <Compile Include="Model\Model.cs" />
     <Compile Include="NativeWiFi\SimpleMeasure.cs" />
     <Compile Include="Test\Model\TestEntityCreation.cs" />
+    <Compile Include="Test\TestInitializer.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
