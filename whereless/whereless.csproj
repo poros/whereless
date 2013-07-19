@@ -76,6 +76,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\System.Data.SQLite.1.0.87.0\lib\net45\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -115,7 +117,7 @@
     <Compile Include="Model\Mappings\ZIndexPlaceMap.cs" />
     <Compile Include="Model\Model.cs" />
     <Compile Include="NativeWiFi\SimpleMeasure.cs" />
-    <Compile Include="Model\Test\TestEntityCreation.cs" />
+    <Compile Include="Test\Model\TestEntityCreation.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -158,12 +160,16 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="NuGet_Packets.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Log4net_Testing.xml" />
+    <Resource Include="Log4net.xml" />
     <Content Include="x64\SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

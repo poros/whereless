@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using log4net;
+using log4net.Config;
 
 namespace whereless
 {
@@ -22,6 +24,9 @@ namespace whereless
     {
         public MainWindow()
         {
+            XmlConfigurator.Configure();
+            ILog log = LogManager.GetLogger(this.GetType());
+            log.Info("whereless started...");
             InitializeComponent();
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using FluentNHibernate.Automapping;
 using FluentNHibernate.Cfg;
@@ -12,23 +13,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using log4net;
+using log4net.Config;
 using whereless.Model.Entities;
 using whereless.Model.Factory;
 using whereless.NativeWiFi;
 
-namespace whereless.Model.Test
+namespace whereless.Test.Model
 {
     using NUnit.Framework;
 
-    
     [TestFixture]
     class TestEntityCreation
     {
+        // Define a static logger variable so that it references the
+        // Logger instance named "MyApp".
+        private static readonly ILog Log = LogManager.GetLogger(typeof(TestEntityCreation));
+
         private const string DbFile = "firstTest.db";
 
         [Test]
         public void DummyTest()
         {
+            // BasicConfigurator replaced with XmlConfigurator.
+            XmlConfigurator.Configure();
+            
             var entitiesFactory = EntitiesFactory.Factory;
 
             // create our NHibernate session factory
