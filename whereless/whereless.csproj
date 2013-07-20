@@ -109,15 +109,22 @@
     </Compile>
     <Compile Include="Model\Factory\EntitiesFactory.cs" />
     <Compile Include="Model\Factory\MplZipGn.cs" />
+    <Compile Include="Model\IModel.cs" />
     <Compile Include="Model\Mappings\GaussianNetworkMap.cs" />
     <Compile Include="Model\Mappings\LocationMap.cs" />
     <Compile Include="Model\Mappings\MultiPlacesLocationMap.cs" />
     <Compile Include="Model\Mappings\NetworkMap.cs" />
     <Compile Include="Model\Mappings\PlaceMap.cs" />
     <Compile Include="Model\Mappings\ZIndexPlaceMap.cs" />
-    <Compile Include="Model\Model.cs" />
+    <Compile Include="Model\NHModel.cs" />
+    <Compile Include="Model\Repository\IRepository.cs" />
+    <Compile Include="Model\Repository\IUnitOfWork.cs" />
+    <Compile Include="Model\Repository\NHRepository.cs" />
+    <Compile Include="Model\Repository\NHUnitOfWork.cs" />
     <Compile Include="NativeWiFi\SimpleMeasure.cs" />
+    <Compile Include="Test\Model\TestRepository.cs" />
     <Compile Include="Test\Model\TestEntityCreation.cs" />
+    <Compile Include="Test\Model\TestUnitOfWork.cs" />
     <Compile Include="Test\TestInitializer.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -178,9 +185,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\Repository\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
