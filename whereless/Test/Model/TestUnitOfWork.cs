@@ -35,9 +35,9 @@ namespace whereless.Test.Model
         [Test]
         public void UowTest()
         {
-            var entitiesFactory = NHModel.EntitiesFactory;
+            var entitiesFactory = ModelHelper.EntitiesFactory;
 
-            using (var uow = NHModel.GetUnitOfWork())
+            using (var uow = ModelHelper.GetUnitOfWork())
             {
                 // populate the database
 
@@ -51,7 +51,7 @@ namespace whereless.Test.Model
                 uow.Commit();
             }
 
-            using (var uow = NHModel.GetUnitOfWork())
+            using (var uow = ModelHelper.GetUnitOfWork())
             {
                 var loc = uow.GetLocationByName("Location3");
                 Console.WriteLine(loc.ToString());

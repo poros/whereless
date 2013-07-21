@@ -17,7 +17,10 @@ namespace whereless.Model.Entities
         // let's give them the last, it would be the less disappointing thing to do)
         private Stack<Place> _places;
         private Place _currPlace;
-        private readonly IEntitiesFactory _Factory = NHModel.EntitiesFactory;
+        //REMARK!!! This is an emergency solution. Impossible to move it in ModelHelper
+        // but in general it should not be here.
+        // Consider to redisgn the whole entity layer
+        private readonly IEntitiesFactory _Factory = NHModel.GetEntitiesFactory();
 
         // number of observations
         public virtual ulong N { get; set; }

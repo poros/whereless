@@ -7,7 +7,8 @@ using whereless.Model.Entities;
 
 namespace whereless.Model.Repository
 {
-    public interface ILocationRepository : IRepository<Location>, ILocationOperations
+    public interface ILocationOperations
     {
+        Location GetLocationByName(string name);
     }
 }

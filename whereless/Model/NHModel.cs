@@ -14,14 +14,6 @@ namespace whereless.Model
 {
     public class NHModel : IModel
     {
-        private static readonly NHModel Instance = new NHModel();
-
-        private NHModel() {}
-
-        public static NHModel Handle
-        {
-            get { return Instance; }
-        }
 
         private const string DbFile = "whereless.db";
         // REMARK The order of these two is really important!!!
@@ -31,29 +23,27 @@ namespace whereless.Model
         private static readonly IEntitiesFactory _entitiesFactory = CreateEntitiesFactory();
         private static readonly ISessionFactory _sessionFactory = CreateSessionFactory();
 
-        
-
-        internal static ISessionFactory SessionFactory
+        public NHModel()
         {
-            get { return _sessionFactory; }
+
         }
 
-        public static IRepository<T> GetRepository<T>() where T : class 
+        public IRepository<T> GetRepository<T>() where T : class 
         {
-            return new NHRepository<T>();
+            return new NHRepository<T>(_sessionFactory);
         }
 
-        public static ILocationRepository GetLocationRepository()
+        public ILocationRepository GetLocationRepository()
         {
-            return new LocationNHRepository();
+            return new LocationNHRepository(_sessionFactory);
         }
 
-        public static IUnitOfWork GetUnitOfWork()
+        public IUnitOfWork GetUnitOfWork()
         {
-            return new NHUnitOfWork();
+            return new NHUnitOfWork(_sessionFactory);
         }
 
-        public static IEntitiesFactory EntitiesFactory
+        public IEntitiesFactory EntitiesFactory
         {
             get { return _entitiesFactory; }
         }
@@ -62,6 +52,12 @@ namespace whereless.Model
         {
             return new MplZipGn();
         }
+
+        internal ISessionFactory SessionFactory
+        {
+            get { return _sessionFactory; }
+        }
+
         /// <summary>
         /// Configure NHibernate. This method returns an ISessionFactory instance that is
         /// populated with mappings created by Fluent NHibernate.
@@ -112,6 +108,11 @@ namespace whereless.Model
             // and exports a database schema from it
             new SchemaExport(config)
                 .Create(false, true);
+        }
+
+        internal static IEntitiesFactory GetEntitiesFactory()
+        {
+            return _entitiesFactory;
         }
     }
 }

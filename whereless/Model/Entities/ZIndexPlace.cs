@@ -12,7 +12,10 @@ namespace whereless.Model.Entities
     public class ZIndexPlace : Place
     {
         // factory for creating child entities
-        private static readonly IEntitiesFactory _Factory = NHModel.EntitiesFactory;
+        //REMARK!!! This is an emergency solution. Impossible to move it in ModelHelper
+        // but in general it should not be here.
+        // Consider to redisgn the whole entity layer
+        private readonly IEntitiesFactory _Factory = NHModel.GetEntitiesFactory();
 
         // the two constant to change in order to refine recognition precision
         // define the penalty in terms of standard deviation for just discovered networks

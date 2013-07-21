@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using NHibernate;
@@ -9,11 +10,17 @@ namespace whereless.Model.Repository
 {
     public class NHRepository<T> : IRepository<T> where T : class
     {
-        protected static readonly ISessionFactory sessionFactory = NHModel.SessionFactory;
+        protected readonly ISessionFactory SessionFactory;
+
+        public NHRepository(ISessionFactory sessionFactory)
+        {
+            Debug.Assert(sessionFactory != null, "sessionFactory != null");
+            this.SessionFactory = sessionFactory;
+        }
 
         public T Get(object id)
         {
-            using (var session = sessionFactory.OpenSession())
+            using (var session = SessionFactory.OpenSession())
             {
                 using (var transaction = session.BeginTransaction())
                 {
@@ -26,7 +33,7 @@ namespace whereless.Model.Repository
 
         public void Save(T value)
         {
-            using (var session = sessionFactory.OpenSession())
+            using (var session = SessionFactory.OpenSession())
             {
                 using (var transaction = session.BeginTransaction())
                 {
@@ -38,7 +45,7 @@ namespace whereless.Model.Repository
 
         public void Update(T value)
         {
-            using (var session = sessionFactory.OpenSession())
+            using (var session = SessionFactory.OpenSession())
             {
                 using (var transaction = session.BeginTransaction())
                 {
@@ -50,7 +57,7 @@ namespace whereless.Model.Repository
 
         public void Delete(T value)
         {
-            using (var session = sessionFactory.OpenSession())
+            using (var session = SessionFactory.OpenSession())
             {
                 using (var transaction = session.BeginTransaction())
                 {
@@ -62,7 +69,7 @@ namespace whereless.Model.Repository
 
         public IList<T> GetAll()
         {
-            using (var session = sessionFactory.OpenSession())
+            using (var session = SessionFactory.OpenSession())
             {
                 using (var transaction = session.BeginTransaction())
                 {

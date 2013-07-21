@@ -8,21 +8,21 @@ using whereless.Model.Entities;
 namespace whereless.Model.Repository
 {
 
-    public class NHUnitOfWork : IUnitOfWork
+    public class NHUnitOfWork : IUnitOfWork, ILocationOperations
     {
 
-        private static readonly ISessionFactory SessionFactory = NHModel.SessionFactory;
         private static readonly ILog Log = LogManager.GetLogger(typeof(NHUnitOfWork));
+        private readonly ISessionFactory _sessionFactory;
 
         private readonly ISession _session;
-        private ITransaction _transaction;
+        private readonly ITransaction _transaction;
 
         private bool _disposed = false;
 
-        public NHUnitOfWork()
+        public NHUnitOfWork(ISessionFactory sessionFactory)
         {
-
-            _session = SessionFactory.OpenSession();
+            _sessionFactory = sessionFactory;
+            _session = _sessionFactory.OpenSession();
             _transaction = _session.BeginTransaction();
         }
 

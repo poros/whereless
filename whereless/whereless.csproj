@@ -116,11 +116,15 @@
     <Compile Include="Model\Mappings\NetworkMap.cs" />
     <Compile Include="Model\Mappings\PlaceMap.cs" />
     <Compile Include="Model\Mappings\ZIndexPlaceMap.cs" />
+    <Compile Include="Model\ModelHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Model\NHModel.cs" />
     <Compile Include="Model\Repository\ILocationRepository.cs" />
     <Compile Include="Model\Repository\IRepository.cs" />
     <Compile Include="Model\Repository\IUnitOfWork.cs" />
     <Compile Include="Model\Repository\LocationNHRepository.cs" />
+    <Compile Include="Model\Repository\ILocationOperations.cs" />
     <Compile Include="Model\Repository\NHRepository.cs" />
     <Compile Include="Model\Repository\NHUnitOfWork.cs" />
     <Compile Include="NativeWiFi\SimpleMeasure.cs" />

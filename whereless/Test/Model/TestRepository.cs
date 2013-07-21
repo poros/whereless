@@ -36,7 +36,7 @@ namespace whereless.Test.Model
         [Test]
         public void RepoTest()
         {
-            var entitiesFactory = NHModel.EntitiesFactory;
+            var entitiesFactory = ModelHelper.EntitiesFactory;
 
 
             // populate the database
@@ -45,17 +45,17 @@ namespace whereless.Test.Model
             var loc = entitiesFactory.CreateLocation("Location101", input);
 
             //this saves everything else via cascading
-            var repLoc = NHModel.GetRepository<Location>();
+            var repLoc = ModelHelper.GetRepository<Location>();
             repLoc.Save(loc);
 
-            var repLoc2 = NHModel.GetLocationRepository();
-            var loc2 = repLoc2.GetByName("ReteZ");
+            var repLoc2 = ModelHelper.GetLocationRepository();
+            var loc2 = repLoc2.GetLocationByName("ReteZ");
             if (loc2 != null)
             {
                 Console.WriteLine(loc2.ToString());
             }
 
-            loc2 = repLoc2.GetByName("Location101");
+            loc2 = repLoc2.GetLocationByName("Location101");
             if (loc2 != null)
             {
                 Console.WriteLine(loc2.ToString());

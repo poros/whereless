@@ -37,7 +37,8 @@ namespace whereless.Test.Model
         [Test]
         public void DummyTest()
         {
-            var entitiesFactory =  NHModel.EntitiesFactory;
+            var m = ModelHelper.Handle;
+            var entitiesFactory =  ModelHelper.EntitiesFactory;
 
             // create our NHibernate session factory
             var sessionFactory = CreateSessionFactory();
