@@ -35,7 +35,7 @@ namespace whereless.Test.Model
         [Test]
         public void UowTest()
         {
-            var entitiesFactory = EntitiesFactory.Factory;
+            var entitiesFactory = NHModel.EntitiesFactory;
 
             using (var uow = NHModel.GetUnitOfWork())
             {
@@ -45,9 +45,17 @@ namespace whereless.Test.Model
                 var loc = entitiesFactory.CreateLocation("Location3", input);
 
                 //this saves everything else via cascading
-                uow.Save(loc);
+                uow.Add(loc);
 
-                uow.Rollback();
+                //uow.Rollback();
+                uow.Commit();
+            }
+
+            using (var uow = NHModel.GetUnitOfWork())
+            {
+                var loc = uow.GetLocationByName("Location3");
+                Console.WriteLine(loc.ToString());
+                uow.Commit();
             }
 
             //using (var uow = NHModel.GetUnitOfWork())

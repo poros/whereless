@@ -4,16 +4,34 @@ using FluentNHibernate.Cfg.Db;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
+using log4net;
+using whereless.Model.Factory;
 using whereless.Model.Repository;
+using whereless.Test.Model;
 
 
 namespace whereless.Model
 {
     public class NHModel : IModel
     {
-        private const string DbFile = "whereless.db";
+        private static readonly NHModel Instance = new NHModel();
 
+        private NHModel() {}
+
+        public static NHModel Handle
+        {
+            get { return Instance; }
+        }
+
+        private const string DbFile = "whereless.db";
+        // REMARK The order of these two is really important!!!
+        // the entitiesFactory is fetched into Entities before having been set, if swapped
+        // static are executed in the order they are declared when one of them is referenced
+        // the first time during execution (except in case of static constructor)
+        private static readonly IEntitiesFactory _entitiesFactory = CreateEntitiesFactory();
         private static readonly ISessionFactory _sessionFactory = CreateSessionFactory();
+
+        
 
         internal static ISessionFactory SessionFactory
         {
@@ -23,14 +41,27 @@ namespace whereless.Model
         public static IRepository<T> GetRepository<T>() where T : class 
         {
             return new NHRepository<T>();
-        } 
+        }
+
+        public static ILocationRepository GetLocationRepository()
+        {
+            return new LocationNHRepository();
+        }
 
         public static IUnitOfWork GetUnitOfWork()
         {
             return new NHUnitOfWork();
-        } 
+        }
 
-        
+        public static IEntitiesFactory EntitiesFactory
+        {
+            get { return _entitiesFactory; }
+        }
+
+        private static IEntitiesFactory CreateEntitiesFactory()
+        {
+            return new MplZipGn();
+        }
         /// <summary>
         /// Configure NHibernate. This method returns an ISessionFactory instance that is
         /// populated with mappings created by Fluent NHibernate.

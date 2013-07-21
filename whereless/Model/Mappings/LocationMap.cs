@@ -12,6 +12,7 @@ namespace whereless.Model.Mappings
                 .Not.Nullable()
                 .Unique();
             Map(x => x.Time);
+            Map(x => x.Prova);
             DiscriminateSubClassesOnColumn("type");
         }
     }

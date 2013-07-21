@@ -6,9 +6,6 @@ namespace whereless.Model.Entities
 {
     public abstract class Place
     {
-        // factory for creating child entities
-        protected static readonly EntitiesFactory Factory = EntitiesFactory.Factory;
-        
         public virtual int Id { get; protected set; }
         // public virtual Location LocationReference { get; set; } // Reference for Inverse(). Causes problems, but saves an update.
 

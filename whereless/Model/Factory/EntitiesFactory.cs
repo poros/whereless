@@ -8,34 +8,15 @@ namespace whereless.Model.Factory
     // I have no time for studying a dependency injection framework and it should not be the case
     // Consider abstract factory pattern over factory/template pattern if things get messy
     // Things got messy :P
-    public abstract class EntitiesFactory
+    public interface IEntitiesFactory
     {
-        private static readonly EntitiesFactory Instance = InstantiateFactory();
-
-        protected EntitiesFactory() {}
-
-        // TODO implement logic in order to instantiate the correct factory
-        private static EntitiesFactory InstantiateFactory()
-        {
-            return new MplZipGn();
-        }
-
-        public static EntitiesFactory Factory
-        {
-            get
-            {
-                return Instance;
-            }
-        }
-
-        internal abstract Type LocationType { get; }
-        internal abstract Type PlaceType { get; }
-        internal abstract Type NetworkType { get; }
-
-        public abstract Location CreateLocation(String name);
-        public abstract Location CreateLocation(String name, IList<IMeasure> measures);
-        public abstract Place CreatePlace();
-        public abstract Place CreatePlace(IList<IMeasure> measures);
-        public abstract Network CreateNetwork(IMeasure measure);
+        Type LocationType { get; }
+        Type PlaceType { get; }
+        Type NetworkType { get; }
+        Location CreateLocation(string name);
+        Location CreateLocation(string name, IList<IMeasure> measures);
+        Place CreatePlace();
+        Place CreatePlace(IList<IMeasure> measures);
+        Network CreateNetwork(IMeasure measure);
     }
 }

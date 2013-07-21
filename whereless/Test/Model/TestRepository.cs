@@ -36,7 +36,7 @@ namespace whereless.Test.Model
         [Test]
         public void RepoTest()
         {
-            var entitiesFactory = EntitiesFactory.Factory;
+            var entitiesFactory = NHModel.EntitiesFactory;
 
 
             // populate the database
@@ -47,6 +47,20 @@ namespace whereless.Test.Model
             //this saves everything else via cascading
             var repLoc = NHModel.GetRepository<Location>();
             repLoc.Save(loc);
+
+            var repLoc2 = NHModel.GetLocationRepository();
+            var loc2 = repLoc2.GetByName("ReteZ");
+            if (loc2 != null)
+            {
+                Console.WriteLine(loc2.ToString());
+            }
+
+            loc2 = repLoc2.GetByName("Location101");
+            if (loc2 != null)
+            {
+                Console.WriteLine(loc2.ToString());
+            }
+            repLoc2.Delete(loc2);
 
             //using (var uow = NHModel.GetUnitOfWork())
             //    {

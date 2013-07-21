@@ -8,7 +8,7 @@ using FluentNHibernate.Cfg.Db;
 using FluentNHibernate.Conventions.Helpers;
 using NHibernate;
 using NHibernate.Cfg;
-
+using NHibernate.Criterion;
 using NHibernate.Tool.hbm2ddl;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 using log4net;
 using log4net.Config;
+using whereless.Model;
 using whereless.Model.Entities;
 using whereless.Model.Factory;
 using whereless.NativeWiFi;
@@ -36,7 +37,7 @@ namespace whereless.Test.Model
         [Test]
         public void DummyTest()
         {
-            var entitiesFactory = EntitiesFactory.Factory;
+            var entitiesFactory =  NHModel.EntitiesFactory;
 
             // create our NHibernate session factory
             var sessionFactory = CreateSessionFactory();
@@ -48,6 +49,7 @@ namespace whereless.Test.Model
                 {
                     List<IMeasure> input = new List<IMeasure> { new SimpleMeasure("ReteA", 10U) };
                     Location loc = entitiesFactory.CreateLocation("Location1", input);
+                    loc.Prova = 9;
 
                     //this saves everything else via cascading
                     session.SaveOrUpdate(loc);
@@ -56,18 +58,17 @@ namespace whereless.Test.Model
                 }
             }
 
+            Location longLocation;
+
             using (var session = sessionFactory.OpenSession())
             {
+                // populate the database
                 using (var transaction = session.BeginTransaction())
                 {
-                    var locations = session.CreateCriteria(entitiesFactory.LocationType)
-                                           .List<Location>();
-
-                    foreach (var location in locations)
-                    {
-                        Console.WriteLine(location.ToString());
-                        session.Delete(location);
-                    }
+                    longLocation = session.CreateCriteria(entitiesFactory.LocationType).Add(Restrictions.Eq("Name", "Location1"))
+                                           .UniqueResult<Location>();
+                    longLocation.Prova = 101;
+                    
 
                     transaction.Commit();
                 }
@@ -75,18 +76,58 @@ namespace whereless.Test.Model
 
             using (var session = sessionFactory.OpenSession())
             {
-                using (session.BeginTransaction())
+                longLocation.Prova = 102;
+                session.Update(longLocation);
+                session.Flush();
+            }
+
+            using (var session = sessionFactory.OpenSession())
+            {
+                // populate the database
+                using (var transaction = session.BeginTransaction())
                 {
-
-                    var networks = session.CreateCriteria(entitiesFactory.NetworkType)
-                            .List<Network>();
-
-                    foreach (var network in networks)
-                    {
-                        Console.WriteLine(network.ToString());
-                    }
+                   
+                    longLocation.Prova = 103;
+                    session.Update(longLocation);
+                    transaction.Commit();
                 }
             }
+
+
+            using (var session = sessionFactory.OpenSession())
+            {
+                using (var transaction = session.BeginTransaction())
+                {
+                    //var locations = session.CreateCriteria(entitiesFactory.LocationType)
+                    //                       .List<Location>();
+
+                    var locations = session.CreateCriteria(typeof(Location))
+                                           .List<Location>();
+
+                    foreach (var location in locations)
+                    {
+                        Console.WriteLine(location.ToString());
+                        //session.Delete(location);
+                    }
+
+                    transaction.Commit();
+                }
+            }
+
+            //using (var session = sessionFactory.OpenSession())
+            //{
+            //    using (session.BeginTransaction())
+            //    {
+
+            //        var networks = session.CreateCriteria(entitiesFactory.NetworkType)
+            //                .List<Network>();
+
+            //        foreach (var network in networks)
+            //        {
+            //            Console.WriteLine(network.ToString());
+            //        }
+            //    }
+            //}
         }
 
         /// <summary>

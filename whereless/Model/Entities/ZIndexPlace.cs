@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using whereless.Model.Factory;
 using whereless.NativeWiFi;
 
 namespace whereless.Model.Entities
@@ -10,6 +11,9 @@ namespace whereless.Model.Entities
     // weighted by the number of observation collected per each network
     public class ZIndexPlace : Place
     {
+        // factory for creating child entities
+        private static readonly IEntitiesFactory _Factory = NHModel.EntitiesFactory;
+
         // the two constant to change in order to refine recognition precision
         // define the penalty in terms of standard deviation for just discovered networks
         private static readonly double bigZ = 4D;
@@ -45,7 +49,7 @@ namespace whereless.Model.Entities
             if (measures == null) return;
             foreach (var measure in measures)
             {
-                AddNetwork(measure.Ssid, Factory.CreateNetwork(measure));
+                AddNetwork(measure.Ssid, _Factory.CreateNetwork(measure));
             }
         }
 
@@ -115,7 +119,7 @@ namespace whereless.Model.Entities
                 }
                 else
                 {
-                    AddNetwork(measure.Ssid, Factory.CreateNetwork(measure));
+                    AddNetwork(measure.Ssid, _Factory.CreateNetwork(measure));
                 }
             }
         }

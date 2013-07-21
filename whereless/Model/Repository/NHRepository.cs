@@ -9,7 +9,7 @@ namespace whereless.Model.Repository
 {
     public class NHRepository<T> : IRepository<T> where T : class
     {
-        private static readonly ISessionFactory sessionFactory = NHModel.SessionFactory;
+        protected static readonly ISessionFactory sessionFactory = NHModel.SessionFactory;
 
         public T Get(object id)
         {

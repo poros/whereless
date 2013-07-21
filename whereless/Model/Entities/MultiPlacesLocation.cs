@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using whereless.Model.Factory;
 using whereless.NativeWiFi;
 
 namespace whereless.Model.Entities
@@ -16,6 +17,7 @@ namespace whereless.Model.Entities
         // let's give them the last, it would be the less disappointing thing to do)
         private Stack<Place> _places;
         private Place _currPlace;
+        private readonly IEntitiesFactory _Factory = NHModel.EntitiesFactory;
 
         // number of observations
         public virtual ulong N { get; set; }
@@ -52,7 +54,7 @@ namespace whereless.Model.Entities
         public MultiPlacesLocation(string name, IList<IMeasure> measures) : base(name)
         {
             _places = new Stack<Place>();
-            AddPlace(Factory.CreatePlace(measures));
+            AddPlace(_Factory.CreatePlace(measures));
         }
 
         // REMARK side effect: always set current place if return true

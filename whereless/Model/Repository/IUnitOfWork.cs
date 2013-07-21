@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using whereless.Model.Entities;
 
 namespace whereless.Model.Repository
 {
     public interface IUnitOfWork : IDisposable
     {
 
+        void Commit();
+        void Rollback();
+
         /// <summary>
         /// Saves or updates the object to the database, depending on the value of its identifier property.
         /// </summary>
         /// <param name="value">A transient instance containing a new or updated state.</param>
-        void Save(object value);
+        void Add(object value);
 
         /// <summary>
         /// Removes a persistent instance from the database.
@@ -31,8 +35,6 @@ namespace whereless.Model.Repository
         /// <typeparam name="T">The type of the given persistant instance.</typeparam>
         IList<T> GetAll<T>() where T : class;
 
-        void Commit();
-        void Rollback();
-
+        Location GetLocationByName(string name);
     }
 }
