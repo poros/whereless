@@ -7,20 +7,20 @@ namespace whereless.Model.Factory
 {
     public class MplZipGn : IEntitiesFactory
     {
-        public virtual Type LocationType
-        {
-            get { return typeof(MultiPlacesLocation); }
-        }
+        //public virtual Type LocationType
+        //{
+        //    get { return typeof(MultiPlacesLocation); }
+        //}
 
-        public virtual Type PlaceType
-        {
-            get { return typeof (ZIndexPlace); }
-        }
+        //public virtual Type PlaceType
+        //{
+        //    get { return typeof (ZIndexPlace); }
+        //}
 
-        public virtual Type NetworkType
-        {
-            get { return typeof(GaussianNetwork); }
-        }
+        //public virtual Type NetworkType
+        //{
+        //    get { return typeof(GaussianNetwork); }
+        //}
 
         public virtual Location CreateLocation(String name)
         {

@@ -19,7 +19,6 @@ namespace whereless.Model.Entities
 
         public virtual ulong Time { get; set; }
 
-        public virtual int Prova { get; set; }
 
         protected Location() { }
 

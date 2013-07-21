@@ -14,7 +14,7 @@ namespace whereless.Model.Repository
         /// Saves or updates the object to the database, depending on the value of its identifier property.
         /// </summary>
         /// <param name="value">A transient instance containing a new or updated state.</param>
-        void Add(object value);
+        void Save(object value);
 
         /// <summary>
         /// Removes a persistent instance from the database.

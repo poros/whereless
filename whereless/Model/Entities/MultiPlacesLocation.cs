@@ -10,6 +10,7 @@ namespace whereless.Model.Entities
 {
     public class MultiPlacesLocation : Location
     {
+        private ulong _n = 0;
         // Locations are saved from most recent to oldest,
         // because in case of locations with similar footprints (test may pass for both)
         // more recent ones MUST be preferred, since the algorithm look for locations in order!!!
@@ -23,13 +24,17 @@ namespace whereless.Model.Entities
         private readonly IEntitiesFactory _Factory = NHModel.GetEntitiesFactory();
 
         // number of observations
-        public virtual ulong N { get; set; }
+        public virtual ulong N
+        {
+            get { return _n; }
+            set { _n = value;  }
+        }
         
         //time is given in terms of observations and default time between them
         public override ulong Time
         {
-            get { return N * T; }
-            set { N = value / T; }
+            get { return _n * T; }
+            set { _n = value / T; }
         }
 
 

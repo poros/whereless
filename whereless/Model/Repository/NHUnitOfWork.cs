@@ -66,24 +66,24 @@ namespace whereless.Model.Repository
 
         public void Commit()
         {
-            if (!_transaction.IsActive)
-            {
-                throw new InvalidOperationException("Oops! We don't have an active transaction");
-            }
+            //if (!_transaction.IsActive)
+            //{
+            //    throw new InvalidOperationException("Transaction not active or disposed");
+            //}
             _transaction.Commit();
         }
 
         public void Rollback()
         {
-            if (!_transaction.IsActive)
-            {
-                throw new InvalidOperationException("Oops! We don't have an active transaction");
-            }
+            //if (!_transaction.IsActive)
+            //{
+            //    throw new InvalidOperationException("Transaction not active or disposed");
+            //}
             _transaction.Rollback();
             Log.Info("Rollbacked transaction");
         }
 
-        public void Add(object value)
+        public void Save(object value)
         {
             _session.SaveOrUpdate(value);
         }

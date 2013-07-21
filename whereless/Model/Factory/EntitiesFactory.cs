@@ -10,9 +10,14 @@ namespace whereless.Model.Factory
     // Things got messy :P
     public interface IEntitiesFactory
     {
-        Type LocationType { get; }
-        Type PlaceType { get; }
-        Type NetworkType { get; }
+        // Type LocationType { get; }
+        // Type PlaceType { get; }
+        // Type NetworkType { get; }
+        
+        // this was in mind
+        // var locations = session.CreateCriteria(entitiesFactory.LocationType)
+        //                       .List<Location>();
+        
         Location CreateLocation(string name);
         Location CreateLocation(string name, IList<IMeasure> measures);
         Place CreatePlace();

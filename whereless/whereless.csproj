@@ -128,9 +128,9 @@
     <Compile Include="Model\Repository\NHRepository.cs" />
     <Compile Include="Model\Repository\NHUnitOfWork.cs" />
     <Compile Include="NativeWiFi\SimpleMeasure.cs" />
-    <Compile Include="Test\Model\TestRepository.cs" />
-    <Compile Include="Test\Model\TestEntityCreation.cs" />
-    <Compile Include="Test\Model\TestUnitOfWork.cs" />
+    <Compile Include="Test\Model\TestNHRepository.cs" />
+    <Compile Include="Test\Model\TestEntitiesMplZipGn.cs" />
+    <Compile Include="Test\Model\TestNHUnitOfWork.cs" />
     <Compile Include="Test\TestInitializer.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
