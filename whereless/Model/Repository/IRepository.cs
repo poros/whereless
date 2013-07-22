@@ -2,16 +2,13 @@
 
 namespace whereless.Model.Repository
 {
-    /// <summary>
-    /// Should you ever need to add functionality specific to a single class, extend
-    /// the interface. See IMonkeyRepository.
-    /// </summary>
+    // ASK FOR MORE OPERATIONS IMPLEMENTATION IF NEEDED (EVEN ENTITY COMPARISON)
     public interface IRepository<T>
     {
-        T Get(object id);
+        T Get(object id, bool dirty = false);
         void Save(T value);
         void Update(T value);
         void Delete(T value);
-        IList<T> GetAll();
+        IList<T> GetAll(bool dirty = false);
     }
 }

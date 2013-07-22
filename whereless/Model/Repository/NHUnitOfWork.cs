@@ -8,7 +8,7 @@ using whereless.Model.Entities;
 namespace whereless.Model.Repository
 {
 
-    public class NHUnitOfWork : IUnitOfWork, ILocationOperations
+    public class NHUnitOfWork : IUnitOfWork
     {
 
         private static readonly ILog Log = LogManager.GetLogger(typeof(NHUnitOfWork));
@@ -111,6 +111,7 @@ namespace whereless.Model.Repository
         public Location GetLocationByName(string name)
         {
             return _session.CreateCriteria(typeof(Location)).Add(Restrictions.Eq("Name", name))
+                                            //.SetFetchMode("Places", FetchMode.Eager)
                                             .UniqueResult<Location>();
         }
         

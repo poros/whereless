@@ -1,22 +1,12 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using FluentNHibernate.Automapping;
-using FluentNHibernate.Cfg;
+﻿using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
-using FluentNHibernate.Conventions.Helpers;
+using log4net;
 using NHibernate;
 using NHibernate.Cfg;
-
 using NHibernate.Tool.hbm2ddl;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using log4net;
-using log4net.Config;
-using whereless.Model;
+using System.IO;
 using whereless.Model.Entities;
 using whereless.Model.Factory;
 using whereless.Model.Repository;
@@ -31,6 +21,7 @@ namespace whereless.Test.Model
     {
 
         // REMARK MplZipGn class is used as dependency
+        // REMARK Entities are NOT comparable. Ask implementation if needed
 
         // Define a static logger variable so that it references the logger instance
         private static readonly ILog Log = LogManager.GetLogger(typeof (TestNHUnitOfWork));
@@ -155,8 +146,33 @@ namespace whereless.Test.Model
             var networks = repNet.GetAll();
             Assert.AreEqual(networks.Count, 3);
 
+            //Dirty Get (without waiting for transactions)
+            var locDirty = repLoc.Get(locA.Id, dirty: true);
+            Assert.AreEqual(locDirty.Name, "Location1");
+            Assert.AreEqual(locDirty.Time, TimeVal);
+
+            var locDirties = repLoc.GetAll(dirty: true);
+            Assert.AreEqual(locDirties.Count, 2);
+            foreach (var location in locDirties)
+            {
+                if (location.Name == "Location1")
+                {
+                    Assert.AreEqual(location.Time, TimeVal);
+                }
+                else if (location.Name == "Location2")
+                {
+                    Assert.AreEqual(location.Time, TimeVal1);
+                }
+                else
+                {
+                    Log.Debug(location.Name);
+                    Assert.Fail("Location name not matching");
+                }
+            }
+
 
             // UPDATE = Update
+            // BEWARE OF DIRTY WRITES!!! THEY ARE STILL DIFFERENT TRANSACTIONS!!!
             Location locUpdated = locA;
             locUpdated.Time = TimeVal2;
             repLoc.Update(locUpdated);
@@ -205,6 +221,9 @@ namespace whereless.Test.Model
             Assert.AreEqual(locNamed.Name, "Location1");
             Assert.AreEqual(locNamed.Time, TimeVal);
 
+            Location locDirty = repLoc.GetLocationByName("Location1", dirty: true);
+            Assert.AreEqual(locDirty.Name, "Location1");
+            Assert.AreEqual(locDirty.Time, TimeVal);
 
             // Delete
             var locations = repLoc.GetAll();

@@ -4,6 +4,7 @@ using whereless.Model.Entities;
 
 namespace whereless.Model.Repository
 {
+    // ASK FOR MORE OPERATIONS IMPLEMENTATION IF NEEDED (EVEN ENTITY COMPARISON)
     public interface IUnitOfWork : IDisposable
     {
 

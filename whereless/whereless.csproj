@@ -67,6 +67,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.SQLite, Version=1.0.87.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -124,10 +125,10 @@
     <Compile Include="Model\Repository\IRepository.cs" />
     <Compile Include="Model\Repository\IUnitOfWork.cs" />
     <Compile Include="Model\Repository\LocationNHRepository.cs" />
-    <Compile Include="Model\Repository\ILocationOperations.cs" />
     <Compile Include="Model\Repository\NHRepository.cs" />
     <Compile Include="Model\Repository\NHUnitOfWork.cs" />
     <Compile Include="NativeWiFi\SimpleMeasure.cs" />
+    <Compile Include="Test\Model\TestModel.cs" />
     <Compile Include="Test\Model\TestNHRepository.cs" />
     <Compile Include="Test\Model\TestEntitiesMplZipGn.cs" />
     <Compile Include="Test\Model\TestNHUnitOfWork.cs" />

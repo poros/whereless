@@ -1,21 +1,23 @@
-﻿using System.IO;
+﻿using System.Configuration;
+using System.IO;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using NHibernate;
-using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
 using log4net;
 using whereless.Model.Factory;
 using whereless.Model.Repository;
-using whereless.Test.Model;
+using Configuration = NHibernate.Cfg.Configuration;
 
 
 namespace whereless.Model
 {
     public class NHModel : IModel
     {
-
-        private const string DbFile = "whereless.db";
+        // REMARK KEEP THE ORDER OF ALL THE STATIC FIELDS AND KEEP ATTENTION TO MUTUAL REFERMENTS
+        // Oh man, I need to fix this...
+        private static readonly ILog Log = LogManager.GetLogger(typeof(NHModel));
+        private static readonly string DbFile = ReadDbName();
         // REMARK The order of these two is really important!!!
         // the entitiesFactory is fetched into Entities before having been set, if swapped
         // static are executed in the order they are declared when one of them is referenced
@@ -48,14 +50,42 @@ namespace whereless.Model
             get { return _entitiesFactory; }
         }
 
-        private static IEntitiesFactory CreateEntitiesFactory()
-        {
-            return new MplZipGn();
-        }
-
         internal ISessionFactory SessionFactory
         {
             get { return _sessionFactory; }
+        }
+
+
+
+        private static string ReadDbName()
+        {
+            string tmp = ConfigurationManager.AppSettings["databaseName"];
+            if (tmp == null)
+            {
+                throw new ConfigurationErrorsException("Unable to find databaseName key");
+            }
+            Log.Debug("DB Name = " + tmp);
+            return tmp;
+        }
+
+        private static IEntitiesFactory CreateEntitiesFactory()
+        {
+            IEntitiesFactory tmp;
+            string factoryName = ConfigurationManager.AppSettings["entities"];
+            if (factoryName == null)
+            {
+                throw new ConfigurationErrorsException("Unable to find entities key");
+            }
+            if (factoryName.Equals("MplZipGn"))
+            {
+                tmp = new MplZipGn();
+                Log.Debug("MplZipGn Factory Instantiated");
+            }
+            else
+            {
+                throw new ConfigurationErrorsException("Entities configuration value not allowed");
+            }
+            return tmp;
         }
 
         /// <summary>
@@ -78,6 +108,7 @@ namespace whereless.Model
 
             if (!File.Exists(DbFile))
             {
+                Log.Debug("Creating new DB");
                 return Fluently.Configure()
                                .Database(SQLiteConfiguration.Standard
                                                             .UsingFile(DbFile))
@@ -90,6 +121,7 @@ namespace whereless.Model
             }
             else
             {
+                Log.Debug("Using already existent DB");
                 return Fluently.Configure()
                                .Database(SQLiteConfiguration.Standard
                                                             .UsingFile(DbFile))

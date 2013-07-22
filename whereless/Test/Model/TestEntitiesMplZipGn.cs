@@ -136,8 +136,12 @@ namespace whereless.Test.Model
         [Test(Description = "MplZipGn Factory Test")]
         public void FactoryTest()
         {
-            IEntitiesFactory factory = new MplZipGn();
-            
+            AuxiliaryFactoryTest(new MplZipGn());
+
+        }
+
+        public static void AuxiliaryFactoryTest(IEntitiesFactory factory)
+        {
             //Location
             var inputL = new List<IMeasure> { new SimpleMeasure("ReteA", 10U) };
             var loc = factory.CreateLocation("Location1", inputL);

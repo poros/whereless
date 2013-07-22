@@ -18,15 +18,22 @@ namespace whereless.Model.Repository
             this.SessionFactory = sessionFactory;
         }
 
-        public T Get(object id)
+        public T Get(object id, bool dirty = false)
         {
             using (var session = SessionFactory.OpenSession())
             {
-                using (var transaction = session.BeginTransaction())
+                if (!dirty)
                 {
-                    T returnVal = session.Get<T>(id);
-                    transaction.Commit();
-                    return returnVal;
+                    using (var transaction = session.BeginTransaction())
+                    {
+                        T returnVal = session.Get<T>(id);
+                        transaction.Commit();
+                        return returnVal;
+                    }
+                }
+                else
+                {
+                    return session.Get<T>(id);
                 }
             }
         }
@@ -67,15 +74,22 @@ namespace whereless.Model.Repository
             }
         }
 
-        public IList<T> GetAll()
+        public IList<T> GetAll(bool dirty = false)
         {
             using (var session = SessionFactory.OpenSession())
             {
-                using (var transaction = session.BeginTransaction())
+                if (!dirty)
                 {
-                    IList<T> returnVal = session.CreateCriteria<T>().List<T>();
-                    transaction.Commit();
-                    return returnVal;
+                    using (var transaction = session.BeginTransaction())
+                    {
+                        IList<T> returnVal = session.CreateCriteria<T>().List<T>();
+                        transaction.Commit();
+                        return returnVal;
+                    }
+                }
+                else
+                {
+                    return session.CreateCriteria<T>().List<T>();
                 }
             }
         }

@@ -15,14 +15,22 @@ namespace whereless.Model.Repository
         {
         }
 
-        public Location GetLocationByName(string name)
+        public Location GetLocationByName(string name, bool dirty = false)
         {
             using (var session = SessionFactory.OpenSession())
             {
-                using (var transaction = session.BeginTransaction())
+                if (!dirty)
+                {
+                    using (var transaction = session.BeginTransaction())
+                    {
+                        return session.CreateCriteria(typeof (Location)).Add(Restrictions.Eq("Name", name))
+                                      .UniqueResult<Location>();
+                    }
+                }
+                else
                 {
                     return session.CreateCriteria(typeof(Location)).Add(Restrictions.Eq("Name", name))
-                                            .UniqueResult<Location>();
+                                      .UniqueResult<Location>();
                 }
             }
             

@@ -17,6 +17,7 @@ namespace whereless.Test.Model
     using NUnit.Framework;
 
     // REMARK MplZipGn class is used as dependency
+    // REMARK Entities are NOT comparable. Ask implementation if needed
 
     [TestFixture(Description = "Test for NHUnitOfWork")]
     class TestNHUnitOfWork
@@ -192,6 +193,7 @@ namespace whereless.Test.Model
             }
 
             // update of an entity retrieved in a unit of work
+            // BEWARE OF DIRTY WRITES!!! THEY ARE STILL DIFFERENT TRANSACTIONS!!!
             using (var uow = new NHUnitOfWork(_sessionFactory))
             {
                 longLivedLocation.Time = TimeVal3;
@@ -238,6 +240,33 @@ namespace whereless.Test.Model
                     }
                 }
             }
+
+
+            // LAZY LOADING
+            // It seems it does not work (always eager loading). Less performances, zero problems... 
+            // Check it by hand, looking at logs
+            Log.Debug("LAZY LOADING");
+            Location locLazy;
+            using (var uow = new NHUnitOfWork(_sessionFactory))
+            {
+                locLazy = uow.GetLocationByName("Location1");
+            }
+            Assert.AreEqual(locLazy.Name, "Location1");
+            Assert.AreEqual(locLazy.Time, TimeVal3);
+
+            var up = new List<IMeasure> { new SimpleMeasure("ReteA", 20U) };
+            locLazy.UpdateStats(up);
+            Log.Debug(locLazy.ToString());
+
+            IList<Location> locLazies;
+            using (var uow = new NHUnitOfWork(_sessionFactory))
+            {
+                locLazies = uow.GetAll<Location>();
+            }
+
+            up = new List<IMeasure> { new SimpleMeasure("ReteA", 10U), new SimpleMeasure("ReteB", 40U) };
+            locLazies[1].UpdateStats(up);
+            Log.Debug(locLazies[1].ToString());
 
             // DELETE
             using (var uow = new NHUnitOfWork(_sessionFactory))
