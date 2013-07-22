@@ -1,0 +1,14 @@
+﻿NuGet Packets
+Nhibernate
+Fluent Nhibernate
+System.Data.SQLite x86/x64
+Nunit adapter + framework
+Log4net
+
+References to add (just in case)
+System.Configuration
+System.Data
+System.Data.SQLite
+
+Useful Extension
+Resharper
