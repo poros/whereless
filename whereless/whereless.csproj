@@ -43,6 +43,9 @@
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="ManagedWifi">
+      <HintPath>..\packages\managedwifi.1.1.0\lib\net20\ManagedWifi.dll</HintPath>
+    </Reference>
     <Reference Include="NHibernate">
       <HintPath>..\packages\NHibernate.3.3.3.4000\lib\Net35\NHibernate.dll</HintPath>
     </Reference>
@@ -127,11 +130,13 @@
     <Compile Include="Model\Repository\LocationNHRepository.cs" />
     <Compile Include="Model\Repository\NHRepository.cs" />
     <Compile Include="Model\Repository\NHUnitOfWork.cs" />
+    <Compile Include="NativeWiFi\Example.cs" />
     <Compile Include="NativeWiFi\SimpleMeasure.cs" />
     <Compile Include="Test\Model\TestModel.cs" />
     <Compile Include="Test\Model\TestNHRepository.cs" />
     <Compile Include="Test\Model\TestEntitiesMplZipGn.cs" />
     <Compile Include="Test\Model\TestNHUnitOfWork.cs" />
+    <Compile Include="Test\NativeWiFi\TestExample.cs" />
     <Compile Include="Test\TestInitializer.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

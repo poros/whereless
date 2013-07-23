@@ -4,6 +4,7 @@ Fluent Nhibernate
 System.Data.SQLite x86/x64
 Nunit adapter + framework
 Log4net
+Managed Wi-Fi 1.1.0
 
 References to add (just in case)
 System.Configuration
