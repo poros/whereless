@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using log4net;
 using whereless.Model.Entities;
 using whereless.Model.Factory;
-using whereless.NativeWiFi;
+using whereless.WiFi;
 
 namespace whereless.Test.Model
 {

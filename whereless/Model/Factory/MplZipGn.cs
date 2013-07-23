@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using whereless.Model.Entities;
-using whereless.NativeWiFi;
+using whereless.WiFi;
 
 namespace whereless.Model.Factory
 {

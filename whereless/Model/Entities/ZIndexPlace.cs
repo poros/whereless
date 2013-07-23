@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using whereless.Model.Factory;
-using whereless.NativeWiFi;
+using whereless.WiFi;
 
 namespace whereless.Model.Entities
 {

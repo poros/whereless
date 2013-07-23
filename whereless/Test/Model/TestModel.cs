@@ -4,7 +4,7 @@ using log4net;
 using whereless.Model;
 using whereless.Model.Entities;
 using whereless.Model.Repository;
-using whereless.NativeWiFi;
+using whereless.WiFi;
 
 namespace whereless.Test.Model
 {

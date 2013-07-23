@@ -1,5 +1,5 @@
 ﻿using System;
-using whereless.NativeWiFi;
+using whereless.WiFi;
 
 namespace whereless.Model.Entities
 {

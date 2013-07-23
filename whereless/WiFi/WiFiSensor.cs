@@ -1,26 +1,35 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using NativeWifi;
 using System;
 using System.Text;
 
-namespace whereless.NativeWiFi
+namespace whereless.WiFi
 {
-    public class Example
+    public class WiFiSensor
     {
-        private static WlanClient client = new WlanClient();
+        private WlanClient client;
+        private System.Threading.ManualResetEvent _continueThreadEvent;
+        public volatile bool StopThread = false;
+
+        public WiFiSensor(System.Threading.ManualResetEvent continueThread)
+        {
+            client = new WlanClient();
+            this._continueThreadEvent = continueThread;
+        }
 
         // Converts a 802.11 SSID to a string.
-        static string GetStringForSSID(Wlan.Dot11Ssid ssid)
+        static string GetStringForSsid(Wlan.Dot11Ssid ssid)
         {
             return Encoding.ASCII.GetString(ssid.SSID, 0, (int)ssid.SSIDLength);
         }
 
-        public static void ExampleMain()
+        public void ExampleMain()
         {
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; !StopThread && i < 10; i++)
             {
+                _continueThreadEvent.WaitOne();
+
                 Console.WriteLine("SCAN " + i);
                 // get all wlan intrerfaces
                 foreach (WlanClient.WlanInterface wlanIface in client.Interfaces)
@@ -40,7 +49,7 @@ namespace whereless.NativeWiFi
                             // Trim ad-hoc networks
                             if (network.dot11BssType != Wlan.Dot11BssType.Independent)
                             {
-                                string ssid = GetStringForSSID(network.dot11Ssid);
+                                string ssid = GetStringForSsid(network.dot11Ssid);
                                 if (!alreadyListedSsids.Contains(ssid))
                                 {
                                     alreadyListedSsids.Add(ssid);
@@ -60,28 +69,33 @@ namespace whereless.NativeWiFi
                     System.Threading.Thread.Sleep(4300);
                 }
             }
-        }
-
-
-
-        private static void Target(Wlan.WlanNotificationData notifyData)
-        {
-            if ((int)notifyData.NotificationCode == (int)Wlan.WlanNotificationCodeAcm.ScanComplete)
+            
+            if (StopThread)
             {
-                Console.WriteLine((int)notifyData.NotificationCode);
-                foreach (var wlanInt in client.Interfaces)
-                {
-                    if (wlanInt.InterfaceGuid == (Guid)notifyData.interfaceGuid)
-                    {
-                        //wlanInt
-                        //if(wlanInt.NetworkInterface.OperationalStatus == OperationalStatus.Dormant)
-                    }
-                }
-            }
-            if ((int)notifyData.NotificationCode == (int)Wlan.WlanNotificationCodeAcm.ScanFail)
-            {
-                Console.WriteLine((int)notifyData.NotificationCode);
+                Console.WriteLine("Thread was stopped");
             }
         }
+
+
+
+        //private static void Target(Wlan.WlanNotificationData notifyData)
+        //{
+        //    if ((int)notifyData.NotificationCode == (int)Wlan.WlanNotificationCodeAcm.ScanComplete)
+        //    {
+        //        Console.WriteLine((int)notifyData.NotificationCode);
+        //        foreach (var wlanInt in client.Interfaces)
+        //        {
+        //            if (wlanInt.InterfaceGuid == (Guid)notifyData.interfaceGuid)
+        //            {
+        //                //wlanInt
+        //                //if(wlanInt.NetworkInterface.OperationalStatus == OperationalStatus.Dormant)
+        //            }
+        //        }
+        //    }
+        //    if ((int)notifyData.NotificationCode == (int)Wlan.WlanNotificationCodeAcm.ScanFail)
+        //    {
+        //        Console.WriteLine((int)notifyData.NotificationCode);
+        //    }
+        //}
     }
 }

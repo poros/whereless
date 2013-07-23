@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace whereless.NativeWiFi
+namespace whereless.WiFi
 {
     class SimpleMeasure : IMeasure
     {
