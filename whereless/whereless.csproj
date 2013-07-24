@@ -130,6 +130,8 @@
     <Compile Include="Model\Repository\LocationNHRepository.cs" />
     <Compile Include="Model\Repository\NHRepository.cs" />
     <Compile Include="Model\Repository\NHUnitOfWork.cs" />
+    <Compile Include="WiFi\LossyProducerConsumerElement.cs" />
+    <Compile Include="WiFi\SensorOutput.cs" />
     <Compile Include="WiFi\WiFiSensor.cs" />
     <Compile Include="WiFi\SimpleMeasure.cs" />
     <Compile Include="Test\Model\TestModel.cs" />

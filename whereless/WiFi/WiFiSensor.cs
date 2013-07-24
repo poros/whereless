@@ -4,17 +4,22 @@ using System.Threading;
 using NativeWifi;
 using System;
 using System.Text;
+using log4net;
 
 namespace whereless.WiFi
 {
     public class WiFiSensor
     {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(WiFiSensor));
+
         // A windows logo compliant wlan interface needs to complete the scan in at most 4 seconds
         // 300ms given for thread spawning (just to be sure)
-        private readonly int waitTime = 4300;
-        private readonly WaitHandle[] _threadControls = new AutoResetEvent[2];
+        private const int WaitTime = 4300;
+        private readonly WaitHandle[] _threadControls = new WaitHandle[2];
         private readonly WaitHandle _play;
-        private WlanClient client;
+        private readonly LossyProducerConsumerElement<SensorOutput> _output; 
+        private readonly WlanClient _client;
+
 
         // Converts a 802.11 SSID to a string.
         static string GetStringForSsid(Wlan.Dot11Ssid ssid)
@@ -22,26 +27,24 @@ namespace whereless.WiFi
             return Encoding.ASCII.GetString(ssid.SSID, 0, (int)ssid.SSIDLength);
         }
 
-        public WiFiSensor(WaitHandle stopThread, WaitHandle pauseThread, WaitHandle playThread)
+
+        public WiFiSensor(WaitHandle stopThread, WaitHandle pauseThread, WaitHandle playThread, LossyProducerConsumerElement<SensorOutput> output)
         {
-            client = new WlanClient();
+            _client = new WlanClient();
             _threadControls[0] = stopThread;
             _threadControls[1] = pauseThread;
             _play = playThread;
+            _output = output;
         }
 
-        public void ExampleMain()
+        public void WiFiSensorLoop()
         {
-            Console.WriteLine("SCAN");
-            var networks = GetNetworksAndScan();
-            foreach (var network in networks)
-            {
-                Console.WriteLine("Network SSID: {0} SignalQuality: {1}",
-                                  network.Ssid, network.SignalQuality);
-            }
+            //First scan performed without waiting
+            PerformScan();
+
             while (true)
             {
-                int handle = WaitHandle.WaitAny(_threadControls, waitTime);
+                int handle = WaitHandle.WaitAny(_threadControls, WaitTime);
                 if (handle == 0)
                 {
                     break;
@@ -54,18 +57,22 @@ namespace whereless.WiFi
                 }
                 else
                 {
-                    Console.WriteLine("SCAN");
-                    networks = GetNetworksAndScan();
-                    foreach (var network in networks)
-                    {
-                        Console.WriteLine("Network SSID: {0} SignalQuality: {1}",
-                                                  network.Ssid, network.SignalQuality);
-                    }
-
+                    PerformScan();
                 }
             }
+            Log.Debug("Thread was stopped");
+        }
 
-            Console.WriteLine("Thread was stopped");
+        private void PerformScan()
+        {
+            Log.Debug("SCAN");
+            var networks = GetNetworksAndScan();
+            foreach (var network in networks)
+            {
+                Log.Debug("Network SSID: " + network.Ssid + " SignalQuality: " + network.SignalQuality);
+            }
+            //Remove (if present) previous SensorOutput and substitute it with the new one
+            _output.LossyPut(new SensorOutput() {Measures = networks});
         }
 
 
@@ -74,7 +81,7 @@ namespace whereless.WiFi
             var measures = new List<IMeasure>();
 
             // get all wlan intrerfaces
-            foreach (WlanClient.WlanInterface wlanIface in client.Interfaces)
+            foreach (WlanClient.WlanInterface wlanIface in _client.Interfaces)
             {
                 // only if interface is up (dormant???)
                 if (wlanIface.NetworkInterface.OperationalStatus == OperationalStatus.Up)
@@ -106,13 +113,12 @@ namespace whereless.WiFi
             return measures;
         }
 
-
-
+        // Notification for completed scan (abandoned idea)
         //private static void Target(Wlan.WlanNotificationData notifyData)
         //{
         //    if ((int)notifyData.NotificationCode == (int)Wlan.WlanNotificationCodeAcm.ScanComplete)
         //    {
-        //        Console.WriteLine((int)notifyData.NotificationCode);
+        //        Log.Debug((int)notifyData.NotificationCode);
         //        foreach (var wlanInt in client.Interfaces)
         //        {
         //            if (wlanInt.InterfaceGuid == (Guid)notifyData.interfaceGuid)
@@ -124,7 +130,7 @@ namespace whereless.WiFi
         //    }
         //    if ((int)notifyData.NotificationCode == (int)Wlan.WlanNotificationCodeAcm.ScanFail)
         //    {
-        //        Console.WriteLine((int)notifyData.NotificationCode);
+        //        Log.Debug((int)notifyData.NotificationCode);
         //    }
         //}
     }

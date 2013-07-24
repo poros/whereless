@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using log4net;
 using whereless.WiFi;
 
 namespace whereless.Test.WiFi
@@ -13,42 +14,44 @@ namespace whereless.Test.WiFi
     [TestFixture(Description = "Test for Example")]
     class TestWiFiSensor
     {
-        
+        private static readonly ILog Log = LogManager.GetLogger(typeof(TestWiFiSensor));
+
         [Test(Description = "NativeWiFi example test")]
         public void WiFiSensorTest()
         {
             var stopThread = new AutoResetEvent(false);
             var pauseThread = new AutoResetEvent(false);
             var playThread = new AutoResetEvent(false);
-            var wifiSensor = new WiFiSensor(stopThread, pauseThread, playThread);
-            var wifiDelegate = new ThreadStart(wifiSensor.ExampleMain);
+            var wifiSensor = new WiFiSensor(stopThread: stopThread, pauseThread: pauseThread,
+                playThread: playThread, output: new LossyProducerConsumerElement<SensorOutput>());
+            var wifiDelegate = new ThreadStart(wifiSensor.WiFiSensorLoop);
             var wifiThread = new Thread(wifiDelegate);
             wifiThread.Start();
             
-            Console.WriteLine("Main Thread go to sleep");
+            Log.Debug("Main Thread go to sleep");
             Thread.Sleep(16000);
-            Console.WriteLine("Main thread is awake");
+            Log.Debug("Main thread is awake");
 
-            Console.WriteLine("Pause WiFiSensor");
+            Log.Debug("Pause WiFiSensor");
             pauseThread.Set();
 
-            Console.WriteLine("Main Thread go to sleep");
+            Log.Debug("Main Thread go to sleep");
             Thread.Sleep(8000);
-            Console.WriteLine("Main thread is awake");
+            Log.Debug("Main thread is awake");
 
-            Console.WriteLine("Restart WiFiSensor");
+            Log.Debug("Restart WiFiSensor");
             playThread.Set();
 
-            Console.WriteLine("Main Thread go to sleep");
+            Log.Debug("Main Thread go to sleep");
             Thread.Sleep(16000);
-            Console.WriteLine("Main thread is awake");
+            Log.Debug("Main thread is awake");
 
-            Console.WriteLine("Stop WiFiSensor");
+            Log.Debug("Stop WiFiSensor");
             stopThread.Set();
 
-            Console.WriteLine("Wait for WiFiSensor");
+            Log.Debug("Wait for WiFiSensor");
             wifiThread.Join();
-            Console.WriteLine("WiFiSensor has spontaneously terminated");
+            Log.Debug("WiFiSensor has spontaneously terminated");
         }
     }
 }
