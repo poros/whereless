@@ -1,8 +1,7 @@
-﻿using System.Configuration;
-using log4net;
+﻿using log4net;
+using System.Configuration;
 using whereless.Model.Factory;
 using whereless.Model.Repository;
-using whereless.Test.Model;
 
 namespace whereless.Model
 {

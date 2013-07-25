@@ -1,22 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
-using log4net.Config;
+﻿using log4net.Config;
 
-// without namespace is called before each test in the assembly
-class TestInitializer
+namespace whereless.Test
 {
-    [SetUpFixture]
-    public class TestsInitializer
+    using NUnit.Framework;
+
+    // without namespace is called before each test in the assembly
+    class TestInitializer
     {
-        [SetUp]
-        public void InitializeLogger()
+        [SetUpFixture]
+        public class TestsInitializer
         {
-            // BasicConfigurator replaced with XmlConfigurator.
-            XmlConfigurator.Configure();
+            [SetUp]
+            public void InitializeLogger()
+            {
+                // BasicConfigurator replaced with XmlConfigurator.
+                XmlConfigurator.Configure();
+            }
         }
     }
 }

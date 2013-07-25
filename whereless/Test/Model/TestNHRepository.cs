@@ -10,7 +10,7 @@ using System.IO;
 using whereless.Model.Entities;
 using whereless.Model.Factory;
 using whereless.Model.Repository;
-using whereless.WiFi;
+using whereless.Model.ValueObjects;
 
 namespace whereless.Test.Model
 {

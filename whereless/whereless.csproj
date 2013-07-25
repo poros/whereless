@@ -99,6 +99,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controller\IPlayPauseStopObjectThread.cs" />
+    <Compile Include="Controller\Localizer\LocationLocalizer.cs" />
+    <Compile Include="Controller\PlayPauseStopThread.cs" />
+    <Compile Include="Controller\ServiceController.cs" />
     <Compile Include="Model\Entities\Location.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -130,15 +134,17 @@
     <Compile Include="Model\Repository\LocationNHRepository.cs" />
     <Compile Include="Model\Repository\NHRepository.cs" />
     <Compile Include="Model\Repository\NHUnitOfWork.cs" />
-    <Compile Include="WiFi\LossyProducerConsumerElement.cs" />
-    <Compile Include="WiFi\SensorOutput.cs" />
-    <Compile Include="WiFi\WiFiSensor.cs" />
-    <Compile Include="WiFi\SimpleMeasure.cs" />
+    <Compile Include="Test\Controller\Localizer\TestLocationLocalizer.cs" />
+    <Compile Include="Controller\SensorToLocalizer.cs" />
+    <Compile Include="Controller\WiFi\SensorOutput.cs" />
+    <Compile Include="Controller\WiFi\WiFiSensor.cs" />
+    <Compile Include="Model\ValueObjects\SimpleMeasure.cs" />
+    <Compile Include="Test\Controller\TestServiceController.cs" />
     <Compile Include="Test\Model\TestModel.cs" />
     <Compile Include="Test\Model\TestNHRepository.cs" />
     <Compile Include="Test\Model\TestEntitiesMplZipGn.cs" />
     <Compile Include="Test\Model\TestNHUnitOfWork.cs" />
-    <Compile Include="Test\WiFi\TestWiFiSensor.cs" />
+    <Compile Include="Test\Controller\WiFi\TestWiFiSensor.cs" />
     <Compile Include="Test\TestInitializer.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -156,7 +162,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="WiFi\IMeasure.cs" />
+    <Compile Include="Model\ValueObjects\IMeasure.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

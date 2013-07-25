@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using log4net;
 using NHibernate;
 using NHibernate.Criterion;
-using log4net;
+using System;
+using System.Collections.Generic;
 using whereless.Model.Entities;
 
 namespace whereless.Model.Repository

@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using whereless.Model.Factory;
-using whereless.WiFi;
+using whereless.Model.ValueObjects;
 
 namespace whereless.Model.Entities
 {

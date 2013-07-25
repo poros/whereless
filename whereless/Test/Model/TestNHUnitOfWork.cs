@@ -1,16 +1,16 @@
-﻿using System;
-using System.IO;
-using FluentNHibernate.Cfg;
+﻿using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
+using log4net;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
+using System;
 using System.Collections.Generic;
-using log4net;
+using System.IO;
 using whereless.Model.Entities;
 using whereless.Model.Factory;
 using whereless.Model.Repository;
-using whereless.WiFi;
+using whereless.Model.ValueObjects;
 
 namespace whereless.Test.Model
 {

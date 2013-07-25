@@ -1,29 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using log4net;
+using NUnit.Framework;
 using System.Threading;
-using System.Threading.Tasks;
-using log4net;
-using whereless.WiFi;
+using whereless.Controller;
+using whereless.Controller.WiFi;
 
-namespace whereless.Test.WiFi
+namespace whereless.Test.Controller.WiFi
 {
-    using NUnit.Framework;
-
-    [TestFixture(Description = "Test for Example")]
+    [TestFixture(Description = "Test for LocationLocalizer")]
     class TestWiFiSensor
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(TestWiFiSensor));
 
-        [Test(Description = "NativeWiFi example test")]
+        [Test(Description = "WiFiSensor Main Loop + Control Thread Test")]
         public void WiFiSensorTest()
         {
             var stopThread = new AutoResetEvent(false);
             var pauseThread = new AutoResetEvent(false);
             var playThread = new AutoResetEvent(false);
             var wifiSensor = new WiFiSensor(stopThread: stopThread, pauseThread: pauseThread,
-                playThread: playThread, output: new LossyProducerConsumerElement<SensorOutput>());
+                playThread: playThread, output: new SensorToLocalizer<SensorOutput>());
             var wifiDelegate = new ThreadStart(wifiSensor.WiFiSensorLoop);
             var wifiThread = new Thread(wifiDelegate);
             wifiThread.Start();

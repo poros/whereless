@@ -1,10 +1,10 @@
-﻿using System.Configuration;
-using System.IO;
-using FluentNHibernate.Cfg;
+﻿using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
+using log4net;
 using NHibernate;
 using NHibernate.Tool.hbm2ddl;
-using log4net;
+using System.Configuration;
+using System.IO;
 using whereless.Model.Factory;
 using whereless.Model.Repository;
 using Configuration = NHibernate.Cfg.Configuration;

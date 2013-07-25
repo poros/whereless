@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using whereless.Model.Factory;
-using whereless.WiFi;
+using whereless.Model.ValueObjects;
 
 namespace whereless.Model.Entities
 {

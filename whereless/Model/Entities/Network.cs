@@ -1,4 +1,4 @@
-﻿using whereless.WiFi;
+﻿using whereless.Model.ValueObjects;
 
 namespace whereless.Model.Entities
 {

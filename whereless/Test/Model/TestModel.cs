@@ -1,10 +1,10 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
-using log4net;
 using whereless.Model;
 using whereless.Model.Entities;
 using whereless.Model.Repository;
-using whereless.WiFi;
+using whereless.Model.ValueObjects;
 
 namespace whereless.Test.Model
 {

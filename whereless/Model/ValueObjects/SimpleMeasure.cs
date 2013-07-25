@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace whereless.WiFi
+﻿namespace whereless.Model.ValueObjects
 {
     class SimpleMeasure : IMeasure
     {
@@ -15,6 +9,11 @@ namespace whereless.WiFi
         {
             this.Ssid = ssid;
             this.SignalQuality = signalQuality;
+        }
+
+        public override string ToString()
+        {
+            return (this.GetType().Name + ": Ssid = " + Ssid + " SignalQuality = " + SignalQuality);
         }
     }
 }
