@@ -5,7 +5,7 @@
 
 * Controller
 	- Implement LocationLocalizer algorithm
-	- Implement execute task behaviour and decide whic tasks support
+	- Implement execute actions behaviour and decide which tasks support
 	- Implement Controller/Presenter methods and classes for WPF controls (only after view finished)
 
 * View
