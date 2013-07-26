@@ -1,0 +1,354 @@
+WHERELESS LOCATION RECOGNITION ALGORITHM
+========================================
+
+const T 1 second
+const K 1.96
+const BIG_Z 4
+const MAX_POWER 100
+
+locations = new List<Location>
+//Locations are saved from most recent to oldest, because in case of locations with similar footprints (test may pass for both)
+//more recent ones MUST be preferred, since the algorithm look for locations in order!!!
+//(users are stupid, they can register the same location twice, let's give them the last, it would be the less disappointing)
+nLocations = 0
+input = new Input
+
+A:	unknown = new Location(UNKNOWN, input)
+currLocation = unknown
+ASK(register current place?)
+if (ANSWER == YES):
+	B: unknown = NULL
+	currLocation.setName(ANSWER.name)
+	locations.add(currLocation)
+	nLocation++
+else:
+	while(input = new Input and currLocation == unknown):
+		if(unknown.testInput(input)):
+			updateStats(unknown, input)
+		else:
+			currLocation = NULL
+			for each location in locations:
+			if(location.testInput(input)):
+				currLocation = location
+				currLocation.updateStats(input)
+				break
+			if (currLocation == NULL):
+				go to A
+
+while(input = new Input):
+	if(currLocation.testInput(input)):
+		currLocation.updateStats(input)
+	else:
+		oldLocation = currLocation
+		currLocation = NULL
+		for each location != oldLocation in locations:
+			if(location.testInput(input)):
+				currLocation = location
+				currLocation.updateStats(input)
+				break
+		if (currLocation == NULL):
+			ASK(Are you still in the same location as before?)
+			if (ANSWER == YES):
+				currLocation = oldLocation
+				currLocation.sameLocation(input)
+			else:
+				go to A
+
+
+forceLocation(name):
+	currLocation = locations[name]
+	currLocation.forceLocation(input)
+
+registerLocation(name):
+	if(currLocation != unknown):
+		unknown = new Location(UNKNOWN, input)
+		currLocation = unknown
+	go to B
+	
+Location:
+	string name
+	//places are stored to most recent to oldest too!
+	List<Place> places
+	integer nPlaces
+	Place currPlace
+	Place oldPlace
+	integer time
+
+	Location(input):
+		time = T
+		currPlace = places.add(new Place(input))
+		nPlaces++
+
+	testInput(input):
+		if(currPlace != NULL and currPlace.testInput(input)):
+			return TRUE
+		else:
+			oldPlace = currPlace
+			currPlace = NULL
+			for each place != oldPlace in places:
+				if(place.testInput(input)):
+					currPlace = place
+					return TRUE
+			return FALSE
+	
+	updateStats(input):
+		if(currPlace == NULL):
+			if (!testInput(input)):
+				currPlace = places.first()
+		currPlace.updateStats(input)
+		time += T
+
+	sameLocation(input):
+		currPlace = places.add(new Place(input))
+		nPlaces++
+		time += T
+	
+	forceLocation(input):
+		currPlace = NULL
+			for each place in places:
+				if(place.testInput(input)):
+					currPlace = place
+					currPlace.updateStats(input)
+					time += T
+					break
+			if(currPlace == NULL):
+				sameLocation(input)
+				
+Place:
+	List<Network> networks //a normal distribution of the power of a network over time is assumed
+	integer nNetworks
+	
+	Place(input):
+		nNetworks = input.nmeasures
+		for each measure in input.measures:
+			networks.add(new Network(measure.SSID, measure.power))
+	
+	testInput(input):
+		n = 0
+		zIndex = 0
+		
+		for each network in networks:
+			n += network.n + 1
+			if (network.stdDev == 0):
+				//max stdDev possible -> great variance accounted for networks only once before (useful for a location first setup)
+				//another option: consider also a minimum time of permanence asked to the user for a location first setup 
+				stdDev = MAX_POWER
+			else:
+				stdDev = network.stdDev
+			if(network.SSID is in input.measures):
+				zIndex += (network.n + 1) * abs((input.measure[SSID].power - network.mean) / stdDev)
+			else:
+				zIndex += network.n * abs((0 - network.mean) / stdDev)
+		
+		for each measure in input.measures:
+			if(measure.SSID not in networks):
+				n += 1
+				zIndex += 1 * (measure.power - 0 / MAX_POWER) * BIG_Z //PENALTY
+		
+		zIndex = zIndex / n
+		if (zIndex <= K):
+			return TRUE
+		else
+			return FALSE
+		
+	updateStats(input):
+		for each field in input:
+			if(network in networks):
+				network.n += 1
+				delta = field.power - network.mean
+				network.mean = network.mean + (delta / network.n)
+				network.devStd = network.devStd + delta * (field.power - network.mean)
+			else:
+			networks.add(field.SSID, field.power)
+			nNetworks++
+				
+Network:
+	string SSID
+	float mean
+	float devStd
+	integer n
+
+	Network(id, power):
+		SSID = id
+		mean = power
+		devStd = 0
+		n = 1
+
+###############################################################
+
+VARIATION 0: REMOVE PLACES
+Location implements directly the logic within place (easy as it seems)
+
+sameLocation():
+forceLocation:
+
+###############################################################
+
+VARIATION 1: RECONCILIATION OF PLACES WITHIN THE SAME LOCATION
+PARALLEL:
+	main_algorithm
+	reconciliation:
+		sleep(5 min) //avoid changes during first minutes
+		while(TRUE):
+			sleep(20 min)
+			for each location in locations:
+				location.reconcile()
+				
+
+Location:
+reconcile():
+		curr = 0
+		while(curr < nPlaces - 1)
+			i = curr + 1
+			while(i < nPlaces):
+			places[curr].testPlace(places[i]):
+				places[curr].merge(places[i])
+				places.remove(i)
+				nPlaces--
+				i = 0
+			curr++
+
+Place:
+testPlace(place):
+		//to be done if implemented
+	
+	
+merge(place):
+		for each network in networks:
+			if(network.SSID in place.networks):
+				network.mean = ((network.n * network.mean) + (place.networks[SSID].n * place.networks[SSID].mean)) / (network.n + place.networks[SSID].n)
+				network.stdDev = sqrt(((network.n * network.stdDev^2) + (place.networks[SSID].n * place.networks[SSID].stdDev^2)) / (network.n + place.networks[SSID].n))
+				network.n += place.networks[SSID].n
+		
+		for each network in place.networks:
+			if(network not in networks):
+				networks.add(network)
+				nNetworks++
+
+###############################################################
+
+VARIATION 2: OBSERVATION WINDOW FOR PLACE FIRST STARTUP
+Once a place has just been created, the first N measures update the location stats without calling testLocation
+
+###############################################################
+
+VARIATION 3: DETECT MOVEMENT
+Compute gradient of the power of each network. If most of the gradients mantains the same sign over time (observation window), movement is detected
+
+###############################################################
+
+VARIATION 4: sameLocation PERFORM A SECOND GROSS TEST ON CURRENT PLACE
+the second test uses a doubled variance, in order to avoid the creation of another place
+(dangerous!! it can erase any advantage coming from places if places are different but near)
+
+###############################################################
+
+VARIATION 5: forceLocation GIVE HUGE WEIGHT TO LAST INPUT
+calling update stats several times
+Pro: no risk to ask again the user soon
+Cons: an outlier might greatly affect the stats
+
+###############################################################
+
+VARIATION 6: ASYNCHRONOUS ALGORITHM
+the algorithm does not wait the user answer to ASK, but keep on collecting data
+
+if(locations == NULL):
+	locations = new List<Location>
+	nLocations = 0
+	
+currLocation = NULL
+unknown = NULL
+input = new Input
+	
+if(nlocations > 0):
+		for each location in locations:
+			if(Location.testInput(input)):
+				currLocation = location
+			break
+
+if(nLocations == 0 || currLocation == NULL):
+	unknown = new Location(UNKNOWN, input)
+	currLocation = unknown
+	question = ASK(register current place?, elaborateAnswerRegister) //aysnchronous ASK with callback
+	
+while(input = new Input):
+	if(currLocation.testInput(input)):
+		currLocation.updateStats(input)
+	else:
+		oldLocation = currLocation
+		currLocation = NULL
+		for each location != oldLocation in locations:
+			if(location.testInput(input)):
+				currLocation = location
+				currLocation.updateStats(input)
+				if(unknown != NULL): 
+					unknown = NULL 
+				//if you were in unknown Register question may be pending
+				//if you were in unknown after being in a known location SameLocation question may be pending
+				retire(question)
+				break
+		if (currLocation == NULL):
+			//if I was in unknown location (don't ask again)
+			if(unknown != NULL):
+				unknown = new Location(UNKNOWN, input)
+				currLocation = unknown
+			//if I was in a known location
+			else:
+				question = ASK(Are you still in the same location as before?, elaborateAnswerSameLocation)
+				unknown = new Location(UNKNOWN, input)
+				currLocation = unknown
+
+
+forceLocation(name):
+	currLocation = locations[name]
+	currLocation.forceLocation(input)
+
+	
+registerLocation(name):
+	if(currLocation != unknown):
+		unknown = new Location(UNKNOWN, input)
+		currLocation = unknown
+	unknown = NULL
+	currLocation.setName(ANSWER.name)
+	locations.add(currLocation)
+	nLocation++
+
+	
+elaborateAnswerRegister(question, answer):
+retireQuestion(question)
+//we are sure we are in unknown, otherwise the question should already be retired
+if (unknown == NULL):
+	throw exception
+if (answer == YES):
+		currLocation = registerLocation(answer.name)
+
+		
+elaborateAnswerSameLocation(question, answer):
+retireQuestion(question)
+//we are sure we are in unknown and no other locations have been detected, otherwise the question should already be retired
+if (unknown == NULL):
+	throw exception
+if (answer == YES):
+	currLocation = oldLocation
+	currLocation.sameLocation(unknown)
+else:
+	question = ASK(register current place?, elaborateAnswerRegister)
+
+	
+Location:
+	sameLocation(location): //method overload for the case with unknown instead of a single input
+		currPlace = places.add(location.places[0]) //unknown has only a place
+		nPlaces++
+		time += location.time
+
+###############################################################
+
+VARIATION 7: fuse the two questions
+ASK(Where are you?)
+OPTIONS {
+	Known Location = Drop-Down List (default: current location, if it exist),
+	Register Location = Text Field (name of the location),
+	I don't care
+}
+###############################################################

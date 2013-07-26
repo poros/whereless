@@ -1,0 +1,33 @@
+﻿* Model
+	- Add actions to locations
+	- Add alternative entities for an alternative Localizer algorithm (hopefully not)
+	- Entities redesign and refactoring (hopefully not)
+
+* Controller
+	- Implement LocationLocalizer algorithm
+	- Implement execute task behaviour and decide whic tasks support
+	- Implement Controller/Presenter methods and classes for WPF controls (only after view finished)
+
+* View
+	- Study WPF
+	- Design interface based on UML diagrams (semplify them!!!)
+	- Realize XAML interfaces
+
+* View/Controller (App startup)
+	- Study Creating Tray Apps
+	[https://www.simple-talk.com/dotnet/.net-framework/creating-tray-applications-in-.net-a-practical-guide/]
+	[http://stackoverflow.com/questions/2951126/system-tray-popup-windows-7-style]
+	(very briefly look - poros)
+	- Study WPF TrayIcon [http://www.codeproject.com/Articles/36468/WPF-NotifyIcon] 
+	(very briefly look - poros)
+
+* Test
+	- Test entities behaviour TestInput and UpdateStat (to do in conjuction with algorithm testing)
+	- Test (and tune!!!) algorithm
+	- Test Interface/Controller (possible?)
+
+* Config
+	- Switch from test config to production config (at the end)
+
+* Installer
+	- Wrap everything into an installer (already done once - poros)

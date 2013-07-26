@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using whereless.Model.ValueObjects;
+using whereless.Controller.WiFi;
 
 namespace whereless.Model.Entities
 {
     public abstract class Location
     {
         // factory for creating child entities 
-        protected static readonly ulong T = 1000; //ms between probes TO BE MOVED
+        protected static readonly ulong T = (ulong) WiFiSensor.ScanTime;
         private string _name;
 
         public virtual int Id { get; protected set; }
