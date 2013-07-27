@@ -7,19 +7,23 @@ namespace whereless.Model.Entities
     public class GaussianNetwork : Network
     {
         // range of acceptance (corresponds to 99.99%)
-        private static readonly double k = 1.96D;
+        public static readonly double K = 1.96D;
         // signal quality varies between 0 and 100
-        private static readonly double signalQualityMax = 100D;
+        public static readonly double SignalQualityMin = 0D;
+        public static readonly double SignalQualityMax = 100D;
+        public static readonly double SignalQualityUnit = 1D;
+        // number of observations to consider the distribution stable
+        public static readonly ulong StableN = 10U;
 
-
-        private double _mean;
-        private double _stdDev;
         private ulong _n;
+        private double _mean;
+        private double _s;
 
 
-        public static double SignalQualityMax
+        public virtual ulong N
         {
-            get { return signalQualityMax; }
+            get { return _n; }
+            set { _n = value; }
         }
 
         public virtual double Mean
@@ -28,18 +32,19 @@ namespace whereless.Model.Entities
             set { _mean = value; }
         }
 
+        public virtual double S
+        {
+            get { return _s; }
+            set { _s = value; }
+
+        }
+
+        // REMARK Do not map in the db!!! S is enough and two of them may create inconsistencies
         public virtual double StdDev
         {
-            get { return _stdDev; }
-            set { _stdDev = value; }
+            get { return Math.Sqrt(_s / _n); }
+            set { _s = value * value * _n; }
         }
-
-        public virtual ulong N
-        {
-            get { return _n; }
-            set { _n = value; }
-        }
-
 
         protected GaussianNetwork() { }
 
@@ -47,7 +52,7 @@ namespace whereless.Model.Entities
             : base(measure)
         {
             _mean = measure.SignalQuality;
-            _stdDev = 0D;
+            _s = 0D;
             _n = 1;
         }
 
@@ -57,8 +62,25 @@ namespace whereless.Model.Entities
             // SSIDs have not a standard character set 
             if (Ssid.Equals(measure.Ssid, StringComparison.Ordinal))
             {
+                // if not enough stable (and if N = 1 then stdDev = 0)
+                if (N < StableN)
+                {
+                    return true;
+                }
+
                 double dist = Math.Abs((measure.SignalQuality - Mean));
-                return (dist.CompareTo(k * StdDev) <= 0); //double safe comparison
+                double range = K * StdDev;
+                
+                // if stdDev < misure error (input is uint)
+                if (range.CompareTo(SignalQualityUnit) > 0)
+                {
+                    return (dist.CompareTo(range) <= 0); //double safe comparison    
+                }
+                else
+                {
+                    return (dist.CompareTo(SignalQualityUnit) <= 0);
+                }
+
             }
             return false;
         }
@@ -70,13 +92,19 @@ namespace whereless.Model.Entities
             N += 1;
             var delta = sample - Mean;
             Mean = Mean + (delta / N);
-            StdDev = StdDev + delta * (sample - Mean);
+            _s = _s + delta * (sample - Mean);
+            // if overflow consider _variance = _variance + delta/n * (sample - Mean)
+            // but it may suffer by numeric cancellation
+            if (_s.Equals(Double.PositiveInfinity))
+            {
+                throw new OverflowException("S overflowed!!!!");
+            }
         }
 
 
         public override string ToString()
         {
-            return (base.ToString() + " Mean = " + Mean + "; StdDev = " + StdDev +
+            return (base.ToString() + " Mean = " + Mean + "; S = " + S + "; StdDev = " + StdDev +
                     "; N = " + N + ";");
         }
     }

@@ -1,6 +1,9 @@
-﻿using log4net;
+﻿using System.Configuration;
+using System.IO;
+using log4net;
 using System;
 using System.Collections.Generic;
+using whereless.Controller.WiFi;
 using whereless.Model;
 using whereless.Model.Entities;
 using whereless.Model.Repository;
@@ -17,11 +20,37 @@ namespace whereless.Test.Model
         private static readonly ILog Log = LogManager.GetLogger(typeof(TestNHUnitOfWork));
         private static readonly IModel StaticModel = ModelHelper.Handle;
 
-        private const ulong TimeVal = 9000UL;
-        private const ulong TimeVal1 = 11000UL;
-        private const ulong TimeVal2 = 2000UL;
-        private const ulong TimeVal3 = 3000UL;
-        private const ulong TimeVal4 = 4000UL;
+        private const ulong TimeVal = 9UL * WiFiSensor.ScanTime;
+        private const ulong TimeVal1 = 11UL * WiFiSensor.ScanTime;
+        private const ulong TimeVal2 = 2UL * WiFiSensor.ScanTime;
+        private const ulong TimeVal3 = 3UL * WiFiSensor.ScanTime;
+        private const ulong TimeVal4 = 4UL * WiFiSensor.ScanTime;
+
+        [TestFixtureSetUp]
+        public void CheckTestDbIsUsed()
+        {
+            string tmp = ConfigurationManager.AppSettings["databaseName"];
+            if (tmp == null)
+            {
+                throw new ConfigurationErrorsException("Unable to find databaseName key");
+            }
+            Log.Debug("DB Name = " + tmp);
+            if (tmp != "Test.db")
+            {
+                throw new ConfigurationErrorsException(
+                    "You should run this test with Test.db application configuration");
+            }
+        }
+
+        [TestFixtureTearDown]
+        public void DeleteDb()
+        {
+            if (File.Exists("Test.db"))
+            {
+                File.Delete("Test.db");
+                Log.Info("Test db deleted");
+            }
+        }
 
         [Test(Description = "Test ModelHelper and NHModel Instantion")]
         public void ModelInstantiationTest()

@@ -22,7 +22,6 @@
 	(very briefly look - poros)
 
 * Test
-	- Test entities behaviour TestInput and UpdateStat (to do in conjuction with algorithm testing)
 	- Test (and tune!!!) algorithm
 	- Test Interface/Controller (possible?)
 

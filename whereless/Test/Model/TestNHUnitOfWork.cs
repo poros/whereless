@@ -7,6 +7,7 @@ using NHibernate.Tool.hbm2ddl;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using whereless.Controller.WiFi;
 using whereless.Model.Entities;
 using whereless.Model.Factory;
 using whereless.Model.Repository;
@@ -31,11 +32,11 @@ namespace whereless.Test.Model
 
         private ISessionFactory _sessionFactory;
 
-        private const ulong TimeVal = 9000UL;
-        private const ulong TimeVal1 = 11000UL;
-        private const ulong TimeVal2 = 2000UL;
-        private const ulong TimeVal3 = 3000UL;
-        private const ulong TimeVal4 = 4000UL;
+        private const ulong TimeVal = 9UL * WiFiSensor.ScanTime;
+        private const ulong TimeVal1 = 11UL * WiFiSensor.ScanTime;
+        private const ulong TimeVal2 = 2UL * WiFiSensor.ScanTime;
+        private const ulong TimeVal3 = 3UL * WiFiSensor.ScanTime;
+        private const ulong TimeVal4 = 4UL * WiFiSensor.ScanTime;
 
         [TestFixtureSetUp]
         public void CreateDb()

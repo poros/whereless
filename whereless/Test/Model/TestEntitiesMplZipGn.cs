@@ -13,6 +13,7 @@ using System.IO;
 using whereless.Model.Entities;
 using whereless.Model.Factory;
 using whereless.Model.ValueObjects;
+using whereless.Controller.WiFi;
 
 namespace whereless.Test.Model
 {
@@ -28,12 +29,12 @@ namespace whereless.Test.Model
 
         private ISessionFactory _sessionFactory;
 
-        private const ulong TimeVal = 9000UL;
-        private const ulong NVal = TimeVal / 1000UL;
-        private const ulong TimeVal1 = 11000UL;
-        private const ulong TimeVal2 = 2000UL;
-        private const ulong TimeVal3 = 3000UL;
-        private const ulong TimeVal4 = 4000UL;
+        private const ulong TimeVal = 9UL * WiFiSensor.ScanTime;
+        private const ulong NVal = TimeVal / WiFiSensor.ScanTime;
+        private const ulong TimeVal1 = 11UL * WiFiSensor.ScanTime;
+        private const ulong TimeVal2 = 2UL * WiFiSensor.ScanTime;
+        private const ulong TimeVal3 = 3UL * WiFiSensor.ScanTime;
+        private const ulong TimeVal4 = 4UL * WiFiSensor.ScanTime;
 
 
         [TestFixtureSetUp]
@@ -128,7 +129,7 @@ namespace whereless.Test.Model
                     .CheckProperty(x => x.Ssid, "Sitecom")
                     .CheckProperty(x => x.N, 10UL)
                     .CheckProperty(x => x.Mean, 80D)
-                    .CheckProperty(x => x.StdDev, 2D)
+                    .CheckProperty(x => x.S, 2D)
                     .VerifyTheMappings();
             }
         }
@@ -369,6 +370,97 @@ namespace whereless.Test.Model
                 }
             }
            
+        }
+
+        [Test(Description = "GaussianNetwork business logic test")]
+        public void GaussianNetworkBusinessLogic()
+        {
+            GaussianNetwork net = new GaussianNetwork(new SimpleMeasure("Calvino", 80U));
+            Assert.AreEqual(net.Mean, 80D, 0.000000000001D);
+            Assert.AreEqual(net.S, 0D, 0.000000000001D);
+            Assert.AreEqual(net.StdDev, 0, 0.000000000001D);
+            Assert.AreEqual(net.N, 1);
+
+            Assert.IsFalse(net.TestInput(new SimpleMeasure("Galileo", 80U)));
+            // under stableN, the name is enough
+            Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", 80U)));
+            Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", 79U)));
+            Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", 10U)));
+            
+            
+            net.UpdateStats(new SimpleMeasure("Calvino", 40U));
+            Assert.AreEqual(net.Mean, 60D, 0.000000000001D); //12 digits precision
+            Assert.AreEqual(net.S, 800D, 0.000000000001D);
+            Assert.AreEqual(net.StdDev, 20D, 0.000000000001D);
+            Assert.AreEqual(net.N, 2);
+
+            Assert.IsFalse(net.TestInput(new SimpleMeasure("Galileo", 60U)));
+            // under stableN, the name is enough
+            Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", 40U)));
+            Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", 59U)));
+            Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", 10U)));
+            
+
+            net.UpdateStats(new SimpleMeasure("Calvino", 0U));
+            Assert.AreEqual(net.Mean, 40D, 0.000000000001D);
+            Assert.AreEqual(net.S, 3200, 0.000000000001D);
+            Assert.AreEqual(net.StdDev, 32.659863237109D, 0.000000000001D);
+            Assert.AreEqual(net.N, 3);
+
+            Assert.IsFalse(net.TestInput(new SimpleMeasure("Galileo", 40U)));
+            // under stableN, the name is enough
+            Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", 40U)));
+            Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", 39U)));
+            Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", 10U)));
+            
+            for (int i = 0; i < 1000; i++)
+            {
+                net.UpdateStats(new SimpleMeasure("Calvino", 40U));
+                net.UpdateStats(new SimpleMeasure("Calvino", 35U));
+                net.UpdateStats(new SimpleMeasure("Calvino", 37U));
+                net.UpdateStats(new SimpleMeasure("Calvino", 38U));
+            }
+            Assert.AreEqual(net.Mean, 37.501873594804D, 0.000000000001D);
+            Assert.AreEqual(net.S, 16218.735948039D, 0.000000001D);
+            Assert.AreEqual(net.StdDev, 2.01286990465602D, 0.000000000001D);
+            Assert.AreEqual(net.N, 4003);
+
+            Assert.IsFalse(net.TestInput(new SimpleMeasure("Galileo", 37U)));
+            Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", (uint) Math.Round(net.Mean))));
+            // 1 StdDev
+            double delta1 = 1*net.StdDev - 0.001D;
+            Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", (uint) Math.Floor(net.Mean + delta1))));
+            Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", (uint) Math.Ceiling(net.Mean - delta1))));
+            // K * StdDev
+            double deltaK = GaussianNetwork.K*net.StdDev - 0.001D;
+            Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", (uint)Math.Floor(net.Mean + deltaK))));
+            Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", (uint)Math.Ceiling(net.Mean - deltaK))));
+            // Over
+            double deltaO = GaussianNetwork.K*net.StdDev + 1D;
+            Assert.IsFalse(net.TestInput(new SimpleMeasure("Calvino", (uint)Math.Floor(net.Mean + deltaO))));
+            Assert.IsFalse(net.TestInput(new SimpleMeasure("Calvino", (uint)Math.Ceiling(net.Mean - deltaO))));
+            Assert.IsFalse(net.TestInput(new SimpleMeasure("Calvino", 0U)));
+            Assert.IsFalse(net.TestInput(new SimpleMeasure("Calvino", 100U)));
+
+            // Check K * StdDev < SignalQualityUnit special case
+            for (int i = 0; i < 1000000; i++)
+            {
+                net.UpdateStats(new SimpleMeasure("Calvino", 37U));
+            }
+            Assert.AreEqual(net.Mean, 37D, 0.5D);
+            Assert.Less((net.StdDev * GaussianNetwork.K).CompareTo(GaussianNetwork.SignalQualityUnit), 1);
+            double deltaU = GaussianNetwork.SignalQualityUnit - 0.001D;
+            double deltaUO = GaussianNetwork.SignalQualityUnit + 1D;
+            Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", (uint) Math.Floor(net.Mean + deltaU))));
+            Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", (uint)Math.Ceiling(net.Mean - deltaU))));
+            Assert.IsFalse(net.TestInput(new SimpleMeasure("Calvino", (uint)Math.Floor(net.Mean + deltaUO))));
+            Assert.IsFalse(net.TestInput(new SimpleMeasure("Calvino", (uint)Math.Ceiling(net.Mean - deltaUO))));
+        }
+
+        [Test(Description = "ZIndexPlace business logic test")]
+        public void ZIndexPlaceBusinessLogic()
+        {
+
         }
 
 

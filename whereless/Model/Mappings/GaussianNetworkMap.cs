@@ -10,7 +10,7 @@ namespace whereless.Model.Mappings
             DiscriminatorValue("GaussianNetwork"); //typeOf(GaussianNetwork)
             Map(x => x.N);
             Map(x => x.Mean);
-            Map(x => x.StdDev);
+            Map(x => x.S);
         }
     }
 }
