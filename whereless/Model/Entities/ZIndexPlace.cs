@@ -2,15 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using log4net;
 using whereless.Model.Factory;
 using whereless.Model.ValueObjects;
 
 namespace whereless.Model.Entities
 {
+
     // implements a check of compatibility based on the z-score of the input measure of each network
     // weighted by the number of observation collected per each network
     public class ZIndexPlace : Place
     {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(ZIndexPlace));
+
         // factory for creating child entities
         //REMARK!!! This is an emergency solution. Impossible to move it in ModelHelper
         // but in general it should not be here.
@@ -20,12 +24,12 @@ namespace whereless.Model.Entities
         // the two constant to change in order to refine recognition precision
         // define the penalty in terms of standard deviation for just discovered networks
         private static readonly double bigZ = 4D;
-        // defines the range of input acceptability (99.99%)
-        private static readonly double k = 1.96D;
-        
+        // defines the range of input acceptability (99.99% -> 1.96D, 68.2% -> 1)
+        private static readonly double k = 1D;
+
 
         private IDictionary<string, Network> _networks;
-        
+
 
         public virtual IList<Network> Networks
         {
@@ -39,7 +43,7 @@ namespace whereless.Model.Entities
             _networks.Add(ssid, net);
             //net.PlaceReference = this;
         }
-  
+
 
         public ZIndexPlace()
         {
@@ -56,8 +60,7 @@ namespace whereless.Model.Entities
             }
         }
 
-
-        public override bool TestInput(IList<IMeasure> measures)
+        public virtual double ZIndex(IList<IMeasure> measures)
         {
             Dictionary<String, IMeasure> dMeasures = measures.ToDictionary(m => m.Ssid);
             double zIndex = 0;
@@ -77,22 +80,23 @@ namespace whereless.Model.Entities
                 n += gNet.N + 1;
                 double stdDev = GaussianNetwork.SignalQualityMax;
                 // in order to avoid 0 division for newly added networks (standard dev = 0)
-                if(!gNet.StdDev.Equals(0D))
+                if (!gNet.StdDev.Equals(0D))
                 {
                     stdDev = gNet.StdDev;
                 }
                 IMeasure measure;
                 // if the network is present in the input measures
-                if(dMeasures.TryGetValue(gNet.Ssid, out measure))
+                if (dMeasures.TryGetValue(gNet.Ssid, out measure))
                 {
                     zIndex += (gNet.N + 1) * Math.Abs((measure.SignalQuality - gNet.Mean) / stdDev);
                 }
                 // if not consider a measure with signal quality equal to 0
                 else
                 {
-                    //consider also gNet + 1 (change n above for coherence)
+                    //consider also gNet.N (change n above for coherence, too)
                     zIndex += (gNet.N + 1) * Math.Abs((0D - gNet.Mean) / stdDev);
                 }
+                //Log.Debug(zIndex);
             }
 
             // foreach just discovered network
@@ -107,8 +111,13 @@ namespace whereless.Model.Entities
             }
 
             zIndex = zIndex / n;
+            Log.Debug("Z-Index = " + zIndex);
+            return zIndex;
+        }
 
-            return (zIndex.CompareTo(k) <= 0); //double safe comparison
+        public override bool TestInput(IList<IMeasure> measures)
+        {
+            return (ZIndex(measures).CompareTo(k) <= 0); //double safe comparison
         }
 
         public override void UpdateStats(IList<IMeasure> measures)

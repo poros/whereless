@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using log4net;
 using whereless.Model.Factory;
 using whereless.Model.ValueObjects;
 
@@ -10,6 +11,8 @@ namespace whereless.Model.Entities
 {
     public class MultiPlacesLocation : Location
     {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(MultiPlacesLocation));
+
         private ulong _n = 0;
         // Locations are saved from most recent to oldest,
         // because in case of locations with similar footprints (test may pass for both)
@@ -71,6 +74,7 @@ namespace whereless.Model.Entities
             // proximity preference
             if (_currPlace != null && _currPlace.TestInput(measures))
             {
+                Log.Debug("Place recognized = " + _currPlace.Id);
                 return true;
             }
             var oldPlace = _currPlace;
@@ -79,9 +83,11 @@ namespace whereless.Model.Entities
                 var place in _places.Where(place => place != oldPlace).Where(place => place.TestInput(measures)))
             {
                 _currPlace = place;
+                Log.Debug("Place recognized = " + _currPlace.Id);
                 return true;
             }
             // REMARK current place was not set up
+            Log.Debug("No place recognized");
             return false;
         }
 
@@ -94,6 +100,7 @@ namespace whereless.Model.Entities
             }
             // TODO find a better way than a side effect
             Debug.Assert(_currPlace != null, "_currPlace != null");
+            Log.Debug("Place to be updated = " + _currPlace.Id);
             _currPlace.UpdateStats(measures);
             N += 1;
         }

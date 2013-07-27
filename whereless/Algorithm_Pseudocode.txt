@@ -1,8 +1,8 @@
 WHERELESS LOCATION RECOGNITION ALGORITHM
 ========================================
 
-const T 1 second
-const K 1.96
+const T 4.3 second
+const K 1 //1.96
 const BIG_Z 4
 const MAX_POWER 100
 
@@ -352,3 +352,5 @@ OPTIONS {
 	I don't care
 }
 ###############################################################
+
+VARIATION 8: subsitute z-score with weighted (through observations number) number of networks that passed TestInput() 

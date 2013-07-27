@@ -14,6 +14,8 @@ using whereless.Model.Entities;
 using whereless.Model.Factory;
 using whereless.Model.ValueObjects;
 using whereless.Controller.WiFi;
+using System.Linq;
+using System.Text;
 
 namespace whereless.Test.Model
 {
@@ -132,6 +134,29 @@ namespace whereless.Test.Model
                     .CheckProperty(x => x.S, 2D)
                     .VerifyTheMappings();
             }
+        }
+
+        [Test(Description = "GaussianNetwork Exception Test Constructor in case of out-of-range SignalQuality")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void GaussianNetworkOutOfRangeMeasureConstructor()
+        {
+            var net = new GaussianNetwork(new SimpleMeasure("WrongNet", 101U));
+        }
+
+        [Test(Description = "GaussianNetwork Exception Test TestInput in case of out-of-range SignalQuality")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void GaussianNetworkOutOfRangeMeasureTestInputMethod()
+        {
+            var net = new GaussianNetwork(new SimpleMeasure("WrongNet", 10U));
+            net.TestInput(new SimpleMeasure("WrongNet", 101U));
+        }
+
+        [Test(Description = "GaussianNetwork Exception Test UpdateStats in case of out-of-range SignalQuality")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void GaussianNetworkOutOfRangeMeasureUpdateStatsMethod()
+        {
+            var net = new GaussianNetwork(new SimpleMeasure("WrongNet", 10U));
+            net.UpdateStats(new SimpleMeasure("WrongNet", 101U));
         }
 
         [Test(Description = "MplZipGn Factory Test")]
@@ -460,8 +485,96 @@ namespace whereless.Test.Model
         [Test(Description = "ZIndexPlace business logic test")]
         public void ZIndexPlaceBusinessLogic()
         {
+            var input1 = new List<IMeasure> { new SimpleMeasure("ReteA", 10U), new SimpleMeasure("ReteB", 80U), new SimpleMeasure("ReteC", 100U) };
+            var place = new ZIndexPlace(input1);
 
+            var input2 = new List<IMeasure> {new SimpleMeasure("ReteB", 40U), new SimpleMeasure("ReteD", 5U), new SimpleMeasure("ReteA", 10U) };
+            
+            //TestInput method
+            Assert.AreEqual(place.ZIndex(input1), 0D, Double.Epsilon);
+            Assert.AreEqual(place.ZIndex(input2), 0.42857142857142D, 0.00000000000001D);
+            Assert.True(place.TestInput(input2));
+
+            //UpdateStats method
+            place.UpdateStats(input2);
+            Assert.AreEqual(place.Networks.Count, 4);
+            Dictionary<string, GaussianNetwork> dict = place.Networks.ToDictionary(m => m.Ssid, m => m as GaussianNetwork);
+            var flags = new bool[4] { false, false, false, false };
+            foreach (var network in dict)
+            {
+                if (network.Key.Equals("ReteA"))
+                {
+                    flags[0] = true;
+                    Assert.AreEqual(network.Value.N, 2);
+                }
+                else if (network.Key.Equals("ReteB"))
+                {
+                    flags[1] = true;
+                    Assert.AreEqual(network.Value.N, 2);
+                }
+                else if (network.Key.Equals("ReteC"))
+                {
+                    flags[2] = true;
+                    Assert.AreEqual(network.Value.N, 1);
+                }
+                else if (network.Key.Equals("ReteD"))
+                {
+                    flags[3] = true;
+                    Assert.AreEqual(network.Value.N, 1);
+                }
+                else
+                {
+                    Assert.Fail();
+                }
+            }
+            for (int i = 0; i < 4; i++)
+            {
+                if (!flags[i])
+                {
+                    Log.Debug(i);
+                    Assert.Fail();
+                }
+
+            }
+
+            var input3 = new List<IMeasure> {new SimpleMeasure("ReteB", 30U)};
+            Assert.AreEqual(place.ZIndex(input3), 0.69D, Double.Epsilon);
+            Assert.True(place.TestInput(input3));
+            place.UpdateStats(input3);
+
+            var input4 = new List<IMeasure> { new SimpleMeasure("ReteZ", 30U) , new SimpleMeasure("ReteQ", 90U), new SimpleMeasure("ReteW", 80U) };
+            Assert.False(place.TestInput(input4));
+            
         }
+
+        [Test(Description = "MultiPlacesLocation business logic test")]
+        public void MultiPlacesLocationBusinessLogic()
+        {
+            var input1 = new List<IMeasure>
+                {
+                    new SimpleMeasure("ReteA", 100U),
+                    new SimpleMeasure("ReteB", 100U),
+                    new SimpleMeasure("ReteC", 100U)
+                };
+            var location = new MultiPlacesLocation("Polito", input1);
+
+            var input2 = new List<IMeasure>
+                {
+                    new SimpleMeasure("ReteB", 40U),
+                    new SimpleMeasure("ReteD", 5U),
+                    new SimpleMeasure("ReteA", 10U)
+                };
+            Assert.True(location.TestInput(input2));
+            location.UpdateStats(input2);
+
+            var input3 = new List<IMeasure> { new SimpleMeasure("ReteB", 30U) };
+            location.AddPlace(new ZIndexPlace(input3));
+            Assert.True(location.TestInput(input3));
+
+            var input4 = new List<IMeasure> { new SimpleMeasure("ReteZ", 30U), new SimpleMeasure("ReteQ", 90U), new SimpleMeasure("ReteW", 80U) };
+            Assert.False(location.TestInput(input4));
+        }
+
 
 
 

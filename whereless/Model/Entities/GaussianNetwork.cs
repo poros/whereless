@@ -15,6 +15,14 @@ namespace whereless.Model.Entities
         // number of observations to consider the distribution stable
         public static readonly ulong StableN = 10U;
 
+        private static void CheckInput(IMeasure measure)
+        {
+            if (measure.SignalQuality < SignalQualityMin || measure.SignalQuality > SignalQualityMax)
+            {
+                throw new ArgumentOutOfRangeException("measure" + " SignalQuality out of range");
+            }
+        }
+
         private ulong _n;
         private double _mean;
         private double _s;
@@ -51,6 +59,7 @@ namespace whereless.Model.Entities
         public GaussianNetwork(IMeasure measure)
             : base(measure)
         {
+            CheckInput(measure);
             _mean = measure.SignalQuality;
             _s = 0D;
             _n = 1;
@@ -59,6 +68,8 @@ namespace whereless.Model.Entities
 
         public override bool TestInput(IMeasure measure)
         {
+            CheckInput(measure);
+
             // SSIDs have not a standard character set 
             if (Ssid.Equals(measure.Ssid, StringComparison.Ordinal))
             {
@@ -87,6 +98,8 @@ namespace whereless.Model.Entities
 
         public override void UpdateStats(IMeasure measure)
         {
+            CheckInput(measure);
+
             //online mean and standard deviation
             var sample = (double)measure.SignalQuality;
             N += 1;
