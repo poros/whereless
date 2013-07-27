@@ -42,14 +42,19 @@ namespace whereless.Test.Model
             }
         }
 
-        [TestFixtureTearDown]
-        public void DeleteDb()
+        [TearDown]
+        public void EmptyDb()
         {
-            if (File.Exists("Test.db"))
+            using (var uow = ModelHelper.GetUnitOfWork())
             {
-                File.Delete("Test.db");
-                Log.Info("Test db deleted");
+                var entities = uow.GetAll<object>();
+                foreach (var entity in entities)
+                {
+                    uow.Delete(entity);
+                }
+                uow.Commit();
             }
+            Log.Debug("Empty DB Assured");
         }
 
         [Test(Description = "Test ModelHelper and NHModel Instantion")]

@@ -1,4 +1,6 @@
-﻿using log4net.Config;
+﻿using System.IO;
+using log4net;
+using log4net.Config;
 
 namespace whereless.Test
 {
@@ -15,6 +17,17 @@ namespace whereless.Test
             {
                 // BasicConfigurator replaced with XmlConfigurator.
                 XmlConfigurator.Configure();
+            }
+
+            [TearDown]
+            public void DeleteDb()
+            {
+                ILog Log = LogManager.GetLogger(typeof(TestsInitializer));
+                if (File.Exists("Test.db"))
+                {
+                    File.Delete("Test.db");
+                    Log.Info("Test db deleted");
+                }
             }
         }
     }
