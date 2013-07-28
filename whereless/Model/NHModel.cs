@@ -1,5 +1,6 @@
 ﻿using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
+using FluentNHibernate.Conventions.Helpers;
 using log4net;
 using NHibernate;
 using NHibernate.Tool.hbm2ddl;
@@ -115,6 +116,7 @@ namespace whereless.Model
                                .Mappings(m =>
                                          m.FluentMappings.AddFromAssemblyOf<App>()
                                         //.Conventions.Add(DefaultCascade.All())
+                                        .Conventions.Add(DefaultLazy.Never())
                                 )
                                .ExposeConfiguration(BuildSchema)
                                .BuildSessionFactory();
@@ -128,6 +130,7 @@ namespace whereless.Model
                                .Mappings(m =>
                                          m.FluentMappings.AddFromAssemblyOf<App>()
                                         //.Conventions.Add(DefaultCascade.All())
+                                        .Conventions.Add(DefaultLazy.Never())
                                 )
                                .BuildSessionFactory();
             }

@@ -12,6 +12,9 @@ namespace whereless.Model.Mappings
                 .Not.Nullable()
                 .Unique();
             Map(x => x.Time);
+            HasMany(x => x.ActivityList)
+                //.Inverse()
+                .Cascade.All();
             DiscriminateSubClassesOnColumn("type");
         }
     }

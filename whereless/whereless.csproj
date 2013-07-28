@@ -106,6 +106,7 @@
     <Compile Include="Controller\Localizer\LocationLocalizer.cs" />
     <Compile Include="Controller\PlayPauseStopThread.cs" />
     <Compile Include="Controller\ServiceController.cs" />
+    <Compile Include="Model\Entities\Activity.cs" />
     <Compile Include="Model\Entities\Location.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -121,6 +122,7 @@
     <Compile Include="Model\Factory\EntitiesFactory.cs" />
     <Compile Include="Model\Factory\MplZipGn.cs" />
     <Compile Include="Model\IModel.cs" />
+    <Compile Include="Model\Mappings\ActivityMap.cs" />
     <Compile Include="Model\Mappings\GaussianNetworkMap.cs" />
     <Compile Include="Model\Mappings\LocationMap.cs" />
     <Compile Include="Model\Mappings\MultiPlacesLocationMap.cs" />

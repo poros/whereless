@@ -1,5 +1,6 @@
 ﻿using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
+using FluentNHibernate.Conventions.Helpers;
 using log4net;
 using NHibernate;
 using NHibernate.Cfg;
@@ -65,6 +66,7 @@ namespace whereless.Test.Model
                                                         .UsingFile(DbFile))
                            .Mappings(m =>
                                      m.FluentMappings.AddFromAssemblyOf<Location>()
+                                     .Conventions.Add(DefaultLazy.Never())
                 //.Conventions.Add(DefaultCascade.All())
                 )
                            .ExposeConfiguration(BuildSchema)

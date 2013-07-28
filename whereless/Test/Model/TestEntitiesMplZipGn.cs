@@ -83,6 +83,25 @@ namespace whereless.Test.Model
                 .Create(false, true);
         }
 
+        [TearDown]
+        public void EmptyDb()
+        {
+            using (var session = _sessionFactory.OpenSession())
+            {
+                using (var transaction = session.BeginTransaction())
+                {
+                    var entities = session.CreateCriteria(typeof(Object))
+                                           .List<Object>();
+                    foreach (var entity in entities)
+                    {
+                        session.Delete(entity);
+                    }
+                    transaction.Commit();
+                }
+            }
+            Log.Debug("Empty DB Assured");
+        }
+
         // REMARK Comment it if you want to check the db by hand
         [TestFixtureTearDown]
         public void DeleteDb()
@@ -105,6 +124,7 @@ namespace whereless.Test.Model
                     .CheckProperty(x => x.Time, TimeVal)
                     .CheckProperty(x => x.N, NVal)
                     .CheckList(x => x.Places, MockPlace())
+                    .CheckList(x => x.ActivityList, MockActivity())
                     .VerifyTheMappings();
             }
         }
@@ -132,6 +152,18 @@ namespace whereless.Test.Model
                     .CheckProperty(x => x.N, 10UL)
                     .CheckProperty(x => x.Mean, 80D)
                     .CheckProperty(x => x.S, 2D)
+                    .VerifyTheMappings();
+            }
+        }
+
+        [Test(Description = "Activity Test with Fluent NHibernate PersistanceSpecification")]
+        public void ActivityMappingTest()
+        {
+            using (var session = _sessionFactory.OpenSession())
+            {
+                new PersistenceSpecification<Activity>(session, new CustomEqualityComparer())
+                    // .CheckProperty(x => x.Id, 1)
+                    .CheckProperty(x => x.Name, "AlarmClock")
                     .VerifyTheMappings();
             }
         }
@@ -213,6 +245,9 @@ namespace whereless.Test.Model
                     Assert.AreEqual(loc2.Name, "Location2");
                     Assert.AreEqual(loc2.Time, TimeVal1);
 
+                    loc.AddActivity(new Activity("AlarmClock"));
+                    loc.AddActivity(new Activity("OpenBrowser"));
+                    loc2.AddActivity(new Activity("AlarmClock"));
 
                     //this saves everything else via cascading
                     session.SaveOrUpdate(loc); //the same of using session.Save(loc)
@@ -238,7 +273,8 @@ namespace whereless.Test.Model
                         if (location.Name == "Location1")
                         {
                             Assert.AreEqual(location.Time, TimeVal);
-                        } else if (location.Name == "Location2")
+                        }
+                        else if (location.Name == "Location2")
                         {
                             Assert.AreEqual(location.Time, TimeVal1);
                         }
@@ -285,7 +321,30 @@ namespace whereless.Test.Model
                             Assert.Fail("Network Ssid not matching");
                         }
                     }
-                    
+
+                    var activities = session.CreateCriteria(typeof(Activity))
+                                          .List<Activity>();
+                    foreach (var activity in activities)
+                    {
+                        Console.WriteLine(activity.ToString());
+                    }
+                    Assert.AreEqual(3, activities.Count);
+                    foreach (var activity in activities)
+                    {
+                        if (activity.Name.Equals("AlarmClock"))
+                        {
+                            Assert.Pass();
+                        }
+                        else if (activity.Name.Equals("OpenBrowser"))
+                        {
+                            Assert.Pass();
+                        }
+                        else
+                        {
+                            Assert.Fail("Activity Name not matching");
+                        }
+                    }
+
                     transaction.Commit();
                 }
             }
@@ -304,7 +363,7 @@ namespace whereless.Test.Model
                     longLivedLocation = session.CreateCriteria(typeof(Location)).Add(Restrictions.Eq("Name", locName))
                                            .UniqueResult<Location>();
                     Assert.AreEqual(longLivedLocation.Name, locName);
-                    
+
                     longLivedLocation.Time = TimeVal2;
 
                     transaction.Commit();
@@ -320,7 +379,7 @@ namespace whereless.Test.Model
                     Assert.AreEqual(tmp.Time, TimeVal2);
                 }
             }
-            
+
 
             // update of an entity retrieved in a different session
             using (var session = _sessionFactory.OpenSession())
@@ -394,9 +453,12 @@ namespace whereless.Test.Model
                     transaction.Commit();
                 }
             }
-           
+
         }
 
+        //REMARK: values used for test
+        //K = 1.96D;
+        //StableN = 10U;
         [Test(Description = "GaussianNetwork business logic test")]
         public void GaussianNetworkBusinessLogic()
         {
@@ -407,12 +469,12 @@ namespace whereless.Test.Model
             Assert.AreEqual(net.N, 1);
 
             Assert.IsFalse(net.TestInput(new SimpleMeasure("Galileo", 80U)));
-            // under stableN, the name is enough
+            // under stableN, the SSID is enough
             Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", 80U)));
             Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", 79U)));
             Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", 10U)));
-            
-            
+
+
             net.UpdateStats(new SimpleMeasure("Calvino", 40U));
             Assert.AreEqual(net.Mean, 60D, 0.000000000001D); //12 digits precision
             Assert.AreEqual(net.S, 800D, 0.000000000001D);
@@ -420,11 +482,11 @@ namespace whereless.Test.Model
             Assert.AreEqual(net.N, 2);
 
             Assert.IsFalse(net.TestInput(new SimpleMeasure("Galileo", 60U)));
-            // under stableN, the name is enough
+            // under stableN, the SSID is enough
             Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", 40U)));
             Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", 59U)));
             Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", 10U)));
-            
+
 
             net.UpdateStats(new SimpleMeasure("Calvino", 0U));
             Assert.AreEqual(net.Mean, 40D, 0.000000000001D);
@@ -433,11 +495,11 @@ namespace whereless.Test.Model
             Assert.AreEqual(net.N, 3);
 
             Assert.IsFalse(net.TestInput(new SimpleMeasure("Galileo", 40U)));
-            // under stableN, the name is enough
+            // under stableN, the SSID is enough
             Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", 40U)));
             Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", 39U)));
             Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", 10U)));
-            
+
             for (int i = 0; i < 1000; i++)
             {
                 net.UpdateStats(new SimpleMeasure("Calvino", 40U));
@@ -451,17 +513,17 @@ namespace whereless.Test.Model
             Assert.AreEqual(net.N, 4003);
 
             Assert.IsFalse(net.TestInput(new SimpleMeasure("Galileo", 37U)));
-            Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", (uint) Math.Round(net.Mean))));
+            Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", (uint)Math.Round(net.Mean))));
             // 1 StdDev
-            double delta1 = 1*net.StdDev - 0.001D;
-            Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", (uint) Math.Floor(net.Mean + delta1))));
-            Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", (uint) Math.Ceiling(net.Mean - delta1))));
+            double delta1 = 1 * net.StdDev - 0.001D;
+            Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", (uint)Math.Floor(net.Mean + delta1))));
+            Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", (uint)Math.Ceiling(net.Mean - delta1))));
             // K * StdDev
-            double deltaK = GaussianNetwork.K*net.StdDev - 0.001D;
+            double deltaK = GaussianNetwork.K * net.StdDev - 0.001D;
             Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", (uint)Math.Floor(net.Mean + deltaK))));
             Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", (uint)Math.Ceiling(net.Mean - deltaK))));
             // Over
-            double deltaO = GaussianNetwork.K*net.StdDev + 1D;
+            double deltaO = GaussianNetwork.K * net.StdDev + 1D;
             Assert.IsFalse(net.TestInput(new SimpleMeasure("Calvino", (uint)Math.Floor(net.Mean + deltaO))));
             Assert.IsFalse(net.TestInput(new SimpleMeasure("Calvino", (uint)Math.Ceiling(net.Mean - deltaO))));
             Assert.IsFalse(net.TestInput(new SimpleMeasure("Calvino", 0U)));
@@ -476,20 +538,23 @@ namespace whereless.Test.Model
             Assert.Less((net.StdDev * GaussianNetwork.K).CompareTo(GaussianNetwork.SignalQualityUnit), 1);
             double deltaU = GaussianNetwork.SignalQualityUnit - 0.001D;
             double deltaUO = GaussianNetwork.SignalQualityUnit + 1D;
-            Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", (uint) Math.Floor(net.Mean + deltaU))));
+            Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", (uint)Math.Floor(net.Mean + deltaU))));
             Assert.IsTrue(net.TestInput(new SimpleMeasure("Calvino", (uint)Math.Ceiling(net.Mean - deltaU))));
             Assert.IsFalse(net.TestInput(new SimpleMeasure("Calvino", (uint)Math.Floor(net.Mean + deltaUO))));
             Assert.IsFalse(net.TestInput(new SimpleMeasure("Calvino", (uint)Math.Ceiling(net.Mean - deltaUO))));
         }
 
+        // REMARK values used fo test
+        // bigZ = 4D;
+        // K = 1D
         [Test(Description = "ZIndexPlace business logic test")]
         public void ZIndexPlaceBusinessLogic()
         {
             var input1 = new List<IMeasure> { new SimpleMeasure("ReteA", 10U), new SimpleMeasure("ReteB", 80U), new SimpleMeasure("ReteC", 100U) };
             var place = new ZIndexPlace(input1);
 
-            var input2 = new List<IMeasure> {new SimpleMeasure("ReteB", 40U), new SimpleMeasure("ReteD", 5U), new SimpleMeasure("ReteA", 10U) };
-            
+            var input2 = new List<IMeasure> { new SimpleMeasure("ReteB", 40U), new SimpleMeasure("ReteD", 5U), new SimpleMeasure("ReteA", 10U) };
+
             //TestInput method
             Assert.AreEqual(place.ZIndex(input1), 0D, Double.Epsilon);
             Assert.AreEqual(place.ZIndex(input2), 0.42857142857142D, 0.00000000000001D);
@@ -537,15 +602,15 @@ namespace whereless.Test.Model
 
             }
 
-            var input3 = new List<IMeasure> {new SimpleMeasure("ReteB", 30U)};
+            var input3 = new List<IMeasure> { new SimpleMeasure("ReteB", 30U) };
             Assert.AreEqual(place.ZIndex(input3), 0.69D, Double.Epsilon);
             Assert.True(place.TestInput(input3));
             place.UpdateStats(input3);
 
-            var input4 = new List<IMeasure> { new SimpleMeasure("ReteZ", 30U) , new SimpleMeasure("ReteQ", 90U), new SimpleMeasure("ReteW", 80U) };
+            var input4 = new List<IMeasure> { new SimpleMeasure("ReteZ", 30U), new SimpleMeasure("ReteQ", 90U), new SimpleMeasure("ReteW", 80U) };
             Assert.False(place.TestInput(input4));
-            
         }
+
 
         [Test(Description = "MultiPlacesLocation business logic test")]
         public void MultiPlacesLocationBusinessLogic()
@@ -575,7 +640,11 @@ namespace whereless.Test.Model
             Assert.False(location.TestInput(input4));
         }
 
-
+        private IList<Activity> MockActivity()
+        {
+            var list = new List<Activity> { new Activity("Activity1"), new Activity("Activity2") };
+            return list;
+        }
 
 
         private IList<Place> MockPlace()
@@ -603,7 +672,7 @@ namespace whereless.Test.Model
                 }
                 if (x is MultiPlacesLocation && y is MultiPlacesLocation)
                 {
-                    return ((MultiPlacesLocation)x).Name == ((MultiPlacesLocation)y).Name;
+                    return ((MultiPlacesLocation)x).Name.Equals(((MultiPlacesLocation)y).Name);
                 }
                 if (x is ZIndexPlace && y is ZIndexPlace)
                 {
@@ -612,6 +681,10 @@ namespace whereless.Test.Model
                 if (x is GaussianNetwork && y is GaussianNetwork)
                 {
                     return ((GaussianNetwork)x).Ssid == ((GaussianNetwork)y).Ssid;
+                }
+                if (x is Activity && y is Activity)
+                {
+                    return ((Activity)x).Name.Equals(((Activity)y).Name);
                 }
                 return x.Equals(y);
             }

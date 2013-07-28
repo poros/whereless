@@ -1,5 +1,5 @@
 ﻿* Model
-	- Add actions to locations
+	- Complete Activity entity (basing on controller)
 	- Add alternative entities for an alternative Localizer algorithm (hopefully not)
 	- Entities redesign and refactoring (hopefully not)
 
