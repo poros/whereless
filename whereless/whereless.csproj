@@ -106,6 +106,10 @@
     <Compile Include="LocalizationService\Localizer\LocationLocalizer.cs" />
     <Compile Include="LocalizationService\PlayPauseStopThread.cs" />
     <Compile Include="LocalizationService\ServiceController.cs" />
+    <Compile Include="ViewModel\WherelessViewModel.cs" />
+    <Compile Include="ViewModel\PeopleViewModel.cs" />
+    <Compile Include="ViewModel\ServiceAgent.cs" />
+    <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="Model\Entities\Activity.cs" />
     <Compile Include="Model\Entities\Location.cs">
       <SubType>Code</SubType>
@@ -151,7 +155,7 @@
     <Compile Include="Test\Model\TestNHUnitOfWork.cs" />
     <Compile Include="Test\LocalizationService\WiFi\TestWiFiSensor.cs" />
     <Compile Include="Test\TestInitializer.cs" />
-    <Page Include="BigWindow.xaml">
+    <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -161,8 +165,8 @@
     </Compile>
     <Compile Include="Model\Entities\GaussianNetwork.cs" />
     <Compile Include="Model\Entities\Network.cs" />
-    <Compile Include="BigWindow.xaml.cs">
-      <DependentUpon>BigWindow.xaml</DependentUpon>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -212,9 +216,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ModelView\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

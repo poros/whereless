@@ -33,6 +33,14 @@ namespace whereless.LocalizationService
         private readonly SensorToLocalizer<SensorOutput> _sensorOutputLocalizerInput = 
             new SensorToLocalizer<SensorOutput>();
 
+
+        public WiFiSensor.RadioOffCallbackDelegate RadioOffCallback
+        {
+            get { return _sensor.RadioOffDelegate; }
+            set { _sensor.RadioOffDelegate = value; }
+        }
+
+
         public ServiceController()
         {
             _sensor = new WiFiSensor(stopThread: _sensorStop, pauseThread: _sensorPause,
@@ -48,7 +56,11 @@ namespace whereless.LocalizationService
 
             _sensorThread.IsBackground = true;
             _localizerThread.IsBackground = true;
+        }
 
+
+        public void Start()
+        {
             _sensorThread.Start();
             _localizerThread.Start();
         }

@@ -21,10 +21,15 @@ namespace whereless.LocalizationService.WiFi
         private readonly SensorToLocalizer<SensorOutput> _output; 
         private readonly WlanClient _client;
 
-
-        // TODO Just a stub to remember to implement a delegate
-        public delegate void UiDelegate();
-        public UiDelegate WlanInterfaceDownDelegate { get; set; }
+        // Vars for the radioOff callback
+        private bool _radioOff = false;
+        public delegate void RadioOffCallbackDelegate (bool off);
+        private RadioOffCallbackDelegate _radioOffDelegate;
+        public RadioOffCallbackDelegate RadioOffDelegate
+        {
+            get { return _radioOffDelegate; }
+            set { _radioOffDelegate += value; }
+        }
 
 
         // Converts a 802.11 SSID to a string.
@@ -69,7 +74,7 @@ namespace whereless.LocalizationService.WiFi
                 }
             }
             _output.Close();
-            Log.Debug("WiFISensor thread has been stopped");
+            Log.Debug("WiFiSensor thread has been stopped");
         }
 
 
@@ -77,12 +82,15 @@ namespace whereless.LocalizationService.WiFi
         {
             Log.Debug("SCAN");
             var networks = GetNetworksAndScan();
-            foreach (var network in networks)
+            if (networks != null)
             {
-                Log.Debug("Network SSID: " + network.Ssid + " SignalQuality: " + network.SignalQuality);
+                foreach (var network in networks)
+                {
+                    Log.Debug("Network SSID: " + network.Ssid + " SignalQuality: " + network.SignalQuality);
+                }
+                //Remove (if present) previous SensorOutput and substitute it with the new one
+                _output.LossyPut(new SensorOutput() {Measures = networks});
             }
-            //Remove (if present) previous SensorOutput and substitute it with the new one
-            _output.LossyPut(new SensorOutput() {Measures = networks});
         }
 
 
@@ -96,15 +104,16 @@ namespace whereless.LocalizationService.WiFi
                 // Scan only if interface is up (dormant???)
                 if (wlanIface.NetworkInterface.OperationalStatus != OperationalStatus.Up)
                 {
-                    if (WlanInterfaceDownDelegate != null)
-                    {
-                        // TODO Just a stub to remember to implement a delegate
-                        WlanInterfaceDownDelegate.BeginInvoke(null, this);
-                        return null;
-                    }
+                    // notify that radio is off
+                    Log.Debug("Radio is off");
+                    NotifyRadioOff(true);
+                    return null;
                 }
                 else
                 {
+                    // notify that radio is on 
+                    NotifyRadioOff(false);
+
                     // List all networks
                     Wlan.WlanAvailableNetwork[] networks = wlanIface.GetAvailableNetworkList(0); //0 is a flag
                     ISet<string> alreadyListedSsids = new HashSet<string>();
@@ -132,6 +141,19 @@ namespace whereless.LocalizationService.WiFi
                 }
             }
             return measures;
+        }
+
+        public void NotifyRadioOff(bool off)
+        {
+            // notify that radio is now on/off, iff it was off/on
+            if (_radioOff != off)
+            {
+                _radioOff = off;
+                if (RadioOffDelegate != null)
+                {
+                    RadioOffDelegate.Invoke(off);
+                }
+            }
         }
 
 
