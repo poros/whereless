@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using log4net;
+using whereless.LocalizationService;
 using whereless.Model;
 using whereless.Model.Entities;
 
@@ -24,6 +26,7 @@ namespace whereless.ViewModel
             return Instance;
         }
 
+        public ServiceController WherelessService { get; set; }
 
         private bool _servicePaused = false;
         private bool _radioOff = false;
@@ -83,22 +86,30 @@ namespace whereless.ViewModel
         // REMARK Called by UI
         public void PauseService()
         {
-            ServicePaused = true;
-            // TODO pause ServiceController
+            if (!ServicePaused)
+            {
+                Debug.Assert(WherelessService != null, "WherelessService != null");
+                WherelessService.Pause();
+                ServicePaused = true;    
+            }
+        }
+
+        // REMARK Called by UI
+        public void PlayService()
+        {
+            if (ServicePaused)
+            {
+                Debug.Assert(WherelessService != null, "WherelessService != null");
+                WherelessService.Play();
+                ServicePaused = false;    
+            }
         }
 
         // REMARK Use it in the LocationService as delegate value
         public void UpdateRadioOff(bool off)
         {
             RadioOff = off;
-            if (off)
-            {
-                Log.Debug("Radio state changed: off");
-            }
-            else
-            {
-                Log.Debug("Radio state changed: on");
-            }
+            Log.Debug(off ? "Radio state changed: off" : "Radio state changed: on");
         }
 
         // REMARK Use it in the LocationService as delegate value
@@ -115,20 +126,10 @@ namespace whereless.ViewModel
         // Reload everything once the UI trigger a change
 
         // REMARK now is synchronous. Is it better to do it asynchronously?
-        // I don0't think so at least in the constructor
+        // I don't think so at least in the constructor
         public void GetLocations()
         {
             Locations = ModelHelper.GetLocationRepository().GetAll();
         }
-
-        //public void UpdatePerson()
-        //{
-        //    _ServiceAgent.UpdatePerson(this.Person, UpdatePerson_Completed);
-        //}
-
-        //void UpdatePerson_Completed(object sender, UpdatePersonCompletedEventArgs e)
-        //{
-        //    PeopleEventBus.OnOperationCompleted(this, new OperationCompletedEventArgs { OperationStatus = e.Result });
-        //}
     }
 }

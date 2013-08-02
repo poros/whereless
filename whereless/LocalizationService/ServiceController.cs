@@ -56,6 +56,9 @@ namespace whereless.LocalizationService
 
             _sensorThread.IsBackground = true;
             _localizerThread.IsBackground = true;
+
+            _sensorThread.Name = "WiFiSensorThread";
+            _localizerThread.Name = "LocationLocalizerThread";
         }
 
 
