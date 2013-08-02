@@ -9,9 +9,9 @@
 	- Implement Controller/Presenter methods and classes for WPF controls (only after view finished)
 
 * View
-	- Study WPF
-	- Design interface based on UML diagrams (semplify them!!!)
-	- Realize XAML interfaces
+	- Study WPF (work in progress - poros)
+	- Design interface based on UML diagrams (semplify them!!!) (work in progress - poros)
+	- Realize XAML interfaces (work in prgress - poros)
 
 * View/Controller (App startup)
 	- Study Creating Tray Apps

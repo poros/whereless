@@ -1,8 +1,8 @@
 ﻿using log4net;
 using System.Threading;
-using whereless.Controller.WiFi;
+using whereless.LocalizationService.WiFi;
 
-namespace whereless.Controller.Localizer
+namespace whereless.LocalizationService.Localizer
 {
     class LocationLocalizer
     {

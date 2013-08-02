@@ -3,7 +3,7 @@ using System.IO;
 using log4net;
 using System;
 using System.Collections.Generic;
-using whereless.Controller.WiFi;
+using whereless.LocalizationService.WiFi;
 using whereless.Model;
 using whereless.Model.Entities;
 using whereless.Model.Repository;

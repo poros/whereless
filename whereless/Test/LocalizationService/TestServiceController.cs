@@ -1,10 +1,9 @@
 ﻿using log4net;
 using NUnit.Framework;
 using System.Threading;
-using whereless.Controller;
-using whereless.Controller.WiFi;
+using whereless.LocalizationService;
 
-namespace whereless.Test.Controller
+namespace whereless.Test.LocalizationService
 {
     [TestFixture(Description = "Test for ServiceLocalizer")]
     class TestServiceController

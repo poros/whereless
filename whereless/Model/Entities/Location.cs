@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using whereless.LocalizationService.WiFi;
 using whereless.Model.ValueObjects;
-using whereless.Controller.WiFi;
 
 namespace whereless.Model.Entities
 {

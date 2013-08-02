@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using whereless.Controller.Localizer;
-using whereless.Controller.WiFi;
+using whereless.LocalizationService.Localizer;
+using whereless.LocalizationService.WiFi;
 
-namespace whereless.Controller
+namespace whereless.LocalizationService
 {
     public class ServiceController
     {
@@ -49,6 +45,9 @@ namespace whereless.Controller
 
             _sensorThread = new Thread(new ThreadStart(_sensor.WiFiSensorLoop));
             _localizerThread = new Thread(new ThreadStart(_localizer.LocationLocalizerLoop));
+
+            _sensorThread.IsBackground = true;
+            _localizerThread.IsBackground = true;
 
             _sensorThread.Start();
             _localizerThread.Start();

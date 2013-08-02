@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using whereless.Model.ValueObjects;
 
-namespace whereless.Controller.WiFi
+namespace whereless.LocalizationService.WiFi
 {
     public class WiFiSensor
     {

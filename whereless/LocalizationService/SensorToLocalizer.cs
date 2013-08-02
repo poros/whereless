@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using log4net;
 
-namespace whereless.Controller
+namespace whereless.LocalizationService
 {
     public class SensorToLocalizer<T> 
     {

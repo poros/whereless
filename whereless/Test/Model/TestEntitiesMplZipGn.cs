@@ -10,10 +10,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using whereless.LocalizationService.WiFi;
 using whereless.Model.Entities;
 using whereless.Model.Factory;
 using whereless.Model.ValueObjects;
-using whereless.Controller.WiFi;
 using System.Linq;
 using System.Text;
 

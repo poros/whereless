@@ -102,10 +102,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Controller\IPlayPauseStopObjectThread.cs" />
-    <Compile Include="Controller\Localizer\LocationLocalizer.cs" />
-    <Compile Include="Controller\PlayPauseStopThread.cs" />
-    <Compile Include="Controller\ServiceController.cs" />
+    <Compile Include="LocalizationService\IPlayPauseStopObjectThread.cs" />
+    <Compile Include="LocalizationService\Localizer\LocationLocalizer.cs" />
+    <Compile Include="LocalizationService\PlayPauseStopThread.cs" />
+    <Compile Include="LocalizationService\ServiceController.cs" />
     <Compile Include="Model\Entities\Activity.cs" />
     <Compile Include="Model\Entities\Location.cs">
       <SubType>Code</SubType>
@@ -139,19 +139,19 @@
     <Compile Include="Model\Repository\LocationNHRepository.cs" />
     <Compile Include="Model\Repository\NHRepository.cs" />
     <Compile Include="Model\Repository\NHUnitOfWork.cs" />
-    <Compile Include="Test\Controller\Localizer\TestLocationLocalizer.cs" />
-    <Compile Include="Controller\SensorToLocalizer.cs" />
-    <Compile Include="Controller\WiFi\SensorOutput.cs" />
-    <Compile Include="Controller\WiFi\WiFiSensor.cs" />
+    <Compile Include="Test\LocalizationService\Localizer\TestLocationLocalizer.cs" />
+    <Compile Include="LocalizationService\SensorToLocalizer.cs" />
+    <Compile Include="LocalizationService\WiFi\SensorOutput.cs" />
+    <Compile Include="LocalizationService\WiFi\WiFiSensor.cs" />
     <Compile Include="Model\ValueObjects\SimpleMeasure.cs" />
-    <Compile Include="Test\Controller\TestServiceController.cs" />
+    <Compile Include="Test\LocalizationService\TestServiceController.cs" />
     <Compile Include="Test\Model\TestModel.cs" />
     <Compile Include="Test\Model\TestNHRepository.cs" />
     <Compile Include="Test\Model\TestEntitiesMplZipGn.cs" />
     <Compile Include="Test\Model\TestNHUnitOfWork.cs" />
-    <Compile Include="Test\Controller\WiFi\TestWiFiSensor.cs" />
+    <Compile Include="Test\LocalizationService\WiFi\TestWiFiSensor.cs" />
     <Compile Include="Test\TestInitializer.cs" />
-    <Page Include="MainWindow.xaml">
+    <Page Include="BigWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -161,8 +161,8 @@
     </Compile>
     <Compile Include="Model\Entities\GaussianNetwork.cs" />
     <Compile Include="Model\Entities\Network.cs" />
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="BigWindow.xaml.cs">
+      <DependentUpon>BigWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -212,7 +212,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ModelView\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

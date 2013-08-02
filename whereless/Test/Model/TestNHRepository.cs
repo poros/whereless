@@ -8,7 +8,7 @@ using NHibernate.Tool.hbm2ddl;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using whereless.Controller.WiFi;
+using whereless.LocalizationService.WiFi;
 using whereless.Model.Entities;
 using whereless.Model.Factory;
 using whereless.Model.Repository;

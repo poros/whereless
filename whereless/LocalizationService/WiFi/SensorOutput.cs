@@ -2,7 +2,7 @@
 using System.Text;
 using whereless.Model.ValueObjects;
 
-namespace whereless.Controller.WiFi
+namespace whereless.LocalizationService.WiFi
 {
     public class SensorOutput
     {
