@@ -250,7 +250,7 @@ Cons: an outlier might greatly affect the stats
 
 ###############################################################
 
-VARIATION 6: ASYNCHRONOUS ALGORITHM
+VARIATION 6: ASYNCHRONOUS ALGORITHM WITH QUESTIONS
 the algorithm does not wait the user answer to ASK, but keep on collecting data
 
 if(locations == NULL):
@@ -354,3 +354,75 @@ OPTIONS {
 ###############################################################
 
 VARIATION 8: subsitute z-score with weighted (through observations number) number of networks that passed TestInput() 
+
+###############################################################
+
+VARIATION 9: ASYNCHRONOUS ALGORITHM WITH COMMANDS
+the algorithm does not wait the user answer to ASK, but keep on collecting data
+
+if(locations == NULL):
+	locations = new List<Location>
+	nLocations = 0
+	
+currLocation = NULL
+unknown = NULL
+input = new Input
+	
+if(nlocations > 0):
+		for each location in locations:
+			if(Location.testInput(input)):
+				currLocation = location
+			break
+
+if(nLocations == 0 || currLocation == NULL):
+	unknown = new Location(UNKNOWN, input)
+	currLocation = unknown
+	
+while(input = new Input):
+	LOCK(this):
+		if(currLocation.testInput(input)):
+			currLocation.updateStats(input)
+		else:
+			oldLocation = currLocation
+			currLocation = NULL
+			for each location != oldLocation in locations:
+				if(location.testInput(input)):
+					currLocation = location
+					currLocation.updateStats(input)
+					unknown = NULL
+					break
+			if(currLocation == NULL):
+				unknown = new Location(UNKNOWN, input)
+				currLocation = unknown
+
+
+All methods LOCK(this)
+
+forceLocation(name):
+	currLocation = locations[name]
+	currLocation.forceLocation(input)
+
+forceUnknown:
+	unknown = new Location(UNKNOWN, input)
+	currLocation = unknown
+
+registerLocation(name):
+	if(currLocation != unknown):
+		currLocation = new Location(name, input)
+	else:
+		unknown.setName(name)
+		currLocation = unknown
+		unknown = NULL
+	locations.add(currLocation)
+	nLocation++
+	
+Location:
+	forceLocation(input):
+		if(location.testInput(input)):
+			location.updateStats(input)
+		else:
+			places.add(new Place(input))
+			nPlaces++
+
+###############################################################
+
