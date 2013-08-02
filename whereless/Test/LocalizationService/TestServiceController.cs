@@ -16,6 +16,8 @@ namespace whereless.Test.LocalizationService
             Log.Debug("Main Thread started");
             var sc = new ServiceController();
             
+            sc.Start();
+
             Log.Debug("Main Thread go to sleep");
             Thread.Sleep(16000);
             Log.Debug("Main thread is awake");

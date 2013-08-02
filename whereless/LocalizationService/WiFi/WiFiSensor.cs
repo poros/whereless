@@ -24,11 +24,11 @@ namespace whereless.LocalizationService.WiFi
         // Vars for the radioOff callback
         private bool _radioOff = false;
         public delegate void RadioOffCallbackDelegate (bool off);
-        private RadioOffCallbackDelegate _radioOffDelegate;
-        public RadioOffCallbackDelegate RadioOffDelegate
+        private RadioOffCallbackDelegate _radioOffCallback;
+        public RadioOffCallbackDelegate RadioOffCallback
         {
-            get { return _radioOffDelegate; }
-            set { _radioOffDelegate += value; }
+            get { return _radioOffCallback; }
+            set { _radioOffCallback += value; }
         }
 
 
@@ -149,9 +149,9 @@ namespace whereless.LocalizationService.WiFi
             if (_radioOff != off)
             {
                 _radioOff = off;
-                if (RadioOffDelegate != null)
+                if (RadioOffCallback != null)
                 {
-                    RadioOffDelegate.Invoke(off);
+                    RadioOffCallback.Invoke(off);
                 }
             }
         }

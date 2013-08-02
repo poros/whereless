@@ -66,11 +66,13 @@ namespace whereless.Model.Entities
         {
             _places = new Stack<Place>();
             AddPlace(_Factory.CreatePlace(measures));
+            _n = 1;
         }
 
         // REMARK side effect: always set current place if return true
         public override bool TestInput(IList<IMeasure> measures)
         {
+            Log.Debug("To be tested " + this.Name);
             // proximity preference
             if (_currPlace != null && _currPlace.TestInput(measures))
             {
@@ -91,6 +93,7 @@ namespace whereless.Model.Entities
             return false;
         }
 
+
         public override void UpdateStats(IList<IMeasure> measures)
         {
             //just to be sure that a current place is set
@@ -103,6 +106,21 @@ namespace whereless.Model.Entities
             Log.Debug("Place to be updated = " + _currPlace.Id);
             _currPlace.UpdateStats(measures);
             N += 1;
+        }
+
+        public override void ForceLocation(IList<IMeasure> measures)
+        {
+            if (TestInput(measures))
+            {
+                // currPlace is setup by side-effect
+                Debug.Assert(_currPlace != null, "_currPlace != null");
+                UpdateStats(measures);
+            }
+            else
+            {
+                AddPlace(_Factory.CreatePlace(measures));
+                _currPlace = _places.Peek();
+            }
         }
 
         public override string ToString()

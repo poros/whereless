@@ -51,6 +51,8 @@ namespace whereless.Model.Entities
         public abstract bool TestInput(IList<IMeasure> measures);
         // update statistics of the location with the input measures
         public abstract void UpdateStats(IList<IMeasure> measures);
+        // force location to match the input measures
+        public abstract void ForceLocation(IList<IMeasure> measures);
 
         public virtual void StartActivities()
         {

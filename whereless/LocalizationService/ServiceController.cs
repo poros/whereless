@@ -36,10 +36,15 @@ namespace whereless.LocalizationService
 
         public WiFiSensor.RadioOffCallbackDelegate RadioOffCallback
         {
-            get { return _sensor.RadioOffDelegate; }
-            set { _sensor.RadioOffDelegate = value; }
+            get { return _sensor.RadioOffCallback; }
+            set { _sensor.RadioOffCallback = value; }
         }
 
+        public LocationLocalizer.UpdateCurrentLocationCallbackDelegate UpdateCurrentLocationCallback
+        {
+            get { return _localizer.UpdateCurrentLocationCallback; }
+            set { _localizer.UpdateCurrentLocationCallback = value; }
+        }
 
         public ServiceController()
         {
@@ -131,6 +136,21 @@ namespace whereless.LocalizationService
                 throw new InvalidOperationException("ServiceController needs to be stopped before!!!");
             }
             
+        }
+
+        public void ForceLocation(string name)
+        {
+            _localizer.ForceLocation(name);
+        }
+
+        public void ForceUnknown()
+        {
+            _localizer.ForceUnknown();
+        }
+
+        public void RegisterLocation(string name)
+        {
+            _localizer.RegisterLocation(name);
         }
     }
 }

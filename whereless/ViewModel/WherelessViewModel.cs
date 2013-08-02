@@ -105,6 +105,24 @@ namespace whereless.ViewModel
             }
         }
 
+        // REMARK Called by UI
+        public void RegisterLocation(string name)
+        {
+            WherelessService.RegisterLocation(name);
+        }
+
+        // REMARK Called by UI
+        public void ForceLocation(string name)
+        {
+            WherelessService.ForceLocation(name);
+        }
+
+        // REMARK Called by UI
+        public void ForceUnknown()
+        {
+            WherelessService.ForceUnknown();
+        }
+
         // REMARK Use it in the LocationService as delegate value
         public void UpdateRadioOff(bool off)
         {
@@ -116,6 +134,7 @@ namespace whereless.ViewModel
         public void UpdateCurrentLocation(Location location)
         {
             CurrentLocation = location;
+            Log.Debug("ViewModel Current Location updated:" + location);
         }
 
         // REMARK Remember to trigger it when update the collection by the ui (like add or remove one)
@@ -126,8 +145,8 @@ namespace whereless.ViewModel
         // Reload everything once the UI trigger a change
 
         // REMARK now is synchronous. Is it better to do it asynchronously?
-        // I don't think so at least in the constructor
-        public void GetLocations()
+        // I don't think so, at least in the constructor
+        public void UpdateLocations()
         {
             Locations = ModelHelper.GetLocationRepository().GetAll();
         }
