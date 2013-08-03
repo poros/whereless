@@ -103,7 +103,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="LocalizationService\IPlayPauseStopObjectThread.cs" />
+    <Compile Include="LocalizationService\Localizer\LocalizationAlgorithm.cs" />
     <Compile Include="LocalizationService\Localizer\LocationLocalizer.cs" />
+    <Compile Include="LocalizationService\Localizer\SimpleLocalization.cs" />
     <Compile Include="LocalizationService\PlayPauseStopThread.cs" />
     <Compile Include="LocalizationService\ServiceController.cs" />
     <Compile Include="ViewModel\WherelessViewModel.cs" />

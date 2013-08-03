@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Configuration;
 using System.Threading;
+using log4net;
 using whereless.LocalizationService.Localizer;
 using whereless.LocalizationService.WiFi;
 
@@ -7,6 +9,8 @@ namespace whereless.LocalizationService
 {
     public class ServiceController
     {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(ServiceController));
+
         private enum ThreadState
         {
             Playing,
@@ -30,9 +34,10 @@ namespace whereless.LocalizationService
         private readonly AutoResetEvent _localizerPause = new AutoResetEvent(false);
         private readonly AutoResetEvent _localizerPlay = new AutoResetEvent(false);
 
-        private readonly SensorToLocalizer<SensorOutput> _sensorOutputLocalizerInput = 
+        private readonly SensorToLocalizer<SensorOutput> _sensorOutputLocalizerInput =
             new SensorToLocalizer<SensorOutput>();
 
+        private readonly LocalizationAlgorithm _localizationAlgorithm = CreateLocalizationAlgorithm();
 
         public WiFiSensor.RadioOffCallbackDelegate RadioOffCallback
         {
@@ -46,13 +51,33 @@ namespace whereless.LocalizationService
             set { _localizer.UpdateCurrentLocationCallback = value; }
         }
 
+        private static LocalizationAlgorithm CreateLocalizationAlgorithm()
+        {
+            LocalizationAlgorithm tmp;
+            string algName = ConfigurationManager.AppSettings["localizationAlgorithm"];
+            if (algName == null)
+            {
+                throw new ConfigurationErrorsException("Unable to find localizationAlgorithm key");
+            }
+            if (algName.Equals("SimpleLocalization"))
+            {
+                tmp = new SimpleLocalization();
+                Log.Debug("SimpleLocalization Algorithm Instantiated");
+            }
+            else
+            {
+                throw new ConfigurationErrorsException("Localization Aglorithm configuration value not allowed");
+            }
+            return tmp;
+        }
+
         public ServiceController()
         {
             _sensor = new WiFiSensor(stopThread: _sensorStop, pauseThread: _sensorPause,
                 playThread: _sensorPlay, output: _sensorOutputLocalizerInput);
             _localizer = new LocationLocalizer(stopThread: _localizerStop, pauseThread: _localizerPause,
-                playThread: _localizerPlay, input: _sensorOutputLocalizerInput);
-            
+                playThread: _localizerPlay, input: _sensorOutputLocalizerInput, algorithm: _localizationAlgorithm);
+
             _sensorState = ThreadState.Playing;
             _localizerState = ThreadState.Playing;
 
@@ -135,7 +160,7 @@ namespace whereless.LocalizationService
             {
                 throw new InvalidOperationException("ServiceController needs to be stopped before!!!");
             }
-            
+
         }
 
         public void ForceLocation(string name)

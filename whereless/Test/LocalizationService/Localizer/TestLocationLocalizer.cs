@@ -19,7 +19,7 @@ namespace whereless.Test.LocalizationService.Localizer
             var pauseThread = new AutoResetEvent(false);
             var playThread = new AutoResetEvent(false);
             var localizer = new LocationLocalizer(stopThread: stopThread, pauseThread: pauseThread,
-                playThread: playThread, input: new SensorToLocalizer<SensorOutput>());
+                playThread: playThread, input: new SensorToLocalizer<SensorOutput>(), algorithm: new SimpleLocalization());
             var localizerDelegate = new ThreadStart(localizer.LocationLocalizerLoop);
             var localizerThread = new Thread(localizerDelegate);
             localizerThread.Start();

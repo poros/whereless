@@ -1,25 +1,25 @@
 ﻿* Model
-	- Complete Activity entity (basing on controller)
+	- Complete Activity entity
+	- Add better time statistics to Location (work in progress - poros)
 	- Add alternative entities for an alternative Localizer algorithm (hopefully not)
 	- Entities redesign and refactoring (hopefully not)
 
-* Controller
-	- Implement LocationLocalizer algorithm
-	- Implement execute actions behaviour and decide which tasks support
-	- Implement Controller/Presenter methods and classes for WPF controls (only after view finished)
+* Controller/ViewModel
+	- Implement execute actions behaviour (both in entities and LocalizationService) and decide which tasks support
+	- Continue to implement ViewModel methods and properties for WPF controls
 
 * View
 	- Study WPF (work in progress - poros)
-	- Design interface based on UML diagrams (semplify them!!!) (work in progress - poros)
-	- Realize XAML interfaces (work in prgress - poros)
+	- Realize XAML interfaces
 
-* View/Controller (App startup)
+* App startup
 	- Study Creating Tray Apps
 	[https://www.simple-talk.com/dotnet/.net-framework/creating-tray-applications-in-.net-a-practical-guide/]
 	[http://stackoverflow.com/questions/2951126/system-tray-popup-windows-7-style]
 	(very briefly look - poros)
 	- Study WPF TrayIcon [http://www.codeproject.com/Articles/36468/WPF-NotifyIcon] 
 	(very briefly look - poros)
+	- Configure AppStartup (inspired to current MainWindow.xaml.cs)
 
 * Test
 	- Test (and tune!!!) algorithm
