@@ -10,7 +10,7 @@ using FluentNHibernate.Conventions;
 using Microsoft.Win32;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-
+using System.IO;
 
 namespace whereless.Model.Entities
 {
@@ -43,7 +43,7 @@ namespace whereless.Model.Entities
         private int _id;
         private int _idPlace;
         private string _name;
-        private string _argument;
+        private string _argument; // if exe file -> args; if wallpaper -> style
         private string _pathfile;
         private ActivityType _type;
         
@@ -135,23 +135,23 @@ namespace whereless.Model.Entities
                     }
                 }
             }
-
-
-
         }
 
 
 
         public virtual void Start()
         {
-            if (Type == ActivityType.ExeFile)
+            switch (Type)
             {
-                StartExe(Pathfile, Argument);
-            }
-            else
-            {
-                if (Type == ActivityType.Wallpaper)
-                {
+                case ActivityType.ExeFile:
+                    StartExe(Pathfile, Argument);
+                    break;
+
+                case ActivityType.BatchFile:
+                    StartBatch(Pathfile);
+                    break;
+
+                case ActivityType.Wallpaper:
                     WallpaperStyle s;
                     if (Argument.CompareTo("Tiled") == 0)
                     {
@@ -169,21 +169,19 @@ namespace whereless.Model.Entities
                         }
                     }
                     ChangeWallpaper(Pathfile, s);
-                }
-                else
-                {
-                    if (Type == ActivityType.BatchFile)
-                    {
-                        StartBatch(Pathfile);
-                    }
+                    break;
 
-                }
             }
         }
 
         public virtual void Stop()
         {
-            throw new NotImplementedException();
+            string exe = Path.GetFileNameWithoutExtension(Pathfile);
+            Process[] processes = Process.GetProcessesByName(exe);
+            foreach (Process proc in processes)
+            {
+                proc.Kill();
+            }
         }
 
 
@@ -206,11 +204,11 @@ namespace whereless.Model.Entities
                 a.StartInfo.Arguments = args;
                 a.Start();
             }
-            catch (InvalidOperationException ioe)
+            catch (InvalidOperationException)
             {
                 return;
             }
-            catch (Win32Exception w32e)
+            catch (Win32Exception )
             {
                 return;
             }
@@ -224,7 +222,7 @@ namespace whereless.Model.Entities
             {
                 System.Diagnostics.Process.Start(file);
             }
-            catch (Win32Exception w32e)
+            catch (Win32Exception)
             {
                 return;
             }
@@ -233,38 +231,40 @@ namespace whereless.Model.Entities
 
         public virtual void ChangeWallpaper(string file, WallpaperStyle s)
         {
-            RegistryKey rkWallPaper = Registry.CurrentUser.OpenSubKey("Control Panel\\Desktop", true);
-           
-            try
-            {
-                if (s == WallpaperStyle.Stretched)
-                {
-                    rkWallPaper.SetValue(@"WallpaperStyle", 2.ToString());
-                    rkWallPaper.SetValue(@"TileWallpaper", 0.ToString());
-                }
-                else if (s == WallpaperStyle.Centered)
-                {
-                    rkWallPaper.SetValue(@"WallpaperStyle", 1.ToString());
-                    rkWallPaper.SetValue(@"TileWallpaper", 0.ToString());
-                }
-                else
-                {
-                    rkWallPaper.SetValue(@"WallpaperStyle", 1.ToString());
-                    rkWallPaper.SetValue(@"TileWallpaper", 1.ToString());
-                }
-            }
-            catch (System.NullReferenceException nre)
+
+            if (File.Exists(file) == false)
             {
                 return;
             }
 
-            //Set wallpaper 
-            SystemParametersInfo(20, 0, file, 0x01 | 0x02);
-                       
-            rkWallPaper.Close();
+            RegistryKey rkWallPaper = Registry.CurrentUser.OpenSubKey("Control Panel\\Desktop", true);
+
+            if (rkWallPaper != null)
+            {
+                switch (s)
+                {
+                    case WallpaperStyle.Stretched:
+                        rkWallPaper.SetValue(@"WallpaperStyle", 2.ToString());
+                        rkWallPaper.SetValue(@"TileWallpaper", 0.ToString());
+                        break;
+                    case WallpaperStyle.Centered:
+                        rkWallPaper.SetValue(@"WallpaperStyle", 1.ToString());
+                        rkWallPaper.SetValue(@"TileWallpaper", 0.ToString());
+                        break;
+                    case WallpaperStyle.Tiled:
+                        rkWallPaper.SetValue(@"WallpaperStyle", 1.ToString());
+                        rkWallPaper.SetValue(@"TileWallpaper", 1.ToString());
+                        break;
+                    default:
+                        //unreachable
+                        break;
+                }
+
+                //Set wallpaper 
+                SystemParametersInfo(20, 0, file, 0x01 | 0x02);
+                
+                rkWallPaper.Close();
+            }
         }
-
-
-
     }
 }
