@@ -14,10 +14,9 @@ namespace whereless.Model.Mappings
         {
             Id(x => x.Id);
             Map(x => x.Name);
-            Map(x => x.IdPlace);
-            Map(x => x.Pathfile);
             Map(x => x.Argument);
-            Map(x => (int)x.Type);
+            Map(x => x.Pathfile);  
+            Map(x => x.Type).CustomType<int>();
 
         }
     }

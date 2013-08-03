@@ -40,13 +40,14 @@ namespace whereless.Model.Entities
         }
 
 
-        private int _id;
-        private int _idPlace;
+        
         private string _name;
         private string _argument; // if exe file -> args; if wallpaper -> style
         private string _pathfile;
         private ActivityType _type;
-        
+
+
+        public virtual int Id { get; protected set; }
 
         public virtual string Name 
         {
@@ -59,10 +60,11 @@ namespace whereless.Model.Entities
             get{ return _argument; }
             set
             {
-                if (value.IsNotEmpty())
+                if (value !=null)
                 {
                     _argument = value;
                 }
+                
             }
         }
 
@@ -71,7 +73,7 @@ namespace whereless.Model.Entities
             get { return _pathfile; }
             set
             {
-                if (value.IsNotEmpty())
+                if (value != null)
                 {
                     _pathfile = value;
                 }
@@ -86,19 +88,7 @@ namespace whereless.Model.Entities
         }
 
 
-        public virtual int Id
-        {
-            get { return _id; }
-            protected set { _id = value; }
-        }
-
-        public virtual int IdPlace
-        {
-            get { return _idPlace; }
-            protected set { _idPlace = value; }
-        }
-
-
+       
         public Activity()
         {
         }
@@ -109,10 +99,9 @@ namespace whereless.Model.Entities
             _name = name;
         }
 
-        public Activity(int idA, int idP, string name, string path, string args, string t)
+        public Activity(string name, string path, string args, string t)
         {
-            _id = idA;
-            _idPlace = idP;
+
             _name = name;
             _pathfile = path;
             _argument = args;
