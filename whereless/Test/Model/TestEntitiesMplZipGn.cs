@@ -164,6 +164,9 @@ namespace whereless.Test.Model
                 new PersistenceSpecification<Activity>(session, new CustomEqualityComparer())
                     // .CheckProperty(x => x.Id, 1)
                     .CheckProperty(x => x.Name, "AlarmClock")
+                    .CheckProperty(x => x.Argument, "")
+                    .CheckProperty(x => x.Pathfile, "")
+                    .CheckProperty(x => x.Type, Activity.ActivityType.BatchFile)
                     .VerifyTheMappings();
             }
         }
@@ -248,6 +251,8 @@ namespace whereless.Test.Model
                     loc.AddActivity(new Activity("AlarmClock"));
                     loc.AddActivity(new Activity("OpenBrowser"));
                     loc2.AddActivity(new Activity("AlarmClock"));
+
+                  
 
                     //this saves everything else via cascading
                     session.SaveOrUpdate(loc); //the same of using session.Save(loc)
