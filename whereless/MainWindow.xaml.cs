@@ -27,14 +27,16 @@ namespace whereless
             viewModel.WherelessService = service;
             service.Start();
 
-            // TEST-CODE
-            //Thread.Sleep(5000);
-            //viewModel.RegisterLocation("Casa Mare");
-            //Thread.Sleep(5000);
-            //viewModel.ForceUnknown();
-            //Thread.Sleep(5000);
-            //viewModel.ForceLocation("Casa Mare");
-            //Thread.Sleep(5000);
+             //TEST-CODE
+            Thread.Sleep(5000);
+            viewModel.RegisterLocation("Casa Mare");
+            viewModel.AddActivityToLocation(viewModel.CurrentLocation,"OpenBrowser","firefox","www.polito.it","ExeFile");
+
+            Thread.Sleep(5000);
+            viewModel.ForceUnknown();
+            Thread.Sleep(5000);
+            viewModel.ForceLocation("Casa Mare");
+            Thread.Sleep(5000);
 
             log.Info("whereless started...");
             InitializeComponent();

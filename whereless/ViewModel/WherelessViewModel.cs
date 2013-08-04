@@ -150,5 +150,18 @@ namespace whereless.ViewModel
         {
             Locations = ModelHelper.GetLocationRepository().GetAll();
         }
+
+
+
+
+        public void AddActivityToLocation(Location location, string activityName, string pathfile, string argument, string activityType)
+        {
+            var a=new Activity(activityName,pathfile,argument,activityType);
+            
+            location.AddActivity(a);
+            Log.Debug("ViewModel Activity added to Location:" + location);
+        }
+
+
     }
 }
