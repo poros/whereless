@@ -11,7 +11,10 @@ namespace whereless.Model.Mappings
             Map(x => x.Name)
                 .Not.Nullable()
                 .Unique();
-            Map(x => x.Time);
+            Map(x => x.TotalTime);
+            Map(x => x.LongestStreak);
+            Map(x => x.CurrentStreak);
+            Map(x => x.ArrivedAt);
             HasMany(x => x.ActivityList)
                 //.Inverse()
                 .Cascade.All();

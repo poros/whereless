@@ -17,7 +17,7 @@ namespace whereless.ViewModel
         {
             // Current Location is defaulted to Unknown. It will be updated by the LocationService
             _currentLocation = ModelHelper.EntitiesFactory.CreateLocation("Unknown");
-            _currentLocation.Time = 0;
+            _currentLocation.TotalTime = 0;
             _locations = ModelHelper.GetLocationRepository().GetAll();
         }
 
@@ -172,6 +172,8 @@ namespace whereless.ViewModel
             {
                 var location = uow.GetLocationByName(locationName);
                 location.AddActivity(a);
+
+                uow.Commit();
 
                 Log.Debug("Activity added to Location:" + location);
             }

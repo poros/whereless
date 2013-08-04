@@ -125,11 +125,11 @@ namespace whereless.Test.Model
                 // populate the database
                 var input = new List<IMeasure> { new SimpleMeasure("ReteA", 10U) };
                 var loc = _entitiesFactory.CreateLocation("Location1", input);
-                loc.Time = TimeVal;  
+                loc.TotalTime = TimeVal;  
   
                 var input2 = new List<IMeasure> { new SimpleMeasure("ReteB", 50U), new SimpleMeasure("ReteC", 100U) };
                 var loc2 = _entitiesFactory.CreateLocation("Location2", input2);
-                loc2.Time = TimeVal1; 
+                loc2.TotalTime = TimeVal1; 
 
                 //this saves everything else via cascading
                 uow.Save(loc);
@@ -144,11 +144,11 @@ namespace whereless.Test.Model
             {
                 var locA = uow.GetLocationByName("Location1");
                 Assert.AreEqual(locA.Name, "Location1");
-                Assert.AreEqual(locA.Time, TimeVal);
+                Assert.AreEqual(locA.TotalTime, TimeVal);
 
                 var locB = uow.Get<Location>(locA.Id);
                 Assert.AreEqual(locB.Name, "Location1");
-                Assert.AreEqual(locB.Time, TimeVal);
+                Assert.AreEqual(locB.TotalTime, TimeVal);
 
                 IList<Location> locations = uow.GetAll<Location>();
                 Assert.AreEqual(locations.Count, 2);
@@ -158,11 +158,11 @@ namespace whereless.Test.Model
                     Console.WriteLine(location.ToString());
                     if (location.Name == "Location1")
                     {
-                        Assert.AreEqual(location.Time, TimeVal);
+                        Assert.AreEqual(location.TotalTime, TimeVal);
                     }
                     else if (location.Name == "Location2")
                     {
-                        Assert.AreEqual(location.Time, TimeVal1);
+                        Assert.AreEqual(location.TotalTime, TimeVal1);
                     }
                     else
                     {
@@ -185,21 +185,21 @@ namespace whereless.Test.Model
             using (var uow = new NHUnitOfWork(_sessionFactory))
             {
                 longLivedLocation = uow.GetLocationByName(locName);
-                longLivedLocation.Time = TimeVal2;
+                longLivedLocation.TotalTime = TimeVal2;
                 uow.Commit();
             }
 
             using (var uow = new NHUnitOfWork(_sessionFactory))
             {
                 var locB = uow.Get<Location>(longLivedLocation.Id);
-                Assert.AreEqual(locB.Time, TimeVal2);
+                Assert.AreEqual(locB.TotalTime, TimeVal2);
             }
 
             // update of an entity retrieved in a unit of work
             // BEWARE OF DIRTY WRITES!!! THEY ARE STILL DIFFERENT TRANSACTIONS!!!
             using (var uow = new NHUnitOfWork(_sessionFactory))
             {
-                longLivedLocation.Time = TimeVal3;
+                longLivedLocation.TotalTime = TimeVal3;
                 uow.Save(longLivedLocation);
                 uow.Commit();
             }
@@ -207,7 +207,7 @@ namespace whereless.Test.Model
             using (var uow = new NHUnitOfWork(_sessionFactory))
             {
                 var tmp = uow.GetLocationByName(locName);
-                Assert.AreEqual(tmp.Time, TimeVal3);
+                Assert.AreEqual(tmp.TotalTime, TimeVal3);
                 uow.Commit();
             }
                     
@@ -216,11 +216,11 @@ namespace whereless.Test.Model
             using (var uow = new NHUnitOfWork(_sessionFactory))
             {
                 longLivedLocation = uow.GetLocationByName("Location1");
-                longLivedLocation.Time = TimeVal4;
+                longLivedLocation.TotalTime = TimeVal4;
 
                 var input = new List<IMeasure> { new SimpleMeasure("ReteC", 10U) };
                 var loc = _entitiesFactory.CreateLocation("Location3", input);
-                loc.Time = TimeVal;
+                loc.TotalTime = TimeVal;
                 uow.Save(loc);
 
                 uow.Rollback();
@@ -230,7 +230,7 @@ namespace whereless.Test.Model
             {
                 var locB = uow.Get<Location>(longLivedLocation.Id);
                 //old value
-                Assert.AreEqual(locB.Time, TimeVal3);
+                Assert.AreEqual(locB.TotalTime, TimeVal3);
 
                 var locations = uow.GetAll<Location>();
                 Assert.AreEqual(locations.Count, 2);
@@ -255,7 +255,7 @@ namespace whereless.Test.Model
                 locLazy = uow.GetLocationByName("Location1");
             }
             Assert.AreEqual(locLazy.Name, "Location1");
-            Assert.AreEqual(locLazy.Time, TimeVal3);
+            Assert.AreEqual(locLazy.TotalTime, TimeVal3);
 
             var up = new List<IMeasure> { new SimpleMeasure("ReteA", 20U) };
             locLazy.UpdateStats(up);

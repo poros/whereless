@@ -28,11 +28,9 @@ namespace whereless.LocalizationService.Localizer
                         {
                             currLocation = location;
 
-                            //start activities
-                            if (currLocation != null)
-                            {
-                                currLocation.StartActivities();
-                            }
+                            currLocation.StartActivities();
+
+                            currLocation.SetUpCurrentTimeStats();
 
                             location.UpdateStats(input);
                             break;
@@ -85,11 +83,9 @@ namespace whereless.LocalizationService.Localizer
                                 unknown = false;
                                 currLocation = location;
 
-                                //start activities
-                                if (oldLocation != null && currLocation!=null && currLocation != oldLocation)
-                                {
-                                    currLocation.StartActivities();
-                                }
+                                currLocation.StartActivities();
+                                
+                                currLocation.SetUpCurrentTimeStats();
 
                                 location.UpdateStats(input);
                                 break;
@@ -113,14 +109,10 @@ namespace whereless.LocalizationService.Localizer
             {
                 currLocation = uow.GetLocationByName(name);
                 Debug.Assert(currLocation != null, "currLocation != null");
+
                 currLocation.ForceLocation(input);
 
-                //start activities
-                if (currLocation != null)
-                {
-                    currLocation.StartActivities();
-                }
-
+                currLocation.StartActivities();
 
                 unknown = false;
                 uow.Commit();

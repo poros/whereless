@@ -84,7 +84,7 @@ namespace whereless.Test.Model
 
             var input = new List<IMeasure> { new SimpleMeasure("Calvino", 50U), new SimpleMeasure("Galileo", 100U) };
             var loc = ModelHelper.EntitiesFactory.CreateLocation("Polito", input);
-            loc.Time = TimeVal;
+            loc.TotalTime = TimeVal;
 
             repLoc.Save(loc);
 
@@ -96,7 +96,7 @@ namespace whereless.Test.Model
                 Console.WriteLine(location.ToString());
                 if (location.Name == "Polito")
                 {
-                    Assert.AreEqual(location.Time, TimeVal);
+                    Assert.AreEqual(location.TotalTime, TimeVal);
                 }
                 else
                 {
@@ -126,7 +126,7 @@ namespace whereless.Test.Model
 
             var input = new List<IMeasure> { new SimpleMeasure("Calvino", 50U), new SimpleMeasure("Galileo", 100U) };
             var loc = ModelHelper.EntitiesFactory.CreateLocation("Polito", input);
-            loc.Time = TimeVal;
+            loc.TotalTime = TimeVal;
 
             repLoc.Save(loc);
 
@@ -138,7 +138,7 @@ namespace whereless.Test.Model
                 Console.WriteLine(location.ToString());
                 if (location.Name == "Polito")
                 {
-                    Assert.AreEqual(location.Time, TimeVal);
+                    Assert.AreEqual(location.TotalTime, TimeVal);
                 }
                 else
                 {
@@ -149,11 +149,11 @@ namespace whereless.Test.Model
 
             Location locNamed = repLoc.GetLocationByName("Polito");
             Assert.AreEqual(locNamed.Name, "Polito");
-            Assert.AreEqual(locNamed.Time, TimeVal);
+            Assert.AreEqual(locNamed.TotalTime, TimeVal);
 
             Location locDirty = repLoc.GetLocationByName("Polito", dirty: true);
             Assert.AreEqual(locDirty.Name, "Polito");
-            Assert.AreEqual(locDirty.Time, TimeVal);
+            Assert.AreEqual(locDirty.TotalTime, TimeVal);
 
             locations = repLoc.GetAll();
             foreach (var location in locations)
@@ -173,11 +173,11 @@ namespace whereless.Test.Model
 
                 var input = new List<IMeasure> { new SimpleMeasure("ReteA", 10U) };
                 var loc = ModelHelper.EntitiesFactory.CreateLocation("Location1", input);
-                loc.Time = TimeVal;
+                loc.TotalTime = TimeVal;
 
                 var input2 = new List<IMeasure> { new SimpleMeasure("ReteB", 50U), new SimpleMeasure("ReteC", 100U) };
                 var loc2 = ModelHelper.EntitiesFactory.CreateLocation("Location2", input2);
-                loc2.Time = TimeVal1;
+                loc2.TotalTime = TimeVal1;
 
                 uow.Save(loc);
                 uow.Save(loc2);
@@ -189,11 +189,11 @@ namespace whereless.Test.Model
             {
                 var locA = uow.GetLocationByName("Location1");
                 Assert.AreEqual(locA.Name, "Location1");
-                Assert.AreEqual(locA.Time, TimeVal);
+                Assert.AreEqual(locA.TotalTime, TimeVal);
 
                 var locB = uow.Get<Location>(locA.Id);
                 Assert.AreEqual(locB.Name, "Location1");
-                Assert.AreEqual(locB.Time, TimeVal);
+                Assert.AreEqual(locB.TotalTime, TimeVal);
 
                 IList<Location> locations = uow.GetAll<Location>();
                 Assert.AreEqual(locations.Count, 2);
@@ -203,11 +203,11 @@ namespace whereless.Test.Model
                     Console.WriteLine(location.ToString());
                     if (location.Name == "Location1")
                     {
-                        Assert.AreEqual(location.Time, TimeVal);
+                        Assert.AreEqual(location.TotalTime, TimeVal);
                     }
                     else if (location.Name == "Location2")
                     {
-                        Assert.AreEqual(location.Time, TimeVal1);
+                        Assert.AreEqual(location.TotalTime, TimeVal1);
                     }
                     else
                     {

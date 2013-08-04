@@ -106,11 +106,11 @@ namespace whereless.Test.Model
             // populate the database
             var input = new List<IMeasure> { new SimpleMeasure("ReteA", 10U) };
             var loc = _entitiesFactory.CreateLocation("Location1", input);
-            loc.Time = TimeVal;
+            loc.TotalTime = TimeVal;
 
             var input2 = new List<IMeasure> { new SimpleMeasure("ReteB", 50U), new SimpleMeasure("ReteC", 100U) };
             var loc2 = _entitiesFactory.CreateLocation("Location2", input2);
-            loc2.Time = TimeVal1; 
+            loc2.TotalTime = TimeVal1; 
 
             //this saves everything else via cascading
             repLoc.Save(loc);
@@ -126,12 +126,12 @@ namespace whereless.Test.Model
                 Console.WriteLine(location.ToString());
                 if (location.Name == "Location1")
                 {
-                    Assert.AreEqual(location.Time, TimeVal);
+                    Assert.AreEqual(location.TotalTime, TimeVal);
                     locA = location;
                 }
                 else if (location.Name == "Location2")
                 {
-                    Assert.AreEqual(location.Time, TimeVal1);
+                    Assert.AreEqual(location.TotalTime, TimeVal1);
                 }
                 else
                 {
@@ -143,7 +143,7 @@ namespace whereless.Test.Model
             Assert.IsNotNull(locA);
             var locB = repLoc.Get(locA.Id);
             Assert.AreEqual(locB.Name, "Location1");
-            Assert.AreEqual(locB.Time, TimeVal);
+            Assert.AreEqual(locB.TotalTime, TimeVal);
 
             var repNet = new NHRepository<Network>(_sessionFactory);
             var networks = repNet.GetAll();
@@ -152,7 +152,7 @@ namespace whereless.Test.Model
             //Dirty Get (without waiting for transactions)
             var locDirty = repLoc.Get(locA.Id, dirty: true);
             Assert.AreEqual(locDirty.Name, "Location1");
-            Assert.AreEqual(locDirty.Time, TimeVal);
+            Assert.AreEqual(locDirty.TotalTime, TimeVal);
 
             var locDirties = repLoc.GetAll(dirty: true);
             Assert.AreEqual(locDirties.Count, 2);
@@ -160,11 +160,11 @@ namespace whereless.Test.Model
             {
                 if (location.Name == "Location1")
                 {
-                    Assert.AreEqual(location.Time, TimeVal);
+                    Assert.AreEqual(location.TotalTime, TimeVal);
                 }
                 else if (location.Name == "Location2")
                 {
-                    Assert.AreEqual(location.Time, TimeVal1);
+                    Assert.AreEqual(location.TotalTime, TimeVal1);
                 }
                 else
                 {
@@ -177,11 +177,11 @@ namespace whereless.Test.Model
             // UPDATE = Update
             // BEWARE OF DIRTY WRITES!!! THEY ARE STILL DIFFERENT TRANSACTIONS!!!
             Location locUpdated = locA;
-            locUpdated.Time = TimeVal2;
+            locUpdated.TotalTime = TimeVal2;
             repLoc.Update(locUpdated);
 
             Location tmp = repLoc.Get(locUpdated.Id);
-            Assert.AreEqual(tmp.Time, TimeVal2);
+            Assert.AreEqual(tmp.TotalTime, TimeVal2);
 
 
             // DELETE = Delete
@@ -209,11 +209,11 @@ namespace whereless.Test.Model
             // populate the database
             var input = new List<IMeasure> { new SimpleMeasure("ReteA", 10U) };
             var loc = _entitiesFactory.CreateLocation("Location1", input);
-            loc.Time = TimeVal;
+            loc.TotalTime = TimeVal;
 
             var input2 = new List<IMeasure> { new SimpleMeasure("ReteB", 50U), new SimpleMeasure("ReteC", 100U) };
             var loc2 = _entitiesFactory.CreateLocation("Location2", input2);
-            loc2.Time = TimeVal1;
+            loc2.TotalTime = TimeVal1;
 
             //this saves everything else via cascading
             repLoc.Save(loc);
@@ -222,11 +222,11 @@ namespace whereless.Test.Model
 
             Location locNamed = repLoc.GetLocationByName("Location1");
             Assert.AreEqual(locNamed.Name, "Location1");
-            Assert.AreEqual(locNamed.Time, TimeVal);
+            Assert.AreEqual(locNamed.TotalTime, TimeVal);
 
             Location locDirty = repLoc.GetLocationByName("Location1", dirty: true);
             Assert.AreEqual(locDirty.Name, "Location1");
-            Assert.AreEqual(locDirty.Time, TimeVal);
+            Assert.AreEqual(locDirty.TotalTime, TimeVal);
 
             // Delete
             var locations = repLoc.GetAll();

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using whereless.LocalizationService.WiFi;
 using whereless.Model.ValueObjects;
@@ -10,6 +11,7 @@ namespace whereless.Model.Entities
         // factory for creating child entities 
         protected static readonly ulong T = (ulong) WiFiSensor.ScanTime;
         private string _name;
+        private DateTime _arrivedAt;
 
         public virtual int Id { get; protected set; }
         public virtual string Name
@@ -18,7 +20,15 @@ namespace whereless.Model.Entities
             set { _name = value; }
         }
 
-        public virtual ulong Time { get; set; }
+
+        public virtual DateTime ArrivedAt
+        {
+            get { return _arrivedAt; }
+            set { _arrivedAt = value; }
+        }
+        public virtual ulong CurrentStreak { get; set; }
+        public virtual ulong LongestStreak { get; set; }
+        public virtual ulong TotalTime { get; set; }
 
         private IList<Activity> _activityList;
 
@@ -39,12 +49,14 @@ namespace whereless.Model.Entities
         protected Location()
         {
             _activityList = new List<Activity>();
+            _arrivedAt = DateTime.Now;
         }
 
         protected Location(string name)
         {
             _name = name;
             _activityList = new List<Activity>();
+            _arrivedAt = DateTime.Now;
         }
 
         // test if the input measures are compatible with the location
@@ -69,6 +81,19 @@ namespace whereless.Model.Entities
                 activity.Stop();
             }
         }
+
+        public virtual void SetArrivedAt()
+        {
+            _arrivedAt = DateTime.Now;
+        }
+
+        public abstract void ResetCurrentStreak();
+
+        public virtual void SetUpCurrentTimeStats()
+        {
+            SetArrivedAt();
+            ResetCurrentStreak();
+        }
         
         public override string ToString()
         {
@@ -77,7 +102,13 @@ namespace whereless.Model.Entities
             {
                 buffer.AppendLine(activity.ToString());
             }
-            return (this.GetType().Name + ": " + "Name = " + Name + "; Time = " + Time + "; Activities = {\n" + buffer + "};");
+            return (this.GetType().Name + ": " 
+                + "Name = " + Name 
+                + "; TotalTime = " + TotalTime 
+                + "; LongestStreak = " + LongestStreak
+                + "; CurrentStreak = " + CurrentStreak
+                + "; ArrivedAt = " + ArrivedAt
+                +  "; Activities = {\n" + buffer + "};");
         }
     }
 }

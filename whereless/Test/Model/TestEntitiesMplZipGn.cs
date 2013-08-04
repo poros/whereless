@@ -121,7 +121,10 @@ namespace whereless.Test.Model
                 new PersistenceSpecification<MultiPlacesLocation>(session, new CustomEqualityComparer())
                     // .CheckProperty(x => x.Id, 1)
                     .CheckProperty(x => x.Name, "Casa")
-                    .CheckProperty(x => x.Time, TimeVal)
+                    .CheckProperty(x => x.TotalTime, TimeVal)
+                    .CheckProperty(x => x.LongestStreak, TimeVal)
+                    .CheckProperty(x => x.CurrentStreak, TimeVal)
+                    .CheckProperty(x => x.ArrivedAt, DateTime.Now)
                     .CheckProperty(x => x.N, NVal)
                     .CheckList(x => x.Places, MockPlace())
                     .CheckList(x => x.ActivityList, MockActivity())
@@ -208,8 +211,8 @@ namespace whereless.Test.Model
             var loc = factory.CreateLocation("Location1", inputL);
             Assert.IsInstanceOf<Location>(loc);
             Assert.AreEqual(loc.Name, "Location1");
-            loc.Time = TimeVal;
-            Assert.AreEqual(loc.Time, TimeVal);
+            loc.TotalTime = TimeVal;
+            Assert.AreEqual(loc.TotalTime, TimeVal);
 
             //Place
             var pla = factory.CreatePlace(inputL);
@@ -235,18 +238,18 @@ namespace whereless.Test.Model
                 {
                     var input = new List<IMeasure> { new SimpleMeasure("ReteA", 10U) };
                     var loc = factory.CreateLocation("Location1", input);
-                    loc.Time = TimeVal;
+                    loc.TotalTime = TimeVal;
 
                     Assert.IsInstanceOf<Location>(loc);
                     Assert.AreEqual(loc.Name, "Location1");
-                    Assert.AreEqual(loc.Time, TimeVal);
+                    Assert.AreEqual(loc.TotalTime, TimeVal);
 
                     var input2 = new List<IMeasure> { new SimpleMeasure("ReteB", 50U), new SimpleMeasure("ReteC", 100U) };
                     var loc2 = factory.CreateLocation("Location2", input2);
-                    loc2.Time = TimeVal1;
+                    loc2.TotalTime = TimeVal1;
                     Assert.IsInstanceOf<Location>(loc2);
                     Assert.AreEqual(loc2.Name, "Location2");
-                    Assert.AreEqual(loc2.Time, TimeVal1);
+                    Assert.AreEqual(loc2.TotalTime, TimeVal1);
 
                     loc.AddActivity(new Activity("AlarmClock"));
                     loc.AddActivity(new Activity("OpenBrowser"));
@@ -277,11 +280,11 @@ namespace whereless.Test.Model
                         Console.WriteLine(location.ToString());
                         if (location.Name == "Location1")
                         {
-                            Assert.AreEqual(location.Time, TimeVal);
+                            Assert.AreEqual(location.TotalTime, TimeVal);
                         }
                         else if (location.Name == "Location2")
                         {
-                            Assert.AreEqual(location.Time, TimeVal1);
+                            Assert.AreEqual(location.TotalTime, TimeVal1);
                         }
                         else
                         {
@@ -369,7 +372,7 @@ namespace whereless.Test.Model
                                            .UniqueResult<Location>();
                     Assert.AreEqual(longLivedLocation.Name, locName);
 
-                    longLivedLocation.Time = TimeVal2;
+                    longLivedLocation.TotalTime = TimeVal2;
 
                     transaction.Commit();
                 }
@@ -381,7 +384,7 @@ namespace whereless.Test.Model
                 {
                     var tmp = session.CreateCriteria(typeof(Location)).Add(Restrictions.Eq("Name", locName))
                                            .UniqueResult<Location>();
-                    Assert.AreEqual(tmp.Time, TimeVal2);
+                    Assert.AreEqual(tmp.TotalTime, TimeVal2);
                 }
             }
 
@@ -389,7 +392,7 @@ namespace whereless.Test.Model
             // update of an entity retrieved in a different session
             using (var session = _sessionFactory.OpenSession())
             {
-                longLivedLocation.Time = TimeVal3;
+                longLivedLocation.TotalTime = TimeVal3;
                 session.Update(longLivedLocation);
                 session.Flush();
             }
@@ -400,7 +403,7 @@ namespace whereless.Test.Model
                 {
                     var tmp = session.CreateCriteria(typeof(Location)).Add(Restrictions.Eq("Name", locName))
                                            .UniqueResult<Location>();
-                    Assert.AreEqual(tmp.Time, TimeVal3);
+                    Assert.AreEqual(tmp.TotalTime, TimeVal3);
                 }
             }
 
@@ -410,7 +413,7 @@ namespace whereless.Test.Model
                 using (var transaction = session.BeginTransaction())
                 {
 
-                    longLivedLocation.Time = TimeVal4;
+                    longLivedLocation.TotalTime = TimeVal4;
                     session.SaveOrUpdate(longLivedLocation);
                     transaction.Commit();
                 }
@@ -422,7 +425,7 @@ namespace whereless.Test.Model
                 {
                     var tmp = session.CreateCriteria(typeof(Location)).Add(Restrictions.Eq("Name", locName))
                                            .UniqueResult<Location>();
-                    Assert.AreEqual(tmp.Time, TimeVal4);
+                    Assert.AreEqual(tmp.TotalTime, TimeVal4);
                 }
             }
 
@@ -690,6 +693,12 @@ namespace whereless.Test.Model
                 if (x is Activity && y is Activity)
                 {
                     return ((Activity)x).Name.Equals(((Activity)y).Name);
+                }
+                if (x is DateTime && y is DateTime)
+                {
+                    DateTime xDate = (DateTime) x;
+                    DateTime yDate = (DateTime) y;
+                    return (xDate.Date.Equals(yDate.Date) && xDate.Hour.Equals(yDate.Hour) && xDate.Minute.Equals(yDate.Minute));
                 }
                 return x.Equals(y);
             }

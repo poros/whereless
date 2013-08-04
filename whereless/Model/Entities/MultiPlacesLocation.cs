@@ -34,13 +34,26 @@ namespace whereless.Model.Entities
         }
         
         //time is given in terms of observations and default time between them
-        public override ulong Time
+        public override ulong TotalTime
         {
             get { return _n * T; }
             set { _n = value / T; }
         }
 
+        private ulong _currentN = 0;
+        public override ulong CurrentStreak
+        {
+            get { return _currentN * T; }
+            set { _currentN = value / T; }
+        }
 
+        private ulong _longestN = 0;
+        public override ulong LongestStreak
+        {
+            get { return _longestN * T; }
+            set { _longestN = value/T; }
+        }
+        
         public virtual IList<Place> Places
         {
             get { return _places.ToList(); }
@@ -67,6 +80,9 @@ namespace whereless.Model.Entities
             _places = new Stack<Place>();
             AddPlace(_Factory.CreatePlace(measures));
             _n = 1;
+            _currentN = 1;
+            _longestN = 1;
+            SetArrivedAt();
         }
 
         // REMARK side effect: always set current place if return true
@@ -105,11 +121,24 @@ namespace whereless.Model.Entities
             Debug.Assert(_currPlace != null, "_currPlace != null");
             Log.Debug("Place to be updated = " + _currPlace.Id);
             _currPlace.UpdateStats(measures);
-            N += 1;
+            UpdateTimeStats();
+        }
+
+        private void UpdateTimeStats()
+        {
+            _n += 1;
+            _currentN += 1;
+            if (_currentN > _longestN)
+            {
+                _longestN = _currentN;
+            }
         }
 
         public override void ForceLocation(IList<IMeasure> measures)
         {
+            // it needs to be called before UpdateStats
+            SetUpCurrentTimeStats();
+
             if (TestInput(measures))
             {
                 // currPlace is setup by side-effect
@@ -120,7 +149,17 @@ namespace whereless.Model.Entities
             {
                 AddPlace(_Factory.CreatePlace(measures));
                 _currPlace = _places.Peek();
+                // if UpdateStats is not called, time stats need to be updated
+                UpdateTimeStats();
             }
+
+
+            
+        }
+
+        public override void ResetCurrentStreak()
+        {
+            _currentN = 0;
         }
 
         public override string ToString()
