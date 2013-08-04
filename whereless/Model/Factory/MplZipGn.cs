@@ -47,5 +47,9 @@ namespace whereless.Model.Factory
             return new GaussianNetwork(measure);
         }
 
+        public virtual Activity CreateActivity(string activityName, string pathfile, string argument, string activityType)
+        {
+            return new Activity(activityName, pathfile, argument, activityType);
+        }
     }
 }

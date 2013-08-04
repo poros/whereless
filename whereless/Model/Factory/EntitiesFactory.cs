@@ -22,5 +22,6 @@ namespace whereless.Model.Factory
         Place CreatePlace();
         Place CreatePlace(IList<IMeasure> measures);
         Network CreateNetwork(IMeasure measure);
+        Activity CreateActivity(string activityName, string pathfile, string argument, string activityType);
     }
 }

@@ -156,12 +156,25 @@ namespace whereless.ViewModel
 
         public void AddActivityToLocation(Location location, string activityName, string pathfile, string argument, string activityType)
         {
-            var a=new Activity(activityName,pathfile,argument,activityType);
+            var a = ModelHelper.EntitiesFactory.CreateActivity(activityName,pathfile,argument,activityType);
             
             location.AddActivity(a);
-            Log.Debug("ViewModel Activity added to Location:" + location);
+            var rep = ModelHelper.GetRepository<Location>();
+            rep.Update(location);
+
+            Log.Debug("Activity added to Location:" + location);
         }
 
+        public void AddActivityToLocation(string locationName, string activityName, string pathfile, string argument, string activityType)
+        {
+            var a = ModelHelper.EntitiesFactory.CreateActivity(activityName, pathfile, argument, activityType);
+            using (var uow = ModelHelper.GetUnitOfWork())
+            {
+                var location = uow.GetLocationByName(locationName);
+                location.AddActivity(a);
 
+                Log.Debug("Activity added to Location:" + location);
+            }
+        }
     }
 }
