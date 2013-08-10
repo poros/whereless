@@ -95,16 +95,20 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AppStartup.cs" />
+    <Compile Include="CustomApplicationContext.cs" />
     <Compile Include="LocalizationService\IPlayPauseStopObjectThread.cs" />
     <Compile Include="LocalizationService\Localizer\LocalizationAlgorithm.cs" />
     <Compile Include="LocalizationService\Localizer\LocationLocalizer.cs" />
     <Compile Include="LocalizationService\Localizer\SimpleLocalization.cs" />
     <Compile Include="LocalizationService\PlayPauseStopThread.cs" />
     <Compile Include="LocalizationService\ServiceController.cs" />
+    <Compile Include="MutexManager\ProgramInfo.cs" />
+    <Compile Include="MutexManager\SingleInstance.cs" />
+    <Compile Include="MutexManager\WinAPI.cs" />
     <Compile Include="ViewModel\WherelessViewModel.cs" />
     <Compile Include="ViewModel\PeopleViewModel.cs" />
     <Compile Include="ViewModel\ServiceAgent.cs" />
@@ -154,14 +158,14 @@
     <Compile Include="Test\Model\TestNHUnitOfWork.cs" />
     <Compile Include="Test\LocalizationService\WiFi\TestWiFiSensor.cs" />
     <Compile Include="Test\TestInitializer.cs" />
+    <Page Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Model\Entities\GaussianNetwork.cs" />
     <Compile Include="Model\Entities\Network.cs" />
     <Compile Include="MainWindow.xaml.cs">
@@ -183,15 +187,18 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
@@ -208,6 +215,14 @@
     <Resource Include="Log4net.xml" />
     <Resource Include="Algorithm_Pseudocode.txt" />
     <Resource Include="ToDo.txt" />
+    <None Include="icon\whereless_desktop.ico" />
+    <None Include="icon\whereless_green.ico" />
+    <None Include="icon\whereless_red.ico" />
+    <None Include="icon\whereless_yellow.ico" />
+    <None Include="Resources\whereless_desktop.ico" />
+    <None Include="Resources\whereless_green.ico" />
+    <None Include="Resources\whereless_red.ico" />
+    <None Include="Resources\whereless_yellow.ico" />
     <Content Include="x64\SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
