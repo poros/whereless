@@ -4,7 +4,7 @@ Fluent Nhibernate
 System.Data.SQLite x86/x64
 Nunit adapter + framework
 Log4net
-Managed Wi-Fi 1.1.0
+*DEPRECATED* Managed Wi-Fi 1.1.0 (TWEAKED VERSION OF THE LIBRARY DIRECTLY PASTED INTO THE CODE)
 Hardcodet.Wpf.TaskbarNotification 1.0.4.0 (aka WPF NotifyIcon)
 
 References to add (just in case)

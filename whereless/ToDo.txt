@@ -1,6 +1,5 @@
 ﻿* Model
-	- Complete Activity entity
-	- Add better time statistics to Location (work in progress - poros)
+	- Fix the bug that freeze transactions after moving from a known location
 	- Add alternative entities for an alternative Localizer algorithm (hopefully not)
 	- Entities redesign and refactoring (hopefully not)
 
@@ -9,17 +8,8 @@
 	- Continue to implement ViewModel methods and properties for WPF controls
 
 * View
-	- Study WPF (work in progress - poros)
+	- Study WPF
 	- Realize XAML interfaces
-
-* App startup
-	- Study Creating Tray Apps
-	[https://www.simple-talk.com/dotnet/.net-framework/creating-tray-applications-in-.net-a-practical-guide/]
-	[http://stackoverflow.com/questions/2951126/system-tray-popup-windows-7-style]
-	(very briefly look - poros)
-	- Study WPF TrayIcon [http://www.codeproject.com/Articles/36468/WPF-NotifyIcon] 
-	(very briefly look - poros)
-	- Configure AppStartup (inspired to current MainWindow.xaml.cs)
 
 * Test
 	- Test (and tune!!!) algorithm
@@ -30,3 +20,9 @@
 
 * Installer
 	- Wrap everything into an installer (already done once - poros)
+
+REFERENCES
+Tray Icon:
+[https://www.simple-talk.com/dotnet/.net-framework/creating-tray-applications-in-.net-a-practical-guide/]
+[http://stackoverflow.com/questions/2951126/system-tray-popup-windows-7-style]
+[http://www.codeproject.com/Articles/36468/WPF-NotifyIcon]
