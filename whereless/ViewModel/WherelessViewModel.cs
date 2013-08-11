@@ -134,7 +134,7 @@ namespace whereless.ViewModel
         public void UpdateCurrentLocation(Location location)
         {
             CurrentLocation = location;
-            Log.Debug("ViewModel Current Location updated:" + location);
+            Log.Debug("ViewModel Current Location updated: " + location);
         }
 
         // REMARK Remember to trigger it when update the collection by the ui (like add or remove one)

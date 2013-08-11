@@ -1,9 +1,11 @@
-﻿using log4net;
-using NativeWifi;
+﻿using System;
+using System.Runtime.InteropServices;
+using log4net;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading;
+using whereless.LocalizationService.WiFi.ManagedWifi;
 using whereless.Model.ValueObjects;
 
 namespace whereless.LocalizationService.WiFi
@@ -18,12 +20,12 @@ namespace whereless.LocalizationService.WiFi
 
         private readonly WaitHandle[] _threadControls = new WaitHandle[2];
         private readonly WaitHandle _play;
-        private readonly SensorToLocalizer<SensorOutput> _output; 
+        private readonly SensorToLocalizer<SensorOutput> _output;
         private readonly WlanClient _client;
 
         // Vars for the radioOff callback
         private bool _radioOff = false;
-        public delegate void RadioOffCallbackDelegate (bool off);
+        public delegate void RadioOffCallbackDelegate(bool off);
         private RadioOffCallbackDelegate _radioOffCallback;
         public RadioOffCallbackDelegate RadioOffCallback
         {
@@ -89,7 +91,7 @@ namespace whereless.LocalizationService.WiFi
                     Log.Debug("Network SSID: " + network.Ssid + " SignalQuality: " + network.SignalQuality);
                 }
                 //Remove (if present) previous SensorOutput and substitute it with the new one
-                _output.LossyPut(new SensorOutput() {Measures = networks});
+                _output.LossyPut(new SensorOutput() { Measures = networks });
             }
         }
 
@@ -99,46 +101,69 @@ namespace whereless.LocalizationService.WiFi
             IList<IMeasure> measures = new List<IMeasure>();
 
             // get all wlan intrerfaces
-            foreach (WlanClient.WlanInterface wlanIface in _client.Interfaces)
-            {
-                // Scan only if interface is up (dormant???)
-                if (wlanIface.NetworkInterface.OperationalStatus != OperationalStatus.Up)
-                {
-                    // notify that radio is off
-                    Log.Debug("Radio is off");
-                    NotifyRadioOff(true);
-                    return null;
-                }
-                else
-                {
-                    // notify that radio is on 
-                    NotifyRadioOff(false);
+            // works only if only one interface is present
+            //foreach (WlanClient.WlanInterface wlanIface in _client.Interfaces)
+            //{
 
-                    // List all networks
-                    Wlan.WlanAvailableNetwork[] networks = wlanIface.GetAvailableNetworkList(0); //0 is a flag
-                    ISet<string> alreadyListedSsids = new HashSet<string>();
-                    foreach (Wlan.WlanAvailableNetwork network in networks)
+            WlanClient.WlanInterface wlanIface = _client.Interfaces[0];
+
+            // DEBUG CODE IN ORDER TO UNDERSTAND HOW RADIO STATE WORKS
+            //Log.Debug(wlanIface.InterfaceName);
+            //Log.Debug(wlanIface.RadioState.numberofItems);
+            //foreach (var radio in wlanIface.RadioState.PhyRadioState)
+            //{
+            //    Log.Debug(radio.dwPhyIndex);
+            //    Log.Debug(radio.dot11HardwareRadioState);
+            //    Log.Debug(radio.dot11SoftwareRadioState);
+            //}
+
+            // Scan only if interface is up (dormant???)
+            //wlanIface.NetworkInterface.OperationalStatus != OperationalStatus.Up
+
+            //Scan when HardwareRadioState and SoftwareRadioState are both off
+            //Seems all the elements are the same
+            if (wlanIface.RadioState.PhyRadioState[0].dot11HardwareRadioState != Wlan.Dot11RadioState.On ||
+                wlanIface.RadioState.PhyRadioState[0].dot11SoftwareRadioState != Wlan.Dot11RadioState.On)
+            {
+                Log.Debug(wlanIface.RadioState.PhyRadioState[0].dot11HardwareRadioState);
+                Log.Debug(wlanIface.RadioState.PhyRadioState[0].dot11SoftwareRadioState);
+
+                // notify that radio is off
+                Log.Debug("Radio is off");
+                NotifyRadioOff(true);
+                return null;
+            }
+            else
+            {
+                // notify that radio is on 
+                NotifyRadioOff(false);
+
+                // List all networks
+                Wlan.WlanAvailableNetwork[] networks = wlanIface.GetAvailableNetworkList(0); //0 is a flag
+                ISet<string> alreadyListedSsids = new HashSet<string>();
+                foreach (Wlan.WlanAvailableNetwork network in networks)
+                {
+                    // Trim ad-hoc networks
+                    if (network.dot11BssType != Wlan.Dot11BssType.Independent)
                     {
-                        // Trim ad-hoc networks
-                        if (network.dot11BssType != Wlan.Dot11BssType.Independent)
+                        string ssid = GetStringForSsid(network.dot11Ssid);
+                        if (!alreadyListedSsids.Contains(ssid))
                         {
-                            string ssid = GetStringForSsid(network.dot11Ssid);
-                            if (!alreadyListedSsids.Contains(ssid))
-                            {
-                                alreadyListedSsids.Add(ssid);
-                                measures.Add(new SimpleMeasure(ssid, network.wlanSignalQuality));
-                            }
+                            alreadyListedSsids.Add(ssid);
+                            measures.Add(new SimpleMeasure(ssid, network.wlanSignalQuality));
                         }
                     }
-
-                    // Alternative to timeout (abandoned idea)
-                    // Add the event to track when the wireless connection changes
-                    //wlanIface.WlanNotification +=
-                    //new WlanClient.WlanInterface.WlanNotificationEventHandler(Target);
-
-                    // Ask for a new scan
-                    wlanIface.Scan();
                 }
+
+                // Alternative to timeout (abandoned idea)
+                // Add the event to track when the wireless connection changes
+                //wlanIface.WlanNotification +=
+                //new WlanClient.WlanInterface.WlanNotificationEventHandler(Target);
+
+                // Ask for a new scan
+                wlanIface.Scan();
+                
+                //}
             }
             return measures;
         }

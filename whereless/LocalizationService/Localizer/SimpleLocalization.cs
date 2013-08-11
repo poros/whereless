@@ -55,9 +55,9 @@ namespace whereless.LocalizationService.Localizer
                 // currLocation may be updated by other threads
                 if (!unknown)
                 {
-                    Log.Debug("Trying to retrieve Location" + currLocation.Name);
+                    Log.Debug("Trying to retrieve Location " + currLocation.Name);
                     currLocation = uow.GetLocationByName(currLocation.Name);
-                    Log.Debug(currLocation == null ? "Nothing Retrieved" : "Retrieved" + currLocation.Name);
+                    Log.Debug(currLocation == null ? "Nothing Retrieved " : "Retrieved " + currLocation.Name);
                 }
 
                 // currLocation may be null if updated by others threads

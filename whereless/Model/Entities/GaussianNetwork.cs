@@ -17,6 +17,11 @@ namespace whereless.Model.Entities
 
         private static void CheckInput(IMeasure measure)
         {
+            if (measure == null)
+            {
+                throw new ArgumentNullException("measure");
+            }
+
             if (measure.SignalQuality < SignalQualityMin || measure.SignalQuality > SignalQualityMax)
             {
                 throw new ArgumentOutOfRangeException("measure" + " SignalQuality out of range");

@@ -89,6 +89,12 @@ namespace whereless.Model.Entities
         public override bool TestInput(IList<IMeasure> measures)
         {
             Log.Debug("To be tested " + this.Name);
+
+            if (measures.Count == 0)
+            {
+                return false;
+            }
+
             // proximity preference
             if (_currPlace != null && _currPlace.TestInput(measures))
             {
