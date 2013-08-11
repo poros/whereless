@@ -103,7 +103,6 @@
     <Compile Include="LocalizationService\Localizer\SimpleLocalization.cs" />
     <Compile Include="LocalizationService\PlayPauseStopThread.cs" />
     <Compile Include="LocalizationService\ServiceController.cs" />
-
     <Compile Include="LocalizationService\WiFi\ManagedWifi\Interop.cs" />
     <Compile Include="LocalizationService\WiFi\ManagedWifi\WlanApi.cs" />
     <Compile Include="MutexManager\ProgramInfo.cs" />
@@ -223,6 +222,9 @@
     <None Include="Resources\whereless_green.ico" />
     <None Include="Resources\whereless_red.ico" />
     <None Include="Resources\whereless_yellow.ico" />
+    <Resource Include="icon\TrayIcon_Green.ico" />
+    <Resource Include="icon\TrayIcon_Red.ico" />
+    <Resource Include="icon\TrayIcon_Yellow.ico" />
     <Content Include="x64\SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -15,7 +15,10 @@ namespace whereless
    //class to be passed to Application.Run
    public class CustomApplicationContext : ApplicationContext
     {
-       private static readonly string IconFileName = @"..\..\icon\whereless_yellow.ico";
+       private static readonly string IconFileName = @"..\..\icon\TrayIcon_Yellow.ico";
+       private static readonly string TrayIconGreen = @"..\..\icon\TrayIcon_Green.ico";
+       private static readonly string TrayIconYellow = @"..\..\icon\TrayIcon_Yellow.ico";
+       private static readonly string TrayIconRed = @"..\..\icon\TrayIcon_Red.ico"; 
        private static readonly string DefaultTooltip = "Whereless started";
 
        
@@ -91,11 +94,11 @@ namespace whereless
            {
                if (((WherelessViewModel)sender).CurrentLocation.Name.Equals("UNKNWON") == true)
                {
-                   notifyIcon.Icon = new Icon(@"..\..\icon\whereless_yellow.ico");
+                   notifyIcon.Icon = new Icon(TrayIconYellow);
                }
                else
                {
-                   notifyIcon.Icon = new Icon(@"..\..\icon\whereless_green.ico");
+                   notifyIcon.Icon = new Icon(TrayIconGreen);
                    //Console.Beep(1000, 2000);
                }
            }
@@ -105,12 +108,12 @@ namespace whereless
                {
                    if (((WherelessViewModel)sender).RadioOff==true)
                    {
-                       Console.Beep(1000, 5000);
-                       notifyIcon.Icon = new Icon(@"..\..\icon\whereless_red.ico");
+                       //Console.Beep(1000, 5000);
+                       notifyIcon.Icon = new Icon(TrayIconRed);
                    }
                    else
                    {
-                       notifyIcon.Icon = new Icon(@"..\..\icon\whereless_yellow.ico");
+                       notifyIcon.Icon = new Icon(TrayIconYellow);
                        //Console.Beep(1000, 2000);
                    }
                }
@@ -120,11 +123,11 @@ namespace whereless
                    {
                        if (((WherelessViewModel)sender).ServicePaused==true)
                        {
-                           notifyIcon.Icon = new Icon(@"..\..\icon\whereless_red.ico");
+                           notifyIcon.Icon = new Icon(TrayIconRed);
                        }
                        else
                        {
-                           notifyIcon.Icon = new Icon(@"..\..\icon\whereless_yellow.ico");
+                           notifyIcon.Icon = new Icon(TrayIconYellow);
                        }
                    }
                }
