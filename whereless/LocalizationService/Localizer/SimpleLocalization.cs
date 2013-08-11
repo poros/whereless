@@ -69,14 +69,21 @@ namespace whereless.LocalizationService.Localizer
                 }
                 else
                 {
-                    Location oldLocation = currLocation;
+                    String oldLocationName = null;
+                    if (currLocation != null)
+                    {
+                        oldLocationName = currLocation.Name;
+                    }
                     currLocation = null;
 
-                    var locations = ModelHelper.GetLocationRepository().GetAll();
+                    Log.Debug("Trying to retrieve all locations");
+                    var locations = uow.GetAll<Location>();
+                    Log.Debug("All locations retrieved");
+
                     if (locations.Count > 0)
                     {
                         foreach (var location in locations
-                            .Where(location => location != oldLocation))
+                            .Where(location => oldLocationName == null || !location.Name.Equals(oldLocationName)))
                         {
                             if (location.TestInput(input))
                             {

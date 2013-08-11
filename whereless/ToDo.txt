@@ -1,10 +1,8 @@
 ﻿* Model
-	- Fix the bug that freeze transactions after moving from a known location
 	- Add alternative entities for an alternative Localizer algorithm (hopefully not)
 	- Entities redesign and refactoring (hopefully not)
 
 * Controller/ViewModel
-	- Implement execute actions behaviour (both in entities and LocalizationService) and decide which tasks support
 	- Continue to implement ViewModel methods and properties for WPF controls
 
 * View

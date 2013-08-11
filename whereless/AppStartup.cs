@@ -60,12 +60,8 @@ namespace whereless
                     //Thread.Sleep(5000);
                     //viewModel.ForceLocation("Casa Mare");
                     //Thread.Sleep(5000);
-
-                    //// CODE TO RE-CREATE THE BUG
-                    //Thread.Sleep(5000);
-                    //viewModel.RegisterLocation("Casa Mare");
-                    //Thread.Sleep(5000);
                     // Now move in another unknown location
+                    
 
                     log.Info("whereless started...");
 

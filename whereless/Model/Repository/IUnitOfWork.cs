@@ -4,6 +4,10 @@ using whereless.Model.Entities;
 
 namespace whereless.Model.Repository
 {
+
+    // IMPORTANT NOTE Never use Repository inside a UnitOfWork!!!
+    // Never! The Curse of Deadlock will be upon you!!!
+
     // ASK FOR MORE OPERATIONS IMPLEMENTATION IF NEEDED (EVEN ENTITY COMPARISON)
     public interface IUnitOfWork : IDisposable
     {

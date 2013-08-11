@@ -99,6 +99,9 @@ namespace whereless.Test.Model
         [Test(Description = "Test operations of NHRepository")]
         public void NHRepositoryOperationsTest()
         {
+            // IMPORTANT NOTE Never use Repository inside a UnitOfWork!!!
+            // Never! The Curse of Deadlock will be upon you!!!
+
             //Instantiate
             var repLoc = new NHRepository<Location>(_sessionFactory);
             
