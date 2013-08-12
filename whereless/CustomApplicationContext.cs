@@ -95,10 +95,13 @@ namespace whereless
                if (((WherelessViewModel)sender).CurrentLocation.Name.Equals("UNKNWON") == true)
                {
                    notifyIcon.Icon = new Icon(TrayIconYellow);
+                   //notifyIcon.ShowBalloonTip(4000, "Current location update", "This Location is UNKNWON", ToolTipIcon.Info);
                }
                else
                {
                    notifyIcon.Icon = new Icon(TrayIconGreen);
+                   WherelessViewModel viewModel = WherelessViewModel.GetWherelessViewModel();
+                   notifyIcon.ShowBalloonTip(4000, "Current location update", "You are at:"+viewModel.CurrentLocation.Name, ToolTipIcon.Info);
                    //Console.Beep(1000, 2000);
                }
            }
@@ -110,11 +113,13 @@ namespace whereless
                    {
                        //Console.Beep(1000, 5000);
                        notifyIcon.Icon = new Icon(TrayIconRed);
+                       notifyIcon.ShowBalloonTip(4000, "Change RADIO Status", "Radio is OFF", ToolTipIcon.Info);
+
                    }
                    else
                    {
                        notifyIcon.Icon = new Icon(TrayIconYellow);
-                       //Console.Beep(1000, 2000);
+                       notifyIcon.ShowBalloonTip(4000, "Change RADIO Status", "Radio is ON", ToolTipIcon.Info);
                    }
                }
                else
@@ -124,10 +129,12 @@ namespace whereless
                        if (((WherelessViewModel)sender).ServicePaused==true)
                        {
                            notifyIcon.Icon = new Icon(TrayIconRed);
+                           notifyIcon.ShowBalloonTip(4000, "Change SERVICE Status", "Service is OFF", ToolTipIcon.Info);
                        }
                        else
                        {
                            notifyIcon.Icon = new Icon(TrayIconYellow);
+                           notifyIcon.ShowBalloonTip(4000, "Change SERVICE Status", "Service is ON", ToolTipIcon.Info);
                        }
                    }
                }
