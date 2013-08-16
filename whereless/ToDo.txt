@@ -4,6 +4,8 @@
 
 * Controller/ViewModel
 	- Continue to implement ViewModel methods and properties for WPF controls
+	- Add exit resources close handler (like service, tray icon, windows, etc)
+	- Add baloon to trayicon for location state change
 
 * View
 	- Study WPF

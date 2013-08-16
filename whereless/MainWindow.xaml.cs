@@ -16,5 +16,13 @@ namespace whereless
         {
             InitializeComponent();
         }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+
+            System.Windows.Data.CollectionViewSource wherelessViewModelViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("wherelessViewModelViewSource")));
+            // Caricare i dati impostando la proprietà CollectionViewSource.Source:
+            // wherelessViewModelViewSource.Source = [origine dati generica]
+        }
     }
 }

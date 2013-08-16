@@ -40,7 +40,7 @@ namespace whereless
                     Type type = System.Reflection.MethodBase.GetCurrentMethod().DeclaringType;
                     ILog log = LogManager.GetLogger(type);
 
-                    WherelessViewModel viewModel = WherelessViewModel.GetWherelessViewModel();
+                    WherelessViewModel viewModel = WherelessViewModel.GetInstance();
                     ServiceController service = new ServiceController()
                     {
                         RadioOffCallback = viewModel.UpdateRadioOff,

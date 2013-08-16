@@ -21,7 +21,7 @@ namespace whereless.ViewModel
             _locations = ModelHelper.GetLocationRepository().GetAll();
         }
 
-        public static WherelessViewModel GetWherelessViewModel()
+        static public WherelessViewModel GetInstance()
         {
             return Instance;
         }

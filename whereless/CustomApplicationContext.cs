@@ -55,7 +55,7 @@ namespace whereless
 
 
 
-            WherelessViewModel viewModel = WherelessViewModel.GetWherelessViewModel();
+            WherelessViewModel viewModel = WherelessViewModel.GetInstance();
             viewModel.PropertyChanged +=new PropertyChangedEventHandler(viewModel_PropertyChange);
 
           
@@ -83,6 +83,11 @@ namespace whereless
        {
             Window bigWnd=new MainWindow();
             bigWnd.Show();
+
+            //UPDATE TEST CODE
+            //System.Threading.Thread.Sleep(5000);
+            //WherelessViewModel viewModel = WherelessViewModel.GetInstance();
+            //viewModel.RegisterLocation("Casa Mare");
        }
 
 
@@ -100,7 +105,7 @@ namespace whereless
                else
                {
                    notifyIcon.Icon = new Icon(TrayIconGreen);
-                   WherelessViewModel viewModel = WherelessViewModel.GetWherelessViewModel();
+                   WherelessViewModel viewModel = WherelessViewModel.GetInstance();
                    notifyIcon.ShowBalloonTip(4000, "Current location update", "You are at:"+viewModel.CurrentLocation.Name, ToolTipIcon.Info);
                    //Console.Beep(1000, 2000);
                }
