@@ -14,7 +14,7 @@ namespace whereless.LocalizationService.Localizer
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(LocationLocalizer));
 
-        public const string Unknown = "UNKNWON";
+        public const string Unknown = "UNKNOWN";
         private Location _currLocation = null;
         private bool _unknown = false;
         private readonly LocalizationAlgorithm _algorithm;

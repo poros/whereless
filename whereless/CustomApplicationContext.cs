@@ -85,9 +85,9 @@ namespace whereless
             bigWnd.Show();
 
             //UPDATE TEST CODE
-            //System.Threading.Thread.Sleep(5000);
-            //WherelessViewModel viewModel = WherelessViewModel.GetInstance();
-            //viewModel.RegisterLocation("Casa Mare");
+            System.Threading.Thread.Sleep(5000);
+            WherelessViewModel viewModel = WherelessViewModel.GetInstance();
+            viewModel.RegisterLocation("Casa Mare");
        }
 
 

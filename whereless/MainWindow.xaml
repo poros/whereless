@@ -1,12 +1,29 @@
 ﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:c="clr-namespace:whereless.ViewModel"
+        xmlns:vm="clr-namespace:whereless.ViewModel"
+        xmlns:e="clr-namespace:whereless.Model.Entities"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="whereless.MainWindow"
         Title="MainWindow" Height="600" Width="525" Loaded="Window_Loaded">
     <Window.Resources>
-        <ObjectDataProvider x:Key="ViewModel" ObjectType="{x:Type c:WherelessViewModel}" MethodName="GetInstance" />
-        <CollectionViewSource x:Key="wherelessViewModelViewSource" d:DesignSource="{d:DesignInstance {x:Type c:WherelessViewModel}, CreateList=True}"/>
+        <ObjectDataProvider x:Key="ViewModel" ObjectType="{x:Type vm:WherelessViewModel}" MethodName="GetInstance" />
+        <CollectionViewSource x:Key="wherelessViewModelViewSource" d:DesignSource="{d:DesignInstance {x:Type vm:WherelessViewModel}, CreateList=True}"/>
+
+        <DataTemplate DataType="{x:Type e:Location}">
+            <StackPanel>
+                <TextBlock Text="{Binding Path=Name}" Name="Nome" Background="Red"/>
+                <TextBlock Text="{Binding Path=TotalTime}" Name="Tempo"/>
+            </StackPanel>
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding Path=Name}" Value="UNKNOWN">
+                    <Setter Property="Background" Value="Yellow" TargetName="Nome"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=Name}" Value="Casa Mare">
+                    <Setter Property="Background" Value="Green" TargetName="Nome"/>
+                </DataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+
     </Window.Resources>
     <TabControl HorizontalAlignment="Left" Height="570" VerticalAlignment="Top" Width="517">
         <TabItem Header="TabItem">
@@ -14,6 +31,9 @@
                 <TextBlock HorizontalAlignment="Left" Margin="35,23,0,0" TextWrapping="Wrap" 
 					Text="{Binding CurrentLocation.Name, Source={StaticResource ViewModel}}"
 					VerticalAlignment="Top" Height="44" Width="251"/>
+                <ContentControl HorizontalAlignment="Left" Margin="152,154,0,0" VerticalAlignment="Top"/>
+                <ContentControl Content="{Binding CurrentLocation, Source={StaticResource ViewModel}}" 
+                                HorizontalAlignment="Left" Margin="215,189,0,0" VerticalAlignment="Top" Height="85" Width="224"/>
             </Grid>
         </TabItem>
         <TabItem Header="TabItem">
