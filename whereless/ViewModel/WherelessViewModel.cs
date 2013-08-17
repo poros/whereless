@@ -19,6 +19,7 @@ namespace whereless.ViewModel
             _currentLocation = ModelHelper.EntitiesFactory.CreateLocation("Unknown");
             _currentLocation.TotalTime = 0;
             _locations = ModelHelper.GetLocationRepository().GetAll();
+
         }
 
         static public WherelessViewModel GetInstance()
@@ -34,6 +35,23 @@ namespace whereless.ViewModel
         private IList<Location> _locations;
 
 
+
+        public enum WindowsStat : int
+        {
+            Known,
+            Unknown,
+            Paused,
+            Radiooff
+        }
+
+        private string _statusForWindow;
+        public string StatusForWindow
+        {
+            get { return _statusForWindow; }
+            set { _statusForWindow = value; }
+        }
+
+
         public Location CurrentLocation
         {
             get { return _currentLocation; }
@@ -42,7 +60,10 @@ namespace whereless.ViewModel
                 // Time update will work???
                 // if (_currentLocation != value)
                 _currentLocation = value;
+
+                setWindowStatus(value.Name.Equals("UNKNOWN") == true ? WindowsStat.Unknown : WindowsStat.Known);
                 OnPropertyChanged("CurrentLocation");
+                OnPropertyChanged("StatusForWindow");
             }
         }
 
@@ -64,7 +85,9 @@ namespace whereless.ViewModel
                 if (_radioOff != value)
                 {
                     _radioOff = value;
+                    setWindowStatus(WindowsStat.Radiooff);
                     OnPropertyChanged("RadioOff");
+                    OnPropertyChanged("StatusForWindow");
                 }
             }
         }
@@ -77,7 +100,9 @@ namespace whereless.ViewModel
                 if (_servicePaused != value)
                 {
                     _servicePaused = value;
+                    setWindowStatus(WindowsStat.Paused);
                     OnPropertyChanged("ServicePaused");
+                    OnPropertyChanged("StatusForWindow");
                 }
             }
         }
@@ -178,5 +203,27 @@ namespace whereless.ViewModel
                 Log.Debug("Activity added to Location:" + location);
             }
         }
+
+
+        public void setWindowStatus(WindowsStat ws)
+        {
+            switch (ws)
+            {
+                case WindowsStat.Known:
+                    StatusForWindow = "KNOWN";
+                    break;
+
+                case WindowsStat.Unknown:
+                    StatusForWindow = "UNKNOWN";
+                    break;
+                case WindowsStat.Paused:
+                    StatusForWindow = "PAUSED";
+                    break;
+                case WindowsStat.Radiooff:
+                    StatusForWindow = "RADIOOFF";
+                    break;
+            }
+        }
+
     }
 }
