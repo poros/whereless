@@ -8,6 +8,7 @@ using whereless;
 using whereless.LocalizationService;
 using whereless.ViewModel;
 using System.ComponentModel;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 
 namespace whereless
@@ -21,6 +22,7 @@ namespace whereless
        private static readonly string TrayIconRed = @"..\..\icon\TrayIcon_Red.ico"; 
        private static readonly string DefaultTooltip = "Whereless started";
 
+       private static string oldPlace;
        
 
        private System.ComponentModel.IContainer components;	// a list of components to dispose when the context is disposed
@@ -70,6 +72,9 @@ namespace whereless
             this.menuItem1.Click += new System.EventHandler(this.exitMenu);
             notifyIcon.ContextMenu = this.contextMenu1;
 
+
+
+            oldPlace = "";
         }
 
        //just to close quickly (only during developing)
@@ -97,16 +102,29 @@ namespace whereless
            //Console.Beep(1000, 5000);
            if (e.PropertyName.Equals("CurrentLocation"))
            {
-               if (((WherelessViewModel)sender).CurrentLocation.Name.Equals("UNKNWON") == true)
+               if (((WherelessViewModel)sender).CurrentLocation.Name.Equals("UNKNOWN") == true)
                {
                    notifyIcon.Icon = new Icon(TrayIconYellow);
-                   //notifyIcon.ShowBalloonTip(4000, "Current location update", "This Location is UNKNWON", ToolTipIcon.Info);
+                   
+                   string currentPlace = ((WherelessViewModel) sender).CurrentLocation.Name;
+                   if (currentPlace.Equals(oldPlace) == false)
+                   {
+                       notifyIcon.ShowBalloonTip(4000, "Current location update", "This Location is UNKNOWN", ToolTipIcon.Info);
+                       oldPlace = currentPlace;
+                   }
                }
                else
                {
                    notifyIcon.Icon = new Icon(TrayIconGreen);
                    WherelessViewModel viewModel = WherelessViewModel.GetInstance();
-                   notifyIcon.ShowBalloonTip(4000, "Current location update", "You are at:"+viewModel.CurrentLocation.Name, ToolTipIcon.Info);
+
+                   string currentPlace = ((WherelessViewModel)sender).CurrentLocation.Name;
+                   if (currentPlace.Equals(oldPlace) == false)
+                   {
+                       notifyIcon.ShowBalloonTip(4000, "Current location update", "You are at: " + viewModel.CurrentLocation.Name, ToolTipIcon.Info);
+                       oldPlace = currentPlace;
+                   }
+                   
                    //Console.Beep(1000, 2000);
                }
            }
@@ -119,7 +137,6 @@ namespace whereless
                        //Console.Beep(1000, 5000);
                        notifyIcon.Icon = new Icon(TrayIconRed);
                        notifyIcon.ShowBalloonTip(4000, "Change RADIO Status", "Radio is OFF", ToolTipIcon.Info);
-
                    }
                    else
                    {
