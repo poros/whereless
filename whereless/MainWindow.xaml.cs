@@ -65,6 +65,17 @@ namespace whereless
 
 
 
+        private void OpenAddActivity(object sender, RoutedEventArgs e)
+        {
+            Window WndNewAct=new AddNewActivity();
+            WndNewAct.Show();
+        }
+        
+
+
+
+
+
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Console.Beep(1000,2000);

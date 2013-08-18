@@ -99,6 +99,9 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddNewActivity.xaml.cs">
+      <DependentUpon>AddNewActivity.xaml</DependentUpon>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
@@ -167,6 +170,10 @@
     <Compile Include="Test\Model\TestNHUnitOfWork.cs" />
     <Compile Include="Test\LocalizationService\WiFi\TestWiFiSensor.cs" />
     <Compile Include="Test\TestInitializer.cs" />
+    <Page Include="AddNewActivity.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

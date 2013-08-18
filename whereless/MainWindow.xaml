@@ -225,8 +225,16 @@
 
                     <TextBlock FontFamily="Arial" FontSize="16" Text="ACTIONS " Canvas.Left="42" Canvas.Top="384" Height="19" Width="90"/>
 
-                    <Image Height="39" Width="39" Canvas.Left="111" Canvas.Top="372"
-                           Source="pack://application:,,,/images\symbol_add.png"/>
+                    <Button Name="ButtonAddActivity" Width="19" Height="19" ToolTip="Add new activity" Click="OpenAddActivity" Canvas.Left="123" Canvas.Top="382">
+                        <Button.Template>
+                            <ControlTemplate>
+                                <Image Source="pack://application:,,,/images\symbol_add.png"/>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+
+
+
 
                     <ListBox ItemsSource="{Binding CurrentLocation.ActivityList, Source={StaticResource ViewModel}}" Background="{x:Null}" BorderBrush="Black" Foreground="Black" Canvas.Left="22" Canvas.Top="413" Height="103" Width="446" FontFamily="Arial" FontSize="14" SelectionChanged="ListBox_SelectionChanged">
                         <ListBox.ItemTemplate>
