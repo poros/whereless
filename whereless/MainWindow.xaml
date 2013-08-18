@@ -3,29 +3,33 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:whereless.ViewModel"
         xmlns:e="clr-namespace:whereless.Model.Entities"
+        xmlns:b="clr-namespace:whereless"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         
     
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:whereless="clr-namespace:whereless"
     mc:Ignorable="d" x:Class="whereless.MainWindow"
     
         Title="MainWindow" Height="600" Width="525" Loaded="Window_Loaded">
     <Window.Resources>
         <ObjectDataProvider x:Key="ViewModel" ObjectType="{x:Type vm:WherelessViewModel}" MethodName="GetInstance" />
         <CollectionViewSource x:Key="wherelessViewModelViewSource" d:DesignSource="{d:DesignInstance {x:Type vm:WherelessViewModel}, CreateList=True}"/>
+        <b:TotalTimeToStringConverter x:Key="totalTimeConv" />
+        <b:StreakToStringConverter x:Key="streakConv" />
     </Window.Resources>
 
 
     <TabControl HorizontalAlignment="Left" Height="570" VerticalAlignment="Top" Width="517" Margin="8,0,-8,-1">
         <TabItem Header="TabItem">
 
-            <Grid Background="#FFE5E5E5">
+            <Grid Background="#FFE5E5E5" Margin="0,0,0,-6">
 
 
 
                 <!-- Status: UNKNOWN -->
-                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="511" Height="192" Background="LightYellow" Margin="1,0,-1,0">
+                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="512" Height="192" Background="LightYellow" Margin="0,0,-1,0">
 
                     <Canvas.Style>
                         <Style TargetType="{x:Type Canvas}">
@@ -71,7 +75,7 @@
 
 
                 <!-- Status: PAUSED -->
-                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="512" Height="192" Background="LightCoral" Margin="-1,0,0,0">
+                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="512" Height="195" Background="LightCoral" Margin="-1,0,0,0">
 
                     <Canvas.Style>
                         <Style TargetType="{x:Type Canvas}">
@@ -110,7 +114,7 @@
 
 
                 <!-- Status: RADIOOFF -->
-                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="510" Height="192" Background="LightCoral" Margin="1,0,0,0">
+                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="510" Height="186" Background="LightCoral" Margin="-1,0,0,0">
 
                     <Canvas.Style>
                         <Style TargetType="{x:Type Canvas}">
@@ -143,7 +147,7 @@
                 </Canvas>
 
                 <!-- Status: KNOWN -->
-                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="511" Height="542" Background="LightGreen" Margin="-1,0,0,0">
+                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="513" Height="548" Background="LightGreen" Margin="-1,0">
 
                     <Canvas.Style>
                         <Style TargetType="{x:Type Canvas}" >
@@ -184,15 +188,15 @@
 
                     <TextBlock Height="23" Canvas.Left="22" TextWrapping="Wrap" Text="CURRENT STREAK" Canvas.Top="191" Width="184" FontFamily="Arial" FontSize="20"/>
                     <TextBox Height="23" Canvas.Left="242" TextWrapping="Wrap" Canvas.Top="191" Width="129" FontFamily="Arial" FontSize="20"
-                		Text="{Binding CurrentLocation.CurrentStreak, Source={StaticResource ViewModel}}" Background="{x:Null}" BorderBrush="{x:Null}"        />
+                		Text="{Binding CurrentLocation.CurrentStreak, Source={StaticResource ViewModel}, Converter={StaticResource streakConv}}" Background="{x:Null}" BorderBrush="{x:Null}"        />
 
                     <TextBlock Height="23" Canvas.Left="22" TextWrapping="Wrap" Text="LONGEST STREAK" Canvas.Top="219" Width="184" FontFamily="Arial" FontSize="20"/>
                     <TextBox Height="23" Canvas.Left="242" TextWrapping="Wrap" Canvas.Top="223" Width="129" FontFamily="Arial" FontSize="20"
-                		Text="{Binding CurrentLocation.LongestStreak, Source={StaticResource ViewModel}}" Background="{x:Null}" BorderBrush="{x:Null}"        />
+                		Text="{Binding CurrentLocation.LongestStreak, Source={StaticResource ViewModel}, Converter={StaticResource streakConv}}" Background="{x:Null}" BorderBrush="{x:Null}"        />
 
                     <TextBlock Height="23" Canvas.Left="20" TextWrapping="Wrap" Text="TOTAL TIME" Canvas.Top="247" Width="184" FontFamily="Arial" FontSize="20"/>
-                    <TextBox Height="23" Canvas.Left="242" TextWrapping="Wrap" Canvas.Top="245" Width="129" FontFamily="Arial" FontSize="20"
-                		Text="{Binding CurrentLocation.TotalTime, Source={StaticResource ViewModel}}" Background="{x:Null}" BorderBrush="{x:Null}"        />
+                    <TextBox Height="23" Canvas.Left="242" TextWrapping="Wrap" Canvas.Top="245" Width="226" FontFamily="Arial" FontSize="20"
+                		Text="{Binding CurrentLocation.TotalTime, Source={StaticResource ViewModel}, Converter={StaticResource totalTimeConv}}" Background="{x:Null}" BorderBrush="{x:Null}"        />
 
                     <Expander Header="" Canvas.Left="38" Canvas.Top="312" Height="140" Width="446">
                         <StackPanel Margin="10,4,0,0">
@@ -204,7 +208,7 @@
                                DisplayMemberPath = "Location.Name"
                                SelectedValuePath = "Location.Name"
                             />
-                       
+
                         </StackPanel>
                     </Expander>
 

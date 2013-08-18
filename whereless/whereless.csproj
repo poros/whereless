@@ -115,6 +115,8 @@
     <Compile Include="MutexManager\ProgramInfo.cs" />
     <Compile Include="MutexManager\SingleInstance.cs" />
     <Compile Include="MutexManager\WinAPI.cs" />
+    <Compile Include="StreakToStringConverter.cs" />
+    <Compile Include="TotalTimeToStringConverter.cs" />
     <Compile Include="ViewModel\WherelessViewModel.cs" />
     <Compile Include="ViewModel\PeopleViewModel.cs" />
     <Compile Include="ViewModel\ServiceAgent.cs" />
