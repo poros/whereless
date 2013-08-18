@@ -12,7 +12,6 @@ using System.Threading;
 using Button = System.Windows.Controls.Button;
 using MessageBox = System.Windows.Forms.MessageBox;
 
-
 namespace whereless
 {
     /// <summary>
@@ -68,6 +67,8 @@ namespace whereless
         private void OpenAddActivity(object sender, RoutedEventArgs e)
         {
             Window WndNewAct=new AddNewActivity();
+            System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(WndNewAct);
+
             WndNewAct.Show();
         }
         

@@ -9,6 +9,7 @@ using whereless.LocalizationService;
 using whereless.ViewModel;
 using System.ComponentModel;
 using MessageBox = System.Windows.Forms.MessageBox;
+using System.Windows.Forms.Integration;
 
 
 namespace whereless
@@ -85,6 +86,7 @@ namespace whereless
        //just to close quickly (only during developing)
        private void exitMenu(object sender, EventArgs e)
        {
+           Dispose();
            Environment.Exit(0);
        }
 
@@ -94,6 +96,8 @@ namespace whereless
             if (bigWnd == null)
             {
                 bigWnd = new MainWindow();
+                
+                System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(bigWnd);
                 bigWnd.Show();
 
                 //UPDATE TEST CODE

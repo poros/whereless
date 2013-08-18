@@ -27,6 +27,7 @@ namespace whereless
         private static string filename;
         private static string actionName;
         private static string type;
+        private static string argument;
 
         public AddNewActivity()
         {
@@ -80,14 +81,16 @@ namespace whereless
             }
 
             actionName = TextActName.Text;
-
-            MessageBox.Show("Name: " + actionName, "zzz",
-                                MessageBoxButtons.YesNo,
-                                MessageBoxIcon.Question);
+            argument = TextArgument.Text;
 
             if (actionName.Equals("") == false && filename.Equals("") == false)
             {
-                //viewModel.AddActivityToLocation(l, TextActName.ToString(), filename, "", type);
+                viewModel.AddActivityToLocation(l, actionName, filename, argument, type);
+                
+                MessageBox.Show("Activity "+actionName+" added", "ACTIVITY ADDED",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
+                this.Close();
             }
 
             
