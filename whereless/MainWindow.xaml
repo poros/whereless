@@ -223,6 +223,35 @@
                 		Text="{Binding CurrentLocation.TotalTime, Source={StaticResource ViewModel}, Converter={StaticResource totalTimeConv}}" Background="{x:Null}" BorderBrush="{x:Null}"        />
 
 
+                    <TextBlock FontFamily="Arial" FontSize="16" Text="ACTIONS " Canvas.Left="42" Canvas.Top="384" Height="19" Width="90"/>
+
+                    <Image Height="39" Width="39" Canvas.Left="111" Canvas.Top="372"
+                           Source="pack://application:,,,/images\symbol_add.png"/>
+
+                    <ListBox ItemsSource="{Binding CurrentLocation.ActivityList, Source={StaticResource ViewModel}}" Background="{x:Null}" BorderBrush="Black" Foreground="Black" Canvas.Left="22" Canvas.Top="413" Height="103" Width="446" FontFamily="Arial" FontSize="14" SelectionChanged="ListBox_SelectionChanged">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Path=Name}" />
+                                    <Button Content="{Binding Id}" Width="15" Height="15" ToolTip="Delete Action" Margin="10,0,0,0" Click="DeleteActionClicked">
+                                        <Button.Template>
+                                            <ControlTemplate>
+                                                <Image Source="pack://application:,,,/images/delete.png"/>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                    </Button>
+
+
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+
+
+
+
+
 
 
                     <Button x:Name="ButtonPause" Content="Button" Canvas.Left="475" Canvas.Top="498" Width="33" Height="33" ToolTip="Pause Whereless" Click="Button_Click">

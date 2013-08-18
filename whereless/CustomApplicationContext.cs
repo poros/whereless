@@ -101,6 +101,9 @@ namespace whereless
                 WherelessViewModel viewModel = WherelessViewModel.GetInstance();
                 viewModel.RegisterLocation("Casa Mare");
 
+                viewModel.AddActivityToLocation("Casa Mare", "Open Firefox", "firefox", "www.polito.it", "ExeFile");
+                viewModel.AddActivityToLocation("Casa Mare", "Open Firefox", "firefox", "www.google.it", "ExeFile");
+                viewModel.AddActivityToLocation("Casa Mare", "Open Browser", "firefox", "www.tuttosport.com", "ExeFile");
             }
             else
             {
