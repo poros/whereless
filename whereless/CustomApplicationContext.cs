@@ -82,12 +82,14 @@ namespace whereless
         private void Mouse_DoubleClick(object sender, MouseEventArgs m)
        {
             Window bigWnd=new MainWindow();
+    
+            System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(bigWnd);
             bigWnd.Show();
 
             //UPDATE TEST CODE
-            System.Threading.Thread.Sleep(5000);
-            WherelessViewModel viewModel = WherelessViewModel.GetInstance();
-            viewModel.RegisterLocation("Casa Mare");
+            //System.Threading.Thread.Sleep(5000);
+            //WherelessViewModel viewModel = WherelessViewModel.GetInstance();
+            //viewModel.RegisterLocation("Casa Mare");
        }
 
 
