@@ -8,6 +8,7 @@ using log4net.Config;
 using System.Windows;
 using whereless.LocalizationService;
 using whereless.ViewModel;
+using whereless.Model;
 using System.Threading;
 using Button = System.Windows.Controls.Button;
 using MessageBox = System.Windows.Forms.MessageBox;
@@ -55,11 +56,11 @@ namespace whereless
         {
             WherelessViewModel viewModel = WherelessViewModel.GetInstance();
 
-            MessageBox.Show("Element id: " + ((Button)sender).Content.ToString(), "Pressed delete element",
-                                 MessageBoxButtons.YesNo,
-                                 MessageBoxIcon.Question);
+            //MessageBox.Show("Element id: " + ((Button)sender).Content.ToString(), "Pressed delete element",
+            //                     MessageBoxButtons.YesNo,
+            //                     MessageBoxIcon.Question);
 
-
+            viewModel.DeleteActivityFromCurrentLocation(int.Parse(((Button)sender).Content.ToString()));
         }
 
 

@@ -2,9 +2,11 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using log4net;
+using System.Linq;
 using whereless.LocalizationService;
 using whereless.Model;
 using whereless.Model.Entities;
+
 
 namespace whereless.ViewModel
 {
@@ -202,6 +204,29 @@ namespace whereless.ViewModel
 
                 Log.Debug("Activity added to Location:" + location);
             }
+        }
+
+        public void DeleteActivityFromCurrentLocation(int activityId)
+        {
+            using (var uow = ModelHelper.GetUnitOfWork())
+            {
+                Location loc = uow.GetLocationByName(CurrentLocation.Name);
+
+                bool removed = false;
+                for (int i = 0; i < loc.ActivityList.Count && !removed; i++)
+                {
+                    if (loc.ActivityList[i].Id == activityId)
+                    {
+                        loc.ActivityList.RemoveAt(i);
+                        removed = true;
+                    }
+                }
+                Debug.Assert(removed, "No ativity was removed"); 
+                uow.Commit();
+            }
+
+            // To trigger the interface update (sure, this interface is a mess...)
+            UpdateCurrentLocation(CurrentLocation);
         }
 
 
