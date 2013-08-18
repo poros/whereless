@@ -12,7 +12,7 @@
     xmlns:whereless="clr-namespace:whereless"
     mc:Ignorable="d" x:Class="whereless.MainWindow"
     
-        Title="MainWindow" Height="600" Width="525" Loaded="Window_Loaded">
+        Title="MainWindow" Height="603" Width="534" Loaded="Window_Loaded">
     <Window.Resources>
         <ObjectDataProvider x:Key="ViewModel" ObjectType="{x:Type vm:WherelessViewModel}" MethodName="GetInstance" />
         <CollectionViewSource x:Key="wherelessViewModelViewSource" d:DesignSource="{d:DesignInstance {x:Type vm:WherelessViewModel}, CreateList=True}"/>
@@ -22,15 +22,17 @@
     </Window.Resources>
 
 
-    <TabControl HorizontalAlignment="Left" Height="570" VerticalAlignment="Top" Width="517" Margin="8,0,-8,-1">
+    <TabControl HorizontalAlignment="Left" Height="570" VerticalAlignment="Top" Width="525" Margin="0,0,-7,-7">
         <TabItem Header="TabItem">
 
-            <Grid Background="#FFE5E5E5" Margin="0,0,0,-6">
-
-
+            <Grid Background="#FFE5E5E5" Margin="0,0,0,0" Width="525">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="10*"/>
+                    <RowDefinition Height="533*"/>
+                </Grid.RowDefinitions>
 
                 <!-- Status: UNKNOWN -->
-                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="512" Height="192" Background="LightYellow" Margin="0,0,-1,0">
+                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="525" Height="548" Background="LightYellow" Margin="0,0,0,0" Grid.Row="0">
 
                     <Canvas.Style>
                         <Style TargetType="{x:Type Canvas}">
@@ -53,7 +55,7 @@
                     </Canvas.Style>
 
 
-                    <Image Width="110" Height="112" HorizontalAlignment="Left" Source="E:\Dropbox\Davide_Uccio\whereless\Icone\whereless_yellow.png" Canvas.Left="22" Canvas.Top="18" />
+                    <Image Width="110" Height="112" HorizontalAlignment="Left" Source="pack://application:,,,/images\whereless_yellow.png" Canvas.Left="22" Canvas.Top="18" />
 
 
                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" 
@@ -70,13 +72,19 @@
                     <TextBlock Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{}{0: hh:mm:ss}'}" Canvas.Left="381" Canvas.Top="154" Height="22" Width="103" FontSize="20" FontFamily="Arial" TextAlignment="Center" />
 
 
-
+                    <Button x:Name="ButtonPauseB" Content="Button" Canvas.Left="475" Canvas.Top="498" Width="33" Height="33" ToolTip="Pause Whereless" Click="Button_Click">
+                        <Button.Template>
+                            <ControlTemplate>
+                                <Image Source="pack://application:,,,/buttons\pause.png"/>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
 
                 </Canvas>
 
 
                 <!-- Status: PAUSED -->
-                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="512" Height="195" Background="LightCoral" Margin="-1,0,0,0">
+                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="525" Height="548" Background="LightCoral" Margin="0,0,0,0"  Grid.Row="0" Grid.RowSpan="2">
 
                     <Canvas.Style>
                         <Style TargetType="{x:Type Canvas}">
@@ -99,13 +107,21 @@
                     </Canvas.Style>
 
 
-                    <Image Width="110" Height="112" HorizontalAlignment="Left" Source="E:\Dropbox\Davide_Uccio\whereless\Icone\whereless_red.png" Canvas.Left="22" Canvas.Top="18" />
+                    <Image Width="110" Height="112" HorizontalAlignment="Left" Source="pack://application:,,,/images\whereless_red.png" Canvas.Left="22" Canvas.Top="18" />
 
 
 
 
                     <TextBlock Height="46" Canvas.Left="172" TextWrapping="Wrap" Text="PAUSED" Canvas.Top="66" Width="292" FontFamily="Arial" FontSize="40" TextAlignment="Center"/>
 
+
+                    <Button x:Name="ButtonPlay" Content="Button" Canvas.Left="475" Canvas.Top="498" Width="33" Height="33" ToolTip="Pause Whereless" Click="Button_Click">
+                        <Button.Template>
+                            <ControlTemplate>
+                                <Image Source="pack://application:,,,/buttons\play.png"/>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
 
 
 
@@ -115,7 +131,7 @@
 
 
                 <!-- Status: RADIOOFF -->
-                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="510" Height="186" Background="LightCoral" Margin="-1,0,0,0">
+                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="525" Height="548" Background="LightCoral" Margin="0,0,0,0"  Grid.Row="1">
 
                     <Canvas.Style>
                         <Style TargetType="{x:Type Canvas}">
@@ -138,9 +154,16 @@
                     </Canvas.Style>
 
 
-                    <Image Width="110" Height="112" HorizontalAlignment="Left" Source="E:\Dropbox\Davide_Uccio\whereless\Icone\whereless_red.png" Canvas.Left="22" Canvas.Top="18" />
+                    <Image Width="110" Height="112" HorizontalAlignment="Left" Source="pack://application:,,,/images\whereless_red.png" Canvas.Left="22" Canvas.Top="18" />
 
 
+                    <Button x:Name="ButtonPauseC" Content="Button" Canvas.Left="475" Canvas.Top="498" Width="33" Height="33" ToolTip="Pause Whereless" Click="Button_Click">
+                        <Button.Template>
+                            <ControlTemplate>
+                                <Image Source="pack://application:,,,/buttons\pause.png"/>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
 
 
                     <TextBlock Height="46" Canvas.Left="172" TextWrapping="Wrap" Text="RADIO OFF" Canvas.Top="66" Width="292" FontFamily="Arial" FontSize="40" TextAlignment="Center"/>
@@ -148,7 +171,7 @@
                 </Canvas>
 
                 <!-- Status: KNOWN -->
-                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="513" Height="548" Background="LightGreen" Margin="-1,0">
+                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="525" Height="548" Background="LightGreen" Margin="0,0,0,0" Grid.Row="0">
 
                     <Canvas.Style>
                         <Style TargetType="{x:Type Canvas}" >
@@ -171,7 +194,7 @@
                     </Canvas.Style>
 
 
-                    <Image Width="110" Height="112" HorizontalAlignment="Left" Source="E:\Dropbox\Davide_Uccio\whereless\Icone\whereless_green.png" Canvas.Left="22" Canvas.Top="18" />
+                    <Image Width="110" Height="112" HorizontalAlignment="Left" Source="pack://application:,,,/images\whereless_green.png" Canvas.Left="22" Canvas.Top="18" />
 
 
                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" 
@@ -199,22 +222,16 @@
                     <TextBox Height="23" Canvas.Left="242" TextWrapping="Wrap" Canvas.Top="245" Width="226" FontFamily="Arial" FontSize="20"
                 		Text="{Binding CurrentLocation.TotalTime, Source={StaticResource ViewModel}, Converter={StaticResource totalTimeConv}}" Background="{x:Null}" BorderBrush="{x:Null}"        />
 
-                    <Expander Header="" Canvas.Left="38" Canvas.Top="312" Height="140" Width="446">
-                        <StackPanel Margin="10,4,0,0">
-                            <CheckBox Margin="4" Content="Option 1" />
-                            <CheckBox Margin="4" Content="Option 2" />
-                            <CheckBox Margin="4" Content="Option 3" />
-
-                            <ComboBox ItemsSource="{Binding Locations, Source={StaticResource ViewModel}}"
-                               DisplayMemberPath = "Location.Name"
-                               SelectedValuePath = "Location.Name"
-                            />
-
-                        </StackPanel>
-                    </Expander>
 
 
 
+                    <Button x:Name="ButtonPause" Content="Button" Canvas.Left="475" Canvas.Top="498" Width="33" Height="33" ToolTip="Pause Whereless" Click="Button_Click">
+                        <Button.Template>
+                            <ControlTemplate>
+                                <Image Source="pack://application:,,,/buttons\pause.png"/>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
 
 
 
