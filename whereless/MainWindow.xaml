@@ -18,6 +18,7 @@
         <CollectionViewSource x:Key="wherelessViewModelViewSource" d:DesignSource="{d:DesignInstance {x:Type vm:WherelessViewModel}, CreateList=True}"/>
         <b:TotalTimeToStringConverter x:Key="totalTimeConv" />
         <b:StreakToStringConverter x:Key="streakConv" />
+        <b:DateTimeToTimeStringConverter x:Key="dateTimeConv" />
     </Window.Resources>
 
 
@@ -180,7 +181,7 @@
                     <TextBlock Height="23" Canvas.Left="22" TextWrapping="Wrap" Text="ARRIVED AT" Canvas.Top="153" Width="130" FontFamily="Arial" FontSize="20"/>
 
                     <TextBox Height="23" Canvas.Left="157" TextWrapping="Wrap" Canvas.Top="153" Width="78" FontFamily="Arial" FontSize="20"
-                		Text="{Binding CurrentLocation.ArrivedAt, Source={StaticResource ViewModel}}" Background="{x:Null}" BorderBrush="{x:Null}"        />
+                		Text="{Binding CurrentLocation.ArrivedAt, Source={StaticResource ViewModel}, Converter={StaticResource dateTimeConv}}" Background="{x:Null}" BorderBrush="{x:Null}"        />
 
                     <TextBlock Height="23" Canvas.Left="256" TextWrapping="Wrap" Text="TIME" Canvas.Top="153" Width="130" FontFamily="Arial" FontSize="20" TextAlignment="Center"/>
 
