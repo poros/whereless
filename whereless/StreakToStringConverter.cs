@@ -23,9 +23,9 @@ namespace whereless
 
             int days = (int)(dt / (1000 * 60 * 60 * 24));
             int hours = (int)((dt / (1000 * 60 * 60)) % 24);
-            int minutes = (int)((dt / (1000 * 60)) % (60 * 24));
-            int seconds = (int)((dt / 1000) % (60 * 60 * 24));
-            int milliseconds = (int)(dt % (1000 * 60 * 60 * 24));
+            int minutes = (int)((dt / (1000 * 60)) % 60);
+            int seconds = (int)((dt / 1000) % 60);
+            int milliseconds = (int)(dt % 1000);
 
 
             if (days != 0)

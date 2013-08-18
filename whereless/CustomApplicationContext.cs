@@ -28,6 +28,11 @@ namespace whereless
        private System.ComponentModel.IContainer components;	// a list of components to dispose when the context is disposed
        private static NotifyIcon notifyIcon; // the icon that sits in the system tray
        
+
+       //window
+       private static Window bigWnd;
+
+
        
        //Only during developing
        private System.Windows.Forms.MenuItem menuExit;
@@ -86,13 +91,31 @@ namespace whereless
 
         private void Mouse_DoubleClick(object sender, MouseEventArgs m)
        {
-            Window bigWnd=new MainWindow();
-            bigWnd.Show();
+            if (bigWnd == null)
+            {
+                bigWnd = new MainWindow();
+                bigWnd.Show();
 
-            //UPDATE TEST CODE
-            System.Threading.Thread.Sleep(5000);
-            WherelessViewModel viewModel = WherelessViewModel.GetInstance();
-            viewModel.RegisterLocation("Casa Mare");
+                //UPDATE TEST CODE
+                System.Threading.Thread.Sleep(5000);
+                WherelessViewModel viewModel = WherelessViewModel.GetInstance();
+                viewModel.RegisterLocation("Casa Mare");
+
+            }
+            else
+            {
+                if (bigWnd.IsActive == false)
+                {
+                    bigWnd = new MainWindow();
+                    bigWnd.Show();
+                }
+            }
+
+                
+
+            
+
+            
        }
 
 
