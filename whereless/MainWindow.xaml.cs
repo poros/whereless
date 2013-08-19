@@ -83,5 +83,12 @@ namespace whereless
             Console.Beep(1000,2000);
             
         }
+
+        private void Buotton_ForceUn(object sender, RoutedEventArgs e)
+        {
+            WherelessViewModel viewModel = WherelessViewModel.GetInstance();
+
+            viewModel.ForceUnknown();
+        }
     }
 }
