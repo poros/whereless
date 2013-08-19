@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
@@ -7,6 +8,7 @@ using log4net;
 using log4net.Config;
 using System.Windows;
 using whereless.LocalizationService;
+using whereless.Model.Entities;
 using whereless.ViewModel;
 using whereless.Model;
 using System.Threading;
@@ -90,5 +92,34 @@ namespace whereless
 
             viewModel.ForceUnknown();
         }
+
+
+        private void AddOrSetLocation(object sender, RoutedEventArgs e)
+        {
+            WherelessViewModel viewModel = WherelessViewModel.GetInstance();
+
+            string locName = AutoCompleteBox.Text;
+            
+
+            if (locName.Equals("")==false)
+            {
+                if (viewModel.Locations.Any(l => l.Name.Equals(locName) == true))
+                {
+                    viewModel.ForceLocation(locName);
+                    return;
+                }
+            }
+            
+            viewModel.RegisterLocation(locName);     
+        }
+
+     
+
+
+ 
+       
+
+
+        
     }
 }
