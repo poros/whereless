@@ -6,6 +6,7 @@ using System.Reflection;
 using FluentNHibernate.Diagnostics;
 using whereless;
 using whereless.LocalizationService;
+using whereless.LocalizationService.WiFi.ManagedWifi;
 using whereless.ViewModel;
 using System.ComponentModel;
 using MessageBox = System.Windows.Forms.MessageBox;
@@ -32,7 +33,7 @@ namespace whereless
 
        //window
        private static Window bigWnd;
-
+       private static Window smallWnd;
 
        
        //Only during developing
@@ -59,7 +60,9 @@ namespace whereless
                 Visible = true
             };
 
-            notifyIcon.MouseDoubleClick += Mouse_DoubleClick;
+            //notifyIcon.MouseDown += OnMouseDownClickCount;
+            notifyIcon.MouseClick += Mouse_SingleClick;
+
 
 
 
@@ -83,6 +86,10 @@ namespace whereless
             oldPlace = "";
         }
 
+
+
+
+
        //just to close quickly (only during developing)
        private void exitMenu(object sender, EventArgs e)
        {
@@ -91,39 +98,80 @@ namespace whereless
        }
 
 
-        private void Mouse_DoubleClick(object sender, MouseEventArgs m)
-       {
-            if (bigWnd == null)
-            {
-                bigWnd = new MainWindow();
+
+
+
+       // private void Mouse_DoubleClick(object sender, MouseEventArgs m)
+       //{
+       //     if (bigWnd == null)
+       //     {
+       //         bigWnd = new MainWindow();
                 
-                System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(bigWnd);
-                bigWnd.Show();
+       //         System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(bigWnd);
+       //         bigWnd.Show();
 
-                //UPDATE TEST CODE
-                System.Threading.Thread.Sleep(5000);
-                WherelessViewModel viewModel = WherelessViewModel.GetInstance();
-                viewModel.RegisterLocation("Casa Mare");
+       //         //UPDATE TEST CODE
+       //         System.Threading.Thread.Sleep(5000);
+       //         WherelessViewModel viewModel = WherelessViewModel.GetInstance();
+               
+       //         viewModel.RegisterLocation("Casa Mare");
 
-                viewModel.AddActivityToLocation("Casa Mare", "Open Firefox", "firefox", "www.polito.it", "ExeFile");
-                viewModel.AddActivityToLocation("Casa Mare", "Open Firefox", "firefox", "www.google.it", "ExeFile");
-                viewModel.AddActivityToLocation("Casa Mare", "Open Browser", "firefox", "www.tuttosport.com", "ExeFile");
-            }
-            else
-            {
-                if (bigWnd.IsActive == false)
+       //         viewModel.AddActivityToLocation("Casa Mare", "Open Firefox", "firefox", "www.polito.it", "ExeFile");
+       //         viewModel.AddActivityToLocation("Casa Mare", "Open Firefox", "firefox", "www.google.it", "ExeFile");
+       //         viewModel.AddActivityToLocation("Casa Mare", "Open Browser", "firefox", "www.tuttosport.com", "ExeFile");
+       //     }
+       //     else
+       //     {
+       //         if (bigWnd.IsActive == false)
+       //         {
+       //             bigWnd = new MainWindow();
+       //             bigWnd.Show();
+       //         }
+       //     } 
+       //}
+
+
+
+
+
+        private void Mouse_SingleClick(object sender, MouseEventArgs m)
+        {
+                if (smallWnd == null)
                 {
-                    bigWnd = new MainWindow();
-                    bigWnd.Show();
+
+
+
+                    //UPDATE TEST CODE                
+                    smallWnd = new SmallWindow(notifyIcon);
+                    System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(smallWnd);
+
+                    ((SmallWindow)smallWnd).NotifyIconClick(sender, m);
+
                 }
-            }
+                else
+                {
+                    ((SmallWindow)smallWnd).NotifyIconClick(sender, m);
+                }
+        }
 
-                
 
-            
 
-            
-       }
+
+        //private void OnMouseDownClickCount(object sender, MouseEventArgs e)
+        //{
+        //    if (e.Button == MouseButtons.Left)
+        //    {
+
+        //        if (e.Clicks == 1)
+        //        {
+        //            Mouse_SingleClick(sender,e);
+        //        }
+        //        if (e.Clicks == 2)
+        //        {
+        //            Mouse_DoubleClick(sender,e);
+        //        }
+        //    }
+        //}
 
 
 

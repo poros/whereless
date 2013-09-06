@@ -14,7 +14,7 @@
     mc:Ignorable="d" x:Class="whereless.MainWindow"
    
     
-        Title="MainWindow" Height="603" Width="534" Loaded="Window_Loaded">
+        Title="MainWindow" Height="603" Width="534" Loaded="Window_Loaded" Closing="Window_Closing">
     <Window.Resources>
         <ObjectDataProvider x:Key="ViewModel" ObjectType="{x:Type vm:WherelessViewModel}" MethodName="GetInstance" />
         <CollectionViewSource x:Key="wherelessViewModelViewSource" d:DesignSource="{d:DesignInstance {x:Type vm:WherelessViewModel}, CreateList=True}"/>
@@ -81,6 +81,17 @@
 
                     <TextBlock Text="{Binding Source={x:Static system:DateTime.Now}, StringFormat=\{0: hh:mm:ss\}}" Canvas.Left="381" Canvas.Top="154" Height="22" Width="103" FontSize="20" FontFamily="Arial" TextAlignment="Center" />
 
+                    <controls:AutoCompleteBox VerticalAlignment="Top" Width="348" Height="30" x:Name="AutoCompleteBoxU" 
+                        ItemsSource="{Binding Source={StaticResource ViewLocations}}"
+                        ValueMemberBinding="{Binding Name}" Canvas.Left="54" Canvas.Top="315" Background="{x:Null}" />
+
+                    <Button x:Name="ButtonModifyPositionU" Width="19" Height="19" ToolTip="Add or Set Location" Click="AddOrSetLocation" Canvas.Left="410" Canvas.Top="320">
+                        <Button.Template>
+                            <ControlTemplate>
+                                <Image Source="pack://application:,,,/images\addLocation.png" Margin="0,-24,-24,0"/>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
 
                     <Button x:Name="ButtonPauseB" Content="Button" Canvas.Left="475" Canvas.Top="498" Width="33" Height="33" ToolTip="Pause Whereless" Click="Button_Click">
                         <Button.Template>
@@ -245,11 +256,9 @@
                     <TextBlock Height="23" Canvas.Left="20" TextWrapping="Wrap" Text="TOTAL TIME" Canvas.Top="247" Width="184" FontFamily="Arial" FontSize="20"/>
                     <TextBlock Height="23" Canvas.Left="242" TextWrapping="Wrap" Text="{Binding CurrentLocation.TotalTime, Converter={StaticResource totalTimeConv}, Source={StaticResource ViewModel}}" Canvas.Top="247" Width="184" FontFamily="Arial" FontSize="20" TextAlignment="Center"/>
 
-                    <controls:AutoCompleteBox VerticalAlignment="Top" Width="348" Height="30" x:Name="AutoCompleteBox" 
-                        ItemsSource="{Binding Source={StaticResource ViewLocations}}"
-                        ValueMemberBinding="{Binding Name}" Canvas.Left="54" Canvas.Top="315" Background="{x:Null}" />
+                    
 
-                    <Button x:Name="ButtonSetLocation" Width="19" Height="19" ToolTip="Add new activity" Click="OpenAddActivity" Canvas.Left="129" Canvas.Top="369">
+                    <Button x:Name="ButtonAddActivity" Width="19" Height="19" ToolTip="Add new activity" Click="OpenAddActivity" Canvas.Left="129" Canvas.Top="369">
                         <Button.Template>
                             <ControlTemplate>
                                 <Image Source="pack://application:,,,/images\symbol_add.png"/>
@@ -260,7 +269,12 @@
 
                     <TextBlock FontFamily="Arial" FontSize="16" Text="ACTIONS " Canvas.Left="39" Canvas.Top="369" Height="19" Width="90"/>
 
-                    <Button x:Name="ButtonAddActivity" Width="19" Height="19" ToolTip="Add or Set Location" Click="AddOrSetLocation" Canvas.Left="410" Canvas.Top="320">
+                    <controls:AutoCompleteBox VerticalAlignment="Top" Width="348" Height="30" x:Name="AutoCompleteBox" 
+                        ItemsSource="{Binding Source={StaticResource ViewLocations}}"
+                        ValueMemberBinding="{Binding Name}" Canvas.Left="54" Canvas.Top="315" Background="{x:Null}" />
+                    
+                    
+                    <Button x:Name="ButtonModifyPosition" Width="19" Height="19" ToolTip="Add or Set Location" Click="AddOrSetLocation" Canvas.Left="410" Canvas.Top="320">
                         <Button.Template>
                             <ControlTemplate>
                                 <Image Source="pack://application:,,,/images\addLocation.png" Margin="0,-24,-24,0"/>

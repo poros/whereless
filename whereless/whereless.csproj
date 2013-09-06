@@ -132,6 +132,9 @@
     <Compile Include="MutexManager\ProgramInfo.cs" />
     <Compile Include="MutexManager\SingleInstance.cs" />
     <Compile Include="MutexManager\WinAPI.cs" />
+    <Compile Include="SmallWindow.xaml.cs">
+      <DependentUpon>SmallWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="StreakToStringConverter.cs" />
     <Compile Include="TotalTimeToStringConverter.cs" />
     <Compile Include="ViewModel\WherelessViewModel.cs" />
@@ -183,6 +186,9 @@
     <Compile Include="Test\Model\TestNHUnitOfWork.cs" />
     <Compile Include="Test\LocalizationService\WiFi\TestWiFiSensor.cs" />
     <Compile Include="Test\TestInitializer.cs" />
+    <Compile Include="Positioning\Compatibility.cs" />
+    <Compile Include="Positioning\NativeMethods.cs" />
+    <Compile Include="Positioning\WindowPositioning.cs" />
     <Page Include="AddNewActivity.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -201,6 +207,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="SmallWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\ValueObjects\IMeasure.cs" />
@@ -282,6 +292,9 @@
     </Resource>
     <Resource Include="images\symbol_add.png" />
     <Resource Include="images\addLocation.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="buttons\more.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Content Include="x64\SQLite.Interop.dll">

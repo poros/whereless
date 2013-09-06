@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -22,6 +23,7 @@ namespace whereless
     /// </summary>
     public partial class MainWindow : Window
     {
+
         public MainWindow()
         {
             InitializeComponent();
@@ -98,28 +100,45 @@ namespace whereless
         {
             WherelessViewModel viewModel = WherelessViewModel.GetInstance();
 
-            string locName = AutoCompleteBox.Text;
-            
+            string locNameStatusKnown = AutoCompleteBox.Text;
+            string locNameStatusUnknown = AutoCompleteBoxU.Text;
 
-            if (locName.Equals("")==false)
+            if (locNameStatusKnown.Equals("")==false)
             {
-                if (viewModel.Locations.Any(l => l.Name.Equals(locName) == true))
+                if (viewModel.Locations.Any(l => l.Name.Equals(locNameStatusKnown) == true))
                 {
-                    viewModel.ForceLocation(locName);
+                    Console.Beep(1000, 2000);
+                    viewModel.ForceLocation(locNameStatusKnown);
                     return;
                 }
+                viewModel.RegisterLocation(locNameStatusKnown); 
             }
+
+
+
+            if (locNameStatusUnknown.Equals("") == false)
+            {
+                if (viewModel.Locations.Any(l => l.Name.Equals(locNameStatusUnknown) == true))
+                {
+                    Console.Beep(1000, 2000);
+                    viewModel.ForceLocation(locNameStatusUnknown);
+                    return;
+                }
+                viewModel.RegisterLocation(locNameStatusUnknown); 
+            }   
             
-            viewModel.RegisterLocation(locName);     
         }
 
-     
+
+        public void Connect(int connectionId, object target)
+        {
+            throw new NotImplementedException();
+        }
 
 
- 
-       
-
-
-        
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            
+        }
     }
 }

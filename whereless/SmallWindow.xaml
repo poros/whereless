@@ -1,0 +1,320 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="whereless.SmallWindow"
+         
+        xmlns:vm="clr-namespace:whereless.ViewModel"
+        xmlns:e="clr-namespace:whereless.Model.Entities"
+        xmlns:b="clr-namespace:whereless"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        xmlns:whereless="clr-namespace:whereless"
+        xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
+    
+    
+    
+    
+    
+        Title="SmallWindow" Height="350" Width="250" SizeToContent="WidthAndHeight" WindowStyle="None"
+        SnapsToDevicePixels="True" Topmost="True" Deactivated="Window_Deactivated" Activated="Window_Activated"
+        Loaded="Window_Loaded" ShowInTaskbar="False" Background="Transparent" Closing="Window_Closing">
+
+    <Window.Resources>
+
+        <ObjectDataProvider x:Key="ViewModel" ObjectType="{x:Type vm:WherelessViewModel}" MethodName="GetInstance" />
+        <CollectionViewSource x:Key="wherelessViewModelViewSource" d:DesignSource="{d:DesignInstance {x:Type vm:WherelessViewModel}, CreateList=True}"/>
+
+
+        <!-- Window border styles -->
+        <Style x:Key="AeroBorderStyle" TargetType="Window">
+            <Setter Property="ResizeMode" Value="CanResize" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+
+        <Style x:Key="ClassicBorderStyle" TargetType="Window">
+            <Setter Property="ResizeMode" Value="NoResize" />
+            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}" />
+            <Setter Property="BorderThickness" Value="1" />
+        </Style>
+
+        <!-- InactiveCaptionBrushKey actually refers to the colour of an inactive window's title bar, but it's probably the best colour we have -->
+        <Style x:Key="ClassicBorderStyleInactive" TargetType="Window" BasedOn="{StaticResource ClassicBorderStyle}">
+            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.InactiveCaptionBrushKey}}" />
+        </Style>
+
+        <Style x:Key="AeroBorderFixStyle" TargetType="Border">
+            <Setter Property="Margin" Value="1" />
+        </Style>
+
+    </Window.Resources>
+
+
+
+    <Border Name="WindowBorder" Background="White" Width="250" Height="350" Margin="0,0,0,0">
+
+        <Canvas>
+
+            <!--STATUS: RADIO OFF-->
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="250" Height="350" Background="LightCoral"  Grid.Row="0" Grid.RowSpan="2" Margin="0,0,0,0">
+                <Canvas.Style>
+                    <Style TargetType="{x:Type Canvas}">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding StatusForWindow, Source={StaticResource ViewModel}}" Value="KNOWN">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding StatusForWindow, Source={StaticResource ViewModel}}" Value="UNKNOWN">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding StatusForWindow, Source={StaticResource ViewModel}}" Value="PAUSED">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding StatusForWindow, Source={StaticResource ViewModel}}" Value="RADIOOFF">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Canvas.Style>
+
+                <!--Rectangle top-left-->
+                <Rectangle  Height="72" Stroke="Black" Width="125" Canvas.Top="0" Canvas.Left="0"/>
+                <Button x:Name="ButtonMorR" Content="Button" Canvas.Left="6" Canvas.Top="19" Width="34" Height="33" ToolTip="Show More" Click="Button_More">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Source="pack://application:,,,/buttons/more.png"/>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <TextBlock Height="22" TextWrapping="Wrap" Text="MORE" Canvas.Left="44"  Canvas.Top="26" Width="70" FontFamily="Arial" FontSize="17"/>
+
+
+                <!--Rectangle top-right-->
+                <Rectangle  Height="72" Stroke="Black" Width="125" Canvas.Top="0" Canvas.Left="124"/>
+                <Button x:Name="ButtonPause" Content="Button" Canvas.Left="130" Canvas.Top="19" Width="34" Height="33" ToolTip="Pause Whereless" Click="Button_Pause">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Source="pack://application:,,,/buttons/pause.png"/>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <TextBlock Height="22" Canvas.Left="168" TextWrapping="Wrap" Text="PAUSE" Canvas.Top="26" Width="70" FontFamily="Arial" FontSize="17"/>
+
+
+                <!--Rectangle center-->
+                <Rectangle Height="86" Stroke="Black" Canvas.Left="0" Canvas.Top="71" Width="249"/>
+
+                <Image Width="60" Height="60" HorizontalAlignment="Left" Source="pack://application:,,,/images\whereless_red.png" Canvas.Left="10" Canvas.Top="80" />
+
+                <TextBlock Height="46" Canvas.Left="37" TextWrapping="Wrap" Text="RADIO OFF" Canvas.Top="98" Width="227" FontFamily="Arial" FontSize="30" TextAlignment="Center"/>
+                <TextBlock Height="22" Canvas.Left="10" TextWrapping="Wrap" Text="PLEASE TURN THE RADIO ON" Canvas.Top="228" Width="224" FontFamily="Arial" FontSize="15"/>
+
+            </Canvas>
+
+
+            <!--STATUS: KNOWN-->
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="250" Height="350" Background="LightGreen"  Grid.Row="0" Grid.RowSpan="2" Margin="0,0,0,0">
+                <Canvas.Style>
+                    <Style TargetType="{x:Type Canvas}">
+                        <Setter Property="Visibility" Value="Visible" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding StatusForWindow, Source={StaticResource ViewModel}}" Value="KNOWN">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding StatusForWindow, Source={StaticResource ViewModel}}" Value="UNKNOWN">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding StatusForWindow, Source={StaticResource ViewModel}}" Value="PAUSED">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding StatusForWindow, Source={StaticResource ViewModel}}" Value="RADIOOFF">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Canvas.Style>
+
+                <!--Rectangle top-left-->
+                <Rectangle  Height="72" Stroke="Black" Width="125" Canvas.Top="0" Canvas.Left="0"/>
+                <Button x:Name="ButtonMoreK" Content="Button" Canvas.Left="6" Canvas.Top="19" Width="34" Height="33" ToolTip="Show More" Click="Button_More">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Source="pack://application:,,,/buttons/more.png"/>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <TextBlock Height="22" TextWrapping="Wrap" Text="MORE" Canvas.Left="44"  Canvas.Top="26" Width="70" FontFamily="Arial" FontSize="17"/>
+
+
+
+                <!--Rectangle top-right-->
+                <Rectangle  Height="72" Stroke="Black" Width="125" Canvas.Top="0" Canvas.Left="124"/>
+                <Button x:Name="ButtonPauseK" Content="Button" Canvas.Left="130" Canvas.Top="19" Width="34" Height="33" ToolTip="Pause Whereless" Click="Button_Pause">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Source="pack://application:,,,/buttons/pause.png"/>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <TextBlock Height="22" Canvas.Left="168" TextWrapping="Wrap" Text="PAUSE" Canvas.Top="26" Width="70" FontFamily="Arial" FontSize="17"/>
+
+
+                <!--Rectangle center-->
+                <Rectangle Height="86" Stroke="Black" Canvas.Left="0" Canvas.Top="71" Width="249"/>
+
+                <Image Width="60" Height="60" HorizontalAlignment="Left" Source="pack://application:,,,/images\whereless_green.png" Canvas.Left="10" Canvas.Top="80" />
+
+
+                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" 
+            			Text="{Binding CurrentLocation.Name, Source={StaticResource ViewModel}}"
+            			VerticalAlignment="Top" Height="44" Width="164" Canvas.Left="70" Canvas.Top="96" FontSize="20" FontWeight="Bold" FontFamily="Arial" TextAlignment="Center"/>
+
+
+                <TextBlock Height="31" Canvas.Left="20" TextWrapping="Wrap" Text="WRONG PLACE?" Canvas.Top="182" Width="204" FontFamily="Arial" FontSize="22"/>
+                <TextBlock Height="23" TextWrapping="Wrap" Text="WHERE ARE YOU" Canvas.Top="213" Width="164" FontFamily="Arial" FontSize="18" Canvas.Left="6"/>
+
+            </Canvas>
+
+
+
+            <!--STATUS: UNKNOWN-->
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="250" Height="350" Background="LightYellow"  Grid.Row="0" Grid.RowSpan="2" Margin="0,0,0,0">
+                <Canvas.Style>
+                    <Style TargetType="{x:Type Canvas}">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding StatusForWindow, Source={StaticResource ViewModel}}" Value="KNOWN">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding StatusForWindow, Source={StaticResource ViewModel}}" Value="UNKNOWN">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding StatusForWindow, Source={StaticResource ViewModel}}" Value="PAUSED">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding StatusForWindow, Source={StaticResource ViewModel}}" Value="RADIOOFF">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Canvas.Style>
+
+                <!--Rectangle top-left-->
+                <Rectangle  Height="72" Stroke="Black" Width="125" Canvas.Top="0" Canvas.Left="0"/>
+                <Button x:Name="ButtonMoreU" Content="Button" Canvas.Left="6" Canvas.Top="19" Width="34" Height="33" ToolTip="Show More" Click="Button_More">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Source="pack://application:,,,/buttons/more.png"/>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <TextBlock Height="22" TextWrapping="Wrap" Text="MORE" Canvas.Left="44"  Canvas.Top="26" Width="70" FontFamily="Arial" FontSize="17"/>
+
+
+
+                <!--Rectangle top-right-->
+                <Rectangle  Height="72" Stroke="Black" Width="125" Canvas.Top="0" Canvas.Left="124"/>
+                <Button x:Name="ButtonPauseU" Content="Button" Canvas.Left="130" Canvas.Top="19" Width="34" Height="33" ToolTip="Pause Whereless" Click="Button_Pause">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Source="pack://application:,,,/buttons/pause.png"/>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <TextBlock Height="22" Canvas.Left="168" TextWrapping="Wrap" Text="PAUSE" Canvas.Top="26" Width="70" FontFamily="Arial" FontSize="17"/>
+
+
+                <!--Rectangle center-->
+                <Rectangle Height="86" Stroke="Black" Canvas.Left="0" Canvas.Top="71" Width="249"/>
+
+                <Image Width="60" Height="60" HorizontalAlignment="Left" Source="pack://application:,,,/images\whereless_yellow.png" Canvas.Left="10" Canvas.Top="80" />
+
+
+                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" 
+            			Text="{Binding CurrentLocation.Name, Source={StaticResource ViewModel}}"
+            			VerticalAlignment="Top" Height="44" Width="164" Canvas.Left="70" Canvas.Top="96" FontSize="20" FontWeight="Bold" FontFamily="Arial" TextAlignment="Center"/>
+
+
+                <TextBlock Height="31" Canvas.Left="20" TextWrapping="Wrap" Text="WHERE ARE YOU?" Canvas.Top="182" Width="204" FontFamily="Arial" FontSize="22"/>
+
+
+
+            </Canvas>
+
+
+
+            <!--STATUS: PAUSED-->
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="250" Height="350" Background="LightCoral"  Grid.Row="0" Grid.RowSpan="2" Margin="0,0,0,0">
+                <Canvas.Style>
+                    <Style TargetType="{x:Type Canvas}">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding StatusForWindow, Source={StaticResource ViewModel}}" Value="KNOWN">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding StatusForWindow, Source={StaticResource ViewModel}}" Value="UNKNOWN">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding StatusForWindow, Source={StaticResource ViewModel}}" Value="PAUSED">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding StatusForWindow, Source={StaticResource ViewModel}}" Value="RADIOOFF">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Canvas.Style>
+
+                <!--Rectangle top-left-->
+                <Rectangle  Height="72" Stroke="Black" Width="125" Canvas.Top="0" Canvas.Left="0"/>
+                <Button x:Name="ButtonMoreP" Content="Button" Canvas.Left="6" Canvas.Top="19" Width="34" Height="33" ToolTip="Show More" Click="Button_More">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Source="pack://application:,,,/buttons/more.png"/>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <TextBlock Height="22" TextWrapping="Wrap" Text="MORE" Canvas.Left="44"  Canvas.Top="26" Width="70" FontFamily="Arial" FontSize="17"/>
+
+
+                <!--Rectangle top-right-->
+                <Rectangle  Height="72" Stroke="Black" Width="125" Canvas.Top="0" Canvas.Left="124"/>
+                <Button x:Name="ButtonPauseP" Content="Button" Canvas.Left="130" Canvas.Top="19" Width="34" Height="33" ToolTip="Play Whereless" Click="Button_Play">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Source="pack://application:,,,/buttons/play.png"/>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <TextBlock Height="22" Canvas.Left="168" TextWrapping="Wrap" Text="PLAY" Canvas.Top="26" Width="70" FontFamily="Arial" FontSize="17"/>
+
+
+                <!--Rectangle center-->
+                <Rectangle Height="86" Stroke="Black" Canvas.Left="0" Canvas.Top="71" Width="249"/>
+
+                <Image Width="60" Height="60" HorizontalAlignment="Left" Source="pack://application:,,,/images\whereless_red.png" Canvas.Left="10" Canvas.Top="80" />
+
+
+                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" 
+            			Text="{Binding CurrentLocation.Name, Source={StaticResource ViewModel}}"
+            			VerticalAlignment="Top" Height="44" Width="164" Canvas.Left="70" Canvas.Top="96" FontSize="20" FontWeight="Bold" FontFamily="Arial" TextAlignment="Center"/>
+
+
+                <TextBlock Height="31" TextWrapping="Wrap" Text="WHERELESS PAUSED" Canvas.Top="182" Width="238" FontFamily="Arial" FontSize="22" Canvas.Left="6"/>
+                <Button x:Name="ButtonPausePCenter" Content="Button" Canvas.Left="78" Canvas.Top="218" Width="80" Height="80" ToolTip="Play Whereless" Click="Button_Play">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Source="pack://application:,,,/buttons/play.png"/>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+
+            </Canvas>
+
+
+        </Canvas>
+
+    </Border>
+
+</Window>
