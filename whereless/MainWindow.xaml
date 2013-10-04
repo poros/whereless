@@ -30,7 +30,7 @@
 
 
     <TabControl HorizontalAlignment="Left" Height="570" VerticalAlignment="Top" Width="525" Margin="0,0,-7,-7">
-        <TabItem Header="TabItem">
+        <TabItem Header="Current Location">
 
             <Grid Background="#FFE5E5E5" Margin="0,-2,-6,2" Width="525">
                 <Grid.RowDefinitions>
@@ -70,16 +70,16 @@
 
                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" 
             			Text="{Binding CurrentLocation.Name, Source={StaticResource ViewModel}}"
-            			VerticalAlignment="Top" Height="44" Width="302" Canvas.Left="166" Canvas.Top="56" FontSize="36" FontWeight="Bold" FontFamily="Arial" TextAlignment="Center"/>
+            			VerticalAlignment="Top" Height="44" Width="302" Canvas.Left="166" Canvas.Top="56" FontSize="36" FontWeight="Bold" FontFamily="Mono" TextAlignment="Center"/>
 
-                    <TextBlock Height="23" Canvas.Left="22" TextWrapping="Wrap" Text="ARRIVED AT" Canvas.Top="153" Width="130" FontFamily="Arial" FontSize="20"/>
-                    <TextBlock Height="23" Canvas.Left="160" TextWrapping="Wrap" Text="{Binding CurrentLocation.ArrivedAt, Converter={StaticResource dateTimeConv}, Source={StaticResource ViewModel}}" Canvas.Top="153" Width="130" FontFamily="Arial" FontSize="20" TextAlignment="Center"/>
+                    <TextBlock Height="23" Canvas.Left="22" TextWrapping="Wrap" Text="ARRIVED AT" Canvas.Top="153" Width="130" FontFamily="Mono" FontSize="20"/>
+                    <TextBlock Height="23" Canvas.Left="160" TextWrapping="Wrap" Text="{Binding CurrentLocation.ArrivedAt, Converter={StaticResource dateTimeConv}, Source={StaticResource ViewModel}}" Canvas.Top="153" Width="130" FontFamily="Mono" FontSize="20" TextAlignment="Center"/>
 
 
 
-                    <TextBlock Height="23" Canvas.Left="256" TextWrapping="Wrap" Text="TIME" Canvas.Top="153" Width="130" FontFamily="Arial" FontSize="20" TextAlignment="Center"/>
+                    <TextBlock Height="23" Canvas.Left="256" TextWrapping="Wrap" Text="TIME" Canvas.Top="153" Width="130" FontFamily="Mono" FontSize="20" TextAlignment="Center"/>
 
-                    <TextBlock Text="{Binding Source={x:Static system:DateTime.Now}, StringFormat=\{0: hh:mm:ss\}}" Canvas.Left="381" Canvas.Top="154" Height="22" Width="103" FontSize="20" FontFamily="Arial" TextAlignment="Center" />
+                    <TextBlock Text="{Binding Source={x:Static system:DateTime.Now}, StringFormat=\{0: hh:mm:ss\}}" Canvas.Left="381" Canvas.Top="154" Height="22" Width="103" FontSize="20" FontFamily="Mono" TextAlignment="Center" />
 
                     <controls:AutoCompleteBox VerticalAlignment="Top" Width="348" Height="30" x:Name="AutoCompleteBoxU" 
                         ItemsSource="{Binding Source={StaticResource ViewLocations}}"
@@ -141,7 +141,7 @@
 
 
 
-                    <TextBlock Height="46" Canvas.Left="172" TextWrapping="Wrap" Text="PAUSED" Canvas.Top="66" Width="292" FontFamily="Arial" FontSize="40" TextAlignment="Center"/>
+                    <TextBlock Height="46" Canvas.Left="172" TextWrapping="Wrap" Text="PAUSED" Canvas.Top="66" Width="292" FontFamily="Mono" FontSize="40" TextAlignment="Center"/>
 
 
                     <Button x:Name="ButtonPlay" Content="Button" Canvas.Left="475" Canvas.Top="498" Width="33" Height="33" ToolTip="Pause Whereless" Click="Button_Click">
@@ -194,8 +194,8 @@
                     </Button>
 
 
-                    <TextBlock Height="46" Canvas.Left="172" TextWrapping="Wrap" Text="RADIO OFF" Canvas.Top="66" Width="292" FontFamily="Arial" FontSize="40" TextAlignment="Center"/>
-                    <TextBlock Height="22" Canvas.Left="26" TextWrapping="Wrap" Text="PLEASE TURN THE RADIO ON" Canvas.Top="147" Width="459" FontFamily="Arial" FontSize="18"/>
+                    <TextBlock Height="46" Canvas.Left="172" TextWrapping="Wrap" Text="RADIO OFF" Canvas.Top="66" Width="292" FontFamily="Mono" FontSize="40" TextAlignment="Center"/>
+                    <TextBlock Height="22" Canvas.Left="26" TextWrapping="Wrap" Text="PLEASE TURN THE RADIO ON" Canvas.Top="147" Width="459" FontFamily="Mono" FontSize="18"/>
                 </Canvas>
 
 
@@ -232,33 +232,34 @@
 
                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" 
             			Text="{Binding CurrentLocation.Name, Source={StaticResource ViewModel}}"
-            			VerticalAlignment="Top" Height="44" Width="302" Canvas.Left="166" Canvas.Top="56" FontSize="36" FontWeight="Bold" FontFamily="Arial" TextAlignment="Center"/>
+            			VerticalAlignment="Top" Height="50" Width="339" Canvas.Left="150" Canvas.Top="53" FontSize="46" FontWeight="Bold" FontFamily="Mono" TextAlignment="Left"/>
 
-                    <TextBlock Height="23" Canvas.Left="22" TextWrapping="Wrap" Text="ARRIVED AT" Canvas.Top="153" Width="130" FontFamily="Arial" FontSize="20"/>
-                    <TextBlock Height="23" Canvas.Left="152" TextWrapping="Wrap" Text="{Binding CurrentLocation.ArrivedAt, Converter={StaticResource dateTimeConv}, Source={StaticResource ViewModel}}" Canvas.Top="153" Width="130" FontFamily="Arial" FontSize="20"/>
-
-
-
-                    <TextBlock Height="23" Canvas.Left="256" TextWrapping="Wrap" Text="TIME" Canvas.Top="153" Width="130" FontFamily="Arial" FontSize="20" TextAlignment="Center"/>
-
-                    <TextBlock Text="{Binding Source={x:Static system:DateTime.Now}, StringFormat=\{0: hh:mm:ss\}}" Canvas.Left="381" Canvas.Top="154" Height="22" Width="103" FontSize="20" FontFamily="Arial" TextAlignment="Center" />
-
-                    <TextBlock Height="23" Canvas.Left="22" TextWrapping="Wrap" Text="CURRENT STREAK" Canvas.Top="191" Width="184" FontFamily="Arial" FontSize="20"/>
-                    <TextBlock Text="{Binding CurrentLocation.CurrentStreak, Converter={StaticResource streakConv}, Source={StaticResource ViewModel}}" Canvas.Left="242" Canvas.Top="191" Height="22" Width="172" FontSize="20" FontFamily="Arial" TextAlignment="Center" />
+                    <TextBlock Height="23" Canvas.Left="20" TextWrapping="Wrap" Canvas.Top="180" Width="126" FontFamily="Mono" FontSize="20"><Run Language="it-it" Text="Here since:"/></TextBlock>
+                    <TextBlock Height="23" Canvas.Left="81" TextWrapping="Wrap" Text="{Binding CurrentLocation.ArrivedAt, Converter={StaticResource dateTimeConv}, Source={StaticResource ViewModel}}" Canvas.Top="153" Width="60" FontFamily="Mono" FontSize="20" TextAlignment="Left"/>
 
 
 
-                    <TextBlock Height="23" Canvas.Left="22" TextWrapping="Wrap" Text="LONGEST STREAK" Canvas.Top="219" Width="184" FontFamily="Arial" FontSize="20"/>
-                    <TextBlock Height="23" Canvas.Left="242" TextWrapping="Wrap" Text="{Binding CurrentLocation.LongestStreak, Converter={StaticResource streakConv}, Source={StaticResource ViewModel}}" Canvas.Top="217" Width="184" FontFamily="Arial" FontSize="20" TextAlignment="Center"/>
+                    <TextBlock Height="23" Canvas.Left="20" TextWrapping="Wrap" Canvas.Top="153" Width="61" FontFamily="Mono" FontSize="20" TextAlignment="Left"><Run Language="it-it" Text="From:"/></TextBlock>
+
+                    <TextBlock Text="{Binding Source={x:Static system:DateTime.Now}, StringFormat=\{0:hh:mm\}}" Canvas.Left="191" Canvas.Top="153" Height="22" Width="60" FontSize="20" FontFamily="Mono" TextAlignment="Left" />
+
+                    <TextBlock Height="23" Canvas.Left="157" TextWrapping="Wrap" Canvas.Top="153" Width="28" FontFamily="Mono" FontSize="20" RenderTransformOrigin="0.45,1.087"><Run Language="it-it" Text="To:"/></TextBlock>
+                    <TextBlock Text="{Binding CurrentLocation.CurrentStreak, Converter={StaticResource streakConv}, Source={StaticResource ViewModel}}" Canvas.Left="130" Canvas.Top="181" Height="22" Width="172" FontSize="20" FontFamily="Mono" TextAlignment="Left" />
 
 
 
-                    <TextBlock Height="23" Canvas.Left="20" TextWrapping="Wrap" Text="TOTAL TIME" Canvas.Top="247" Width="184" FontFamily="Arial" FontSize="20"/>
-                    <TextBlock Height="23" Canvas.Left="242" TextWrapping="Wrap" Text="{Binding CurrentLocation.TotalTime, Converter={StaticResource totalTimeConv}, Source={StaticResource ViewModel}}" Canvas.Top="247" Width="184" FontFamily="Arial" FontSize="20" TextAlignment="Center"/>
+                    <TextBlock Height="23" Canvas.Left="20" TextWrapping="Wrap" Canvas.Top="207" Width="126" FontFamily="Mono" FontSize="20"><Run Language="it-it" Text="Longest time:"/></TextBlock>
+                    <TextBlock Height="23" Canvas.Left="148" TextWrapping="Wrap" Text="{Binding CurrentLocation.LongestStreak, Converter={StaticResource streakConv}, Source={StaticResource ViewModel}}" Canvas.Top="207" Width="184" FontFamily="Mono" FontSize="20" TextAlignment="Left"/>
 
-                    
 
-                    <Button x:Name="ButtonAddActivity" Width="19" Height="19" ToolTip="Add new activity" Click="OpenAddActivity" Canvas.Left="129" Canvas.Top="369">
+
+                    <TextBlock Height="23" Canvas.Left="21" TextWrapping="Wrap" Canvas.Top="236" Width="125" FontFamily="Mono" FontSize="20"><Run Language="it-it" Text="Total time:"/></TextBlock>
+                    <TextBlock Height="23" Canvas.Left="120" TextWrapping="Wrap" Text="{Binding CurrentLocation.TotalTime, Converter={StaticResource totalTimeConv}, Source={StaticResource ViewModel}}" Canvas.Top="236" Width="184" FontFamily="Mono" FontSize="20" TextAlignment="Left"/>
+
+
+                    <TextBlock Height="23" Canvas.Left="22" TextWrapping="Wrap" Canvas.Top="287" Width="164" FontFamily="Mono" FontSize="20"><Run Language="it-it" Text="Change Location"/></TextBlock>
+
+                    <Button x:Name="ButtonAddActivity" Width="28" Height="28" ToolTip="Add new activity" Click="OpenAddActivity" Canvas.Left="86" Canvas.Top="365">
                         <Button.Template>
                             <ControlTemplate>
                                 <Image Source="pack://application:,,,/images\symbol_add.png"/>
@@ -267,14 +268,14 @@
                     </Button>
 
 
-                    <TextBlock FontFamily="Arial" FontSize="16" Text="ACTIONS " Canvas.Left="39" Canvas.Top="369" Height="19" Width="90"/>
+                    <TextBlock FontFamily="Mono" FontSize="20" Canvas.Left="22" Canvas.Top="368" Height="19" Width="90"><Run Language="it-it" Text="Actions"/></TextBlock>
 
-                    <controls:AutoCompleteBox VerticalAlignment="Top" Width="348" Height="30" x:Name="AutoCompleteBox" 
+                    <controls:AutoCompleteBox VerticalAlignment="Top" Width="432" Height="30" x:Name="AutoCompleteBox" 
                         ItemsSource="{Binding Source={StaticResource ViewLocations}}"
-                        ValueMemberBinding="{Binding Name}" Canvas.Left="54" Canvas.Top="315" Background="{x:Null}" />
-                    
-                    
-                    <Button x:Name="ButtonModifyPosition" Width="19" Height="19" ToolTip="Add or Set Location" Click="AddOrSetLocation" Canvas.Left="410" Canvas.Top="320">
+                        ValueMemberBinding="{Binding Name}" Canvas.Left="21" Canvas.Top="315" Background="{x:Null}" />
+
+
+                    <Button x:Name="ButtonModifyPosition" Width="19" Height="19" ToolTip="Add or Set Location" Click="AddOrSetLocation" Canvas.Left="451" Canvas.Top="335" RenderTransformOrigin="0.598,1.055">
                         <Button.Template>
                             <ControlTemplate>
                                 <Image Source="pack://application:,,,/images\addLocation.png" Margin="0,-24,-24,0"/>
@@ -285,7 +286,7 @@
 
 
 
-                    <ListBox ItemsSource="{Binding CurrentLocation.ActivityList, Source={StaticResource ViewModel}}" Background="{x:Null}" BorderBrush="Black" Foreground="Black" Canvas.Left="22" Canvas.Top="393" Height="103" Width="446" FontFamily="Arial" FontSize="14" SelectionChanged="ListBox_SelectionChanged">
+                    <ListBox ItemsSource="{Binding CurrentLocation.ActivityList, Source={StaticResource ViewModel}}" Background="{x:Null}" BorderBrush="Black" Foreground="Black" Canvas.Left="22" Canvas.Top="393" Height="103" Width="467" FontFamily="Mono" FontSize="14" SelectionChanged="ListBox_SelectionChanged">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -306,10 +307,10 @@
 
 
 
-                    <Button x:Name="ButtonForceUnknown" Content="Button" Canvas.Left="426" Canvas.Top="501" Width="33" Height="33" ToolTip="Force UNKNOWN location" Click="Buotton_ForceUn">
+                    <Button x:Name="ButtonForceUnknown" Content="Button" Canvas.Left="432" Canvas.Top="506" Width="24" Height="24" ToolTip="Force UNKNOWN location" Click="Buotton_ForceUn">
                         <Button.Template>
                             <ControlTemplate>
-                                <Image Source="pack://application:,,,/images/whereless_yellow.png"/>
+                                <Image Source="pack://application:,,,/images/TrayIcon_Yellow.png"/>
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
@@ -318,7 +319,7 @@
 
 
 
-                    <Button x:Name="ButtonPause" Content="Button" Canvas.Left="464" Canvas.Top="501" Width="34" Height="33" ToolTip="Pause Whereless" Click="Button_Click">
+                    <Button x:Name="ButtonPause" Content="Button" Canvas.Left="462" Canvas.Top="501" Width="34" Height="33" ToolTip="Pause Whereless" Click="Button_Click">
                         <Button.Template>
                             <ControlTemplate>
                                 <Image Source="pack://application:,,,/buttons/pause.png"/>
@@ -332,7 +333,7 @@
 
 
 
-        <TabItem Header="TabItem">
+        <TabItem Header="All Locations">
             <Grid Background="#FFE5E5E5"/>
         </TabItem>
     </TabControl>
