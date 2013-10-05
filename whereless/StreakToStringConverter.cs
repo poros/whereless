@@ -30,25 +30,20 @@ namespace whereless
 
             if (days != 0)
             {
-                return (days + "d " + hours + "h " + minutes + "m " + seconds + "s " + milliseconds + "ms ");
+                return (days + "d " + hours + "h " + minutes + "m ");
             }
             else
             {
                 if (hours != 0)
                 {
-                    return (hours + "h " + minutes + "m " + seconds + "s " + milliseconds + "ms ");
+                    return (hours + "h " + minutes + "m ");
                 }
-                else
-                {
-                    if (minutes != 0)
-                    {
-                        return (minutes + "m " + seconds + "s " + milliseconds + "ms ");
-                    }
-                    else
-                    {
-                        return (seconds + "s " + milliseconds + "ms ");
-                    }
-                }
+                
+                //if (minutes != 0)
+                //{
+                    return (minutes + "m" );
+                //}
+
             }
         }
     }

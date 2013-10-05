@@ -22,7 +22,7 @@ namespace whereless
             int seconds = (int)((dt / 1000) % 60);
             int milliseconds = (int)(dt % 1000);
 
-            return (days + "d " + hours + "h " + minutes + "m " + seconds + "s " + milliseconds + "ms ");
+            return (days + "d " + hours + "h " + minutes + "m ");
 
         }
 

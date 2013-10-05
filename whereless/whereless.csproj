@@ -136,6 +136,7 @@
       <DependentUpon>SmallWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="StreakToStringConverter.cs" />
+    <Compile Include="TimePassing.cs" />
     <Compile Include="TotalTimeToStringConverter.cs" />
     <Compile Include="ViewModel\WherelessViewModel.cs" />
     <Compile Include="ViewModel\PeopleViewModel.cs" />
