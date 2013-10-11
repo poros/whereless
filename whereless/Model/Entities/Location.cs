@@ -60,7 +60,7 @@ namespace whereless.Model.Entities
         }
 
         // test if the input measures are compatible with the location
-        public abstract bool TestInput(IList<IMeasure> measures);
+        public abstract double TestInput(IList<IMeasure> measures);
         // update statistics of the location with the input measures
         public abstract void UpdateStats(IList<IMeasure> measures);
         // force location to match the input measures
@@ -94,6 +94,8 @@ namespace whereless.Model.Entities
             SetArrivedAt();
             ResetCurrentStreak();
         }
+
+        public abstract ulong GetObservations();
         
         public override string ToString()
         {

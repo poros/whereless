@@ -122,6 +122,7 @@
     <Compile Include="CustomApplicationContext.cs" />
     <Compile Include="DateTimeToTimeStringConverter.cs" />
     <Compile Include="LocalizationService\IPlayPauseStopObjectThread.cs" />
+    <Compile Include="LocalizationService\Localizer\BestLocalization.cs" />
     <Compile Include="LocalizationService\Localizer\LocalizationAlgorithm.cs" />
     <Compile Include="LocalizationService\Localizer\LocationLocalizer.cs" />
     <Compile Include="LocalizationService\Localizer\SimpleLocalization.cs" />

@@ -11,30 +11,38 @@ using whereless.Model.ValueObjects;
 
 namespace whereless.LocalizationService.Localizer
 {
-    public class SimpleLocalization : LocalizationAlgorithm
+    public class BestLocalization : LocalizationAlgorithm
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(SimpleLocalization));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(BestLocalization));
+        private static readonly ulong LearningTresh = 15UL;
 
         public override void Initialize(IList<IMeasure> input, ref Location currLocation, ref bool unknown)
         {
             using (var uow = ModelHelper.GetUnitOfWork())
             {
+                Location candidateLocation = null;
                 var locations = uow.GetAll<Location>();
                 if (locations.Count > 0)
                 {
+                    double min = Double.MaxValue;
                     foreach (var location in locations)
                     {
-                        if (location.TestInput(input) >= 0)
+                        double curr = location.TestInput(input);
+                        if (curr.CompareTo(0D) >= 0 && curr.CompareTo(min) < 0)
                         {
-                            currLocation = location;
-
-                            currLocation.StartActivities();
-
-                            currLocation.SetUpCurrentTimeStats();
-
-                            location.UpdateStats(input);
-                            break;
+                            min = curr;
+                            candidateLocation = location;
                         }
+                    }
+                    if (candidateLocation != null)
+                    {
+                        currLocation = candidateLocation;
+
+                        currLocation.StartActivities();
+
+                        currLocation.SetUpCurrentTimeStats();
+
+                        currLocation.UpdateStats(input);
                     }
                 }
                 uow.Commit();
@@ -58,64 +66,65 @@ namespace whereless.LocalizationService.Localizer
                     Log.Debug("Trying to retrieve Location " + currLocation.Name);
                     currLocation = uow.GetLocationByName(currLocation.Name);
                     Log.Debug(currLocation == null ? "Nothing Retrieved " : "Retrieved " + currLocation.Name);
+
+                    // Learning phase
+                    if (currLocation != null && currLocation.GetObservations() <= LearningTresh)
+                    {
+                        Log.Debug("Learning Phase "+ currLocation.Name + ": step = " + currLocation.GetObservations());
+                        currLocation.UpdateStats(input);
+                        uow.Commit();
+                        return;
+                    }
                 }
 
-                // currLocation may be null if updated by others threads
-                //it could also be unknown
-                // proximity bias
-                if (currLocation != null && !unknown && currLocation.TestInput(input) >= 0)
-                {
-                        currLocation.UpdateStats(input);
-                } 
-                else
-                {
-                    String oldLocationName = null;
-                    if (currLocation != null)
-                    {
-                        oldLocationName = currLocation.Name;
-                    }
-                    if (!unknown)
-                    {
-                        currLocation = null;
-                    }
+                Log.Debug("Trying to retrieve all locations");
+                var locations = uow.GetAll<Location>();
+                Log.Debug("All locations retrieved");
 
-                    Log.Debug("Trying to retrieve all locations");
-                    var locations = uow.GetAll<Location>();
-                    Log.Debug("All locations retrieved");
-
-                    if (locations.Count > 0)
+                Location candidateLocation = null;
+                if (locations.Count > 0)
+                {
+                    double min = Double.MaxValue;
+                    foreach (var location in locations)
                     {
-                        foreach (var location in locations
-                            .Where(location => oldLocationName == null || !location.Name.Equals(oldLocationName)))
+                        double curr = location.TestInput(input);
+                        if (curr.CompareTo(0D) >= 0 && curr.CompareTo(min) < 0)
                         {
-                            if (location.TestInput(input) >= 0)
-                            {
-                                unknown = false;
-                                currLocation = location;
-
-                                currLocation.StartActivities();
-                                
-                                currLocation.SetUpCurrentTimeStats();
-
-                                location.UpdateStats(input);
-                                break;
-                            }
+                            candidateLocation = location;
+                            min = curr;
                         }
                     }
+                }
 
+                if (candidateLocation != null)
+                {
+                    unknown = false;
+                    if (currLocation == null || !currLocation.Name.Equals(candidateLocation.Name))
+                    {
+                        currLocation = candidateLocation;
+                        currLocation.StartActivities();
+                        currLocation.SetUpCurrentTimeStats();
+                    }
+                    Debug.Assert(currLocation.Name.Equals(candidateLocation.Name),
+                                 "currLocation.Name.Equals(candidateLocation.Name)");
+                    currLocation.UpdateStats(input);
+                }
+                else
+                {
                     if (unknown)
                     {
                         Debug.Assert(currLocation != null, "currLocation != null");
-                        if (currLocation.TestInput(input) >= 0)
+                        if (currLocation.TestInput(input).CompareTo(0D) >= 0)
                         {
                             currLocation.UpdateStats(input);
                         }
                         else
                         {
-                            currLocation = null;
+                            unknown = false;
                         }
                     }
-                    if (currLocation == null)
+
+                    if (!unknown)
                     {
                         currLocation = ModelHelper.EntitiesFactory
                                                   .CreateLocation(LocationLocalizer.Unknown, input);
@@ -130,7 +139,12 @@ namespace whereless.LocalizationService.Localizer
         {
             using (var uow = ModelHelper.GetUnitOfWork())
             {
-                currLocation = uow.GetLocationByName(name);
+                Location candidateLocation = uow.GetLocationByName(name);
+                if (currLocation.Name.Equals(candidateLocation.Name))
+                {
+                    return;
+                }
+                currLocation = candidateLocation;
                 Debug.Assert(currLocation != null, "currLocation != null");
 
                 currLocation.ForceLocation(input);
@@ -173,3 +187,4 @@ namespace whereless.LocalizationService.Localizer
         }
     }
 }
+

@@ -59,10 +59,15 @@ namespace whereless.LocalizationService
             {
                 throw new ConfigurationErrorsException("Unable to find localizationAlgorithm key");
             }
-            if (algName.Equals("SimpleLocalization"))
+            else if (algName.Equals("SimpleLocalization"))
             {
                 tmp = new SimpleLocalization();
                 Log.Debug("SimpleLocalization Algorithm Instantiated");
+            }
+            else if (algName.Equals("BestLocalization"))
+            {
+                tmp = new BestLocalization();
+                Log.Debug("BestLocalization Algorithm Instantiated");
             }
             else
             {

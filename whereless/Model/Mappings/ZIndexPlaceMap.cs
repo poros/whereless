@@ -8,7 +8,7 @@ namespace whereless.Model.Mappings
         public ZIndexPlaceMap()
         {
             DiscriminatorValue("ZIndexPlace");
-
+            Map(x => x.N);
             HasMany(x => x.Networks)
                 // .Inverse()
                 .Cascade.All();

@@ -23,12 +23,19 @@ namespace whereless.Model.Entities
 
         // the two constant to change in order to refine recognition precision
         // define the penalty in terms of standard deviation for just discovered networks
-        private static readonly double bigZ = 4D;
+        private static readonly double bigZ = 2D;
         // defines the range of input acceptability (99.99% -> 1.96D, 68.2% -> 1)
-        private static readonly double k = 100D;
-
+        private static readonly double k = 8D;
+        
 
         private IDictionary<string, Network> _networks;
+
+        private ulong _n;
+        public virtual ulong N
+        {
+            get { return _n; }
+            set { _n = value; }
+        }
 
 
         public virtual IList<Network> Networks
@@ -58,6 +65,7 @@ namespace whereless.Model.Entities
             {
                 AddNetwork(measure.Ssid, _Factory.CreateNetwork(measure));
             }
+            _n = 1;
         }
 
         public virtual double ZIndex(IList<IMeasure> measures)
@@ -115,14 +123,18 @@ namespace whereless.Model.Entities
             return zIndex;
         }
 
-        public override bool TestInput(IList<IMeasure> measures)
+        public override double TestInput(IList<IMeasure> measures)
         {
             if (measures.Count == 0)
             {
-                return false;
+                return -1D;
             }
-
-            return (ZIndex(measures).CompareTo(k) <= 0); //double safe comparison
+            double z = ZIndex(measures);
+            if (z.CompareTo(k) <= 0)
+            {
+                return z;     
+            }
+            return -1D;
         }
 
         public override void UpdateStats(IList<IMeasure> measures)
@@ -139,8 +151,18 @@ namespace whereless.Model.Entities
                     AddNetwork(measure.Ssid, _Factory.CreateNetwork(measure));
                 }
             }
+            _n++;
         }
 
+        public override ulong GetObservations()
+        {
+            return _n;
+        }
+
+        public override void RestartLearning()
+        {
+            _n = 0;
+        }
 
         public override string ToString()
         {
@@ -149,7 +171,7 @@ namespace whereless.Model.Entities
             {
                 buffer.AppendLine(network.ToString());
             }
-            return (base.ToString() + " Networks = {\n" + buffer + "} ");
+            return (base.ToString() + " N = " + N + "; Networks = {\n" + buffer + "} ");
         }
     }
 }

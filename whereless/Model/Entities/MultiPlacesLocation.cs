@@ -32,6 +32,15 @@ namespace whereless.Model.Entities
             get { return _n; }
             set { _n = value;  }
         }
+
+        public override ulong GetObservations()
+        {
+            if (_currPlace != null)
+            {
+                return _currPlace.GetObservations();
+            }
+            return _n;
+        }
         
         //time is given in terms of observations and default time between them
         public override ulong TotalTime
@@ -85,41 +94,44 @@ namespace whereless.Model.Entities
             SetArrivedAt();
         }
 
-        // REMARK side effect: always set current place if return true
-        public override bool TestInput(IList<IMeasure> measures)
+        // REMARK side effect: always set current place if return >= 0
+        public override double TestInput(IList<IMeasure> measures)
         {
             Log.Debug("To be tested " + this.Name);
 
             if (measures.Count == 0)
             {
-                return false;
+                return -1D;
             }
 
-            // proximity preference
-            if (_currPlace != null && _currPlace.TestInput(measures))
-            {
-                Log.Debug("Place recognized = " + _currPlace.Id);
-                return true;
-            }
-            var oldPlace = _currPlace;
             _currPlace = null;
-            foreach (
-                var place in _places.Where(place => place != oldPlace).Where(place => place.TestInput(measures)))
+            double min = Double.MaxValue;
+            foreach (var place in _places)
             {
-                _currPlace = place;
-                Log.Debug("Place recognized = " + _currPlace.Id);
-                return true;
+                double curr = place.TestInput(measures);
+                if (curr.CompareTo(0D) >= 0 && curr.CompareTo(min) < 0)
+                {
+                    min = curr;
+                    _currPlace = place;
+                }
+                
             }
+            if (_currPlace != null)
+            {
+                Log.Debug("Place recognized = " + _currPlace.Id);
+                return min;
+            }
+            
             // REMARK current place was not set up
             Log.Debug("No place recognized");
-            return false;
+            return -1D;
         }
 
 
         public override void UpdateStats(IList<IMeasure> measures)
         {
             //just to be sure that a current place is set
-            if (_currPlace == null && !TestInput(measures))
+            if (_currPlace == null && TestInput(measures) <= 0)
             {
                 _currPlace = _places.Peek();
             }
@@ -145,11 +157,12 @@ namespace whereless.Model.Entities
             // it needs to be called before UpdateStats
             SetUpCurrentTimeStats();
 
-            if (TestInput(measures))
+            if (TestInput(measures).CompareTo(0D) >= 0)
             {
                 // currPlace is setup by side-effect
                 Debug.Assert(_currPlace != null, "_currPlace != null");
                 UpdateStats(measures);
+                _currPlace.RestartLearning();
             }
             else
             {
