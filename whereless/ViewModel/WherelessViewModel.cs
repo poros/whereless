@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Threading;
 using log4net;
 using System.Linq;
 using whereless.LocalizationService;
@@ -117,7 +119,7 @@ namespace whereless.ViewModel
             {
                 Debug.Assert(WherelessService != null, "WherelessService != null");
                 WherelessService.Pause();
-                ServicePaused = true;    
+                ServicePaused = true;
             }
         }
 
@@ -128,7 +130,7 @@ namespace whereless.ViewModel
             {
                 Debug.Assert(WherelessService != null, "WherelessService != null");
                 WherelessService.Play();
-                ServicePaused = false;    
+                ServicePaused = false;
             }
         }
 
@@ -179,12 +181,47 @@ namespace whereless.ViewModel
         }
 
 
+        /*****ASYNC TASK*****/
 
+
+        public class AddActivityToLocationInfo
+        {
+            public string locationName;
+            public string activityName;
+            public string pathfile;
+            public string argument;
+            public string activityType;
+
+            public AddActivityToLocationInfo(string locationName, string activityName, string pathfile, string argument,
+                                             string activityType)
+            {
+                this.locationName = locationName;
+                this.activityName = activityName;
+                this.pathfile = pathfile;
+                this.argument = argument;
+                this.activityType = activityType;
+            }
+        }
+
+        public void AddActivityToLocationCallback(Object toCastInfo)
+        {
+            var info = (AddActivityToLocationInfo)toCastInfo;
+            var a = ModelHelper.EntitiesFactory.CreateActivity(info.activityName, info.pathfile, info.argument, info.activityType);
+            using (var uow = ModelHelper.GetUnitOfWork())
+            {
+                var location = uow.GetLocationByName(info.locationName);
+                location.AddActivity(a);
+
+                uow.Commit();
+
+                Log.Debug("Activity added to Location:" + location);
+            }
+        }
 
         public void AddActivityToLocation(Location location, string activityName, string pathfile, string argument, string activityType)
         {
-            var a = ModelHelper.EntitiesFactory.CreateActivity(activityName,pathfile,argument,activityType);
-            
+            var a = ModelHelper.EntitiesFactory.CreateActivity(activityName, pathfile, argument, activityType);
+
             location.AddActivity(a);
             var rep = ModelHelper.GetRepository<Location>();
             rep.Update(location);
@@ -194,39 +231,52 @@ namespace whereless.ViewModel
 
         public void AddActivityToLocation(string locationName, string activityName, string pathfile, string argument, string activityType)
         {
-            var a = ModelHelper.EntitiesFactory.CreateActivity(activityName, pathfile, argument, activityType);
-            using (var uow = ModelHelper.GetUnitOfWork())
+            var info = new AddActivityToLocationInfo(
+                locationName, activityName, pathfile, argument, activityName);
+            ThreadPool.QueueUserWorkItem(new WaitCallback(AddActivityToLocationCallback), info);
+        }
+
+        public class DeleteActivityFromLocationInfo
+        {
+            public string locationName;
+            public int activityId;
+
+            public DeleteActivityFromLocationInfo(string locationName, int activityId)
             {
-                var location = uow.GetLocationByName(locationName);
-                location.AddActivity(a);
-
-                uow.Commit();
-
-                Log.Debug("Activity added to Location:" + location);
+                this.locationName = locationName;
+                this.activityId = activityId;
             }
         }
 
-        public void DeleteActivityFromCurrentLocation(int activityId)
+        public void DeleteActivityFromLocationCallback(Object toCastInfo)
         {
+            var info = (DeleteActivityFromLocationInfo) toCastInfo;
             using (var uow = ModelHelper.GetUnitOfWork())
             {
-                Location loc = uow.GetLocationByName(CurrentLocation.Name);
+                Location loc = uow.GetLocationByName(info.locationName);
 
                 bool removed = false;
                 for (int i = 0; i < loc.ActivityList.Count && !removed; i++)
                 {
-                    if (loc.ActivityList[i].Id == activityId)
+                    if (loc.ActivityList[i].Id == info.activityId)
                     {
                         loc.ActivityList.RemoveAt(i);
                         removed = true;
                     }
                 }
-                Debug.Assert(removed, "No ativity was removed"); 
+                Debug.Assert(removed, "No activity was removed");
                 uow.Commit();
             }
 
             // To trigger the interface update (sure, this interface is a mess...)
-            UpdateCurrentLocation(CurrentLocation);
+            //UpdateCurrentLocation(CurrentLocation);
+        }
+
+        public void DeleteActivityFromLocation(string locationName, int activityId)
+        {
+            DeleteActivityFromLocationInfo info = new DeleteActivityFromLocationInfo(
+                locationName, activityId);
+            ThreadPool.QueueUserWorkItem(new WaitCallback(DeleteActivityFromLocationCallback), info);
         }
 
 

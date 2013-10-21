@@ -10,7 +10,7 @@ namespace whereless.Model.Mappings
             DiscriminatorValue("ZIndexPlace");
             Map(x => x.N);
             HasMany(x => x.Networks)
-                // .Inverse()
+                //.Inverse()
                 .Cascade.All();
         }
     }

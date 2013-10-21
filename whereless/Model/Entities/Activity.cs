@@ -46,6 +46,8 @@ namespace whereless.Model.Entities
         private string _pathfile;
         private ActivityType _type;
 
+        public virtual Location Location { get; set; } // Reference for Inverse(). Causes problems, but saves an update.
+
 
         public virtual int Id { get; protected set; }
 

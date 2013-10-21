@@ -13,7 +13,7 @@ namespace whereless.Model.Entities
             set { _ssid = value; }
         }
 
-        //public virtual Place Place { get; set; } // Reference for Inverse(). Causes problems, but saves an update.
+        public virtual Place Place { get; set; } // Reference for Inverse(). Causes problems, but saves an update.
 
 
         protected Network() {}

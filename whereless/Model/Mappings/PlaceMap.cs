@@ -8,8 +8,8 @@ namespace whereless.Model.Mappings
         public PlaceMap()
         {
             Id(x => x.Id);
-            // References(x => x.Location)
-            //    .Column("MultiplePlacesLocation_id");
+            References(x => x.Location)
+                .Column("MultiplePlacesLocation_id");
             DiscriminateSubClassesOnColumn("type");
         }
     }

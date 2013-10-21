@@ -85,7 +85,7 @@ namespace whereless
 
             if (actionName.Equals("") == false && filename.Equals("") == false)
             {
-                viewModel.AddActivityToLocation(l, actionName, filename, argument, type);
+                viewModel.AddActivityToLocation(l.Name, actionName, filename, argument, type);
                 
                 MessageBox.Show("Activity "+actionName+" added", "ACTIVITY ADDED",
                                 MessageBoxButtons.OK,

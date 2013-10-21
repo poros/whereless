@@ -6,7 +6,7 @@ namespace whereless.Model.Entities
     public abstract class Place
     {
         public virtual int Id { get; protected set; }
-        // public virtual Location LocationReference { get; set; } // Reference for Inverse(). Causes problems, but saves an update.
+        public virtual Location Location { get; set; } // Reference for Inverse(). Causes problems, but saves an update.
 
         // test if the input measures are compatible with the place
         public abstract double TestInput(IList<IMeasure> measures);

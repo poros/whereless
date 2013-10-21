@@ -10,8 +10,8 @@ namespace whereless.Model.Mappings
             Id(x => x.Id);
             Map(x => x.Ssid)
                 .Not.Nullable();
-            // References(x => x.Place)
-            //    .Column("ZIndexPlace_id");
+            References(x => x.Place)
+                .Column("ZIndexPlace_id");
             DiscriminateSubClassesOnColumn("type");
         }
     }

@@ -64,7 +64,7 @@ namespace whereless
             //                     MessageBoxButtons.YesNo,
             //                     MessageBoxIcon.Question);
 
-            viewModel.DeleteActivityFromCurrentLocation(int.Parse(((Button)sender).Content.ToString()));
+            viewModel.DeleteActivityFromLocation(viewModel.CurrentLocation.Name, int.Parse(((Button)sender).Content.ToString()));
         }
 
 

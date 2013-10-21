@@ -13,6 +13,8 @@ namespace whereless.Model.Mappings
         public ActivityMap()
         {
             Id(x => x.Id);
+            References(x => x.Location)
+                .Column("MultiplePlacesLocation_id");
             Map(x => x.Name);
             Map(x => x.Argument);
             Map(x => x.Pathfile);  

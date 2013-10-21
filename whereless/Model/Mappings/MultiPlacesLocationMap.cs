@@ -10,7 +10,7 @@ namespace whereless.Model.Mappings
             DiscriminatorValue("MultiplePlacesMap");
             Map(x => x.N);
             HasMany(x => x.Places)
-                // .Inverse()
+                //.Inverse()
                 .Cascade.All();
         }
     }

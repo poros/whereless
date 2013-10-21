@@ -42,7 +42,7 @@ namespace whereless.Model.Entities
         public virtual void AddActivity(Activity activity)
         {
             _activityList.Add(activity);
-            //activity.LocationReference = this;
+            activity.Location = this;
         }
 
 

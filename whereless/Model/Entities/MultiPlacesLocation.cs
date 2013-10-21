@@ -14,11 +14,6 @@ namespace whereless.Model.Entities
         private static readonly ILog Log = LogManager.GetLogger(typeof(MultiPlacesLocation));
 
         private ulong _n = 0;
-        // Locations are saved from most recent to oldest,
-        // because in case of locations with similar footprints (test may pass for both)
-        // more recent ones MUST be preferred, since the algorithm look for locations in order!!!
-        // (users are stupid, they can register the same location twice,
-        // let's give them the last, it would be the less disappointing thing to do)
         private Stack<Place> _places;
         private Place _currPlace;
         //REMARK!!! This is an emergency solution. Impossible to move it in ModelHelper
@@ -73,7 +68,7 @@ namespace whereless.Model.Entities
         public virtual void AddPlace(Place place)
         {
             _places.Push(place);
-            //place.LocationReference = this;
+            place.Location = this;
         }
 
 

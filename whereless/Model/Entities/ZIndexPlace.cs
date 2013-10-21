@@ -48,7 +48,7 @@ namespace whereless.Model.Entities
         public virtual void AddNetwork(string ssid, Network net)
         {
             _networks.Add(ssid, net);
-            //net.PlaceReference = this;
+            net.Place = this;
         }
 
 
