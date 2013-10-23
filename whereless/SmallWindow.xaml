@@ -296,7 +296,7 @@
 
 
                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" 
-            			Text="{Binding CurrentLocation.Name, Source={StaticResource ViewModel}}"
+            			Text="WHERELESS IN PAUSE"
             			VerticalAlignment="Top" Height="44" Width="164" Canvas.Left="70" Canvas.Top="96" FontSize="20" FontWeight="Bold" FontFamily="Arial" TextAlignment="Center"/>
 
 

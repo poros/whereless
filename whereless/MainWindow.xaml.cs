@@ -109,6 +109,7 @@ namespace whereless
                 {
                     Console.Beep(1000, 2000);
                     viewModel.ForceLocation(locNameStatusKnown);
+                    locNameStatusKnown = "";
                     return;
                 }
                 viewModel.RegisterLocation(locNameStatusKnown); 
@@ -122,6 +123,7 @@ namespace whereless
                 {
                     Console.Beep(1000, 2000);
                     viewModel.ForceLocation(locNameStatusUnknown);
+                    locNameStatusUnknown = "";
                     return;
                 }
                 viewModel.RegisterLocation(locNameStatusUnknown); 

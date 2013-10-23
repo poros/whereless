@@ -25,7 +25,7 @@
         <b:TimePassing x:Key="TimeP" />
 
 
-        <CollectionViewSource x:Key="ViewLocations" Source="{Binding Locations, Source={StaticResource ViewModel}}" />
+        <CollectionViewSource x:Key="ViewLocations" Source="{Binding Locations.name, Source={StaticResource ViewModel}}" />
 
 
     </Window.Resources>
@@ -353,7 +353,17 @@
 
 
         <TabItem Header="All Locations">
-            <Grid Background="#FFE5E5E5"/>
+            <Grid Background="#FFE5E5E5">
+
+                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="526" Height="548" Background="Beige" Margin="-2,0,0,-6"
+                        Grid.Row="0" Grid.RowSpan="2">
+                
+                    
+                    
+                </Canvas>
+
+
+            </Grid>
         </TabItem>
     </TabControl>
 
