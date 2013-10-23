@@ -84,7 +84,7 @@ namespace whereless
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Console.Beep(1000,2000);
+            //Console.Beep(1000,2000);
             
         }
 
