@@ -87,9 +87,13 @@
 
                     <TextBlock Text="{Binding Source={StaticResource TimeP}, Path=Now, Mode=OneWay, StringFormat=\{0: hh:mm\}}" Canvas.Left="381" Canvas.Top="171" Height="22" Width="103" FontSize="20" FontFamily="Mono" TextAlignment="Center" />
 
-                    <controls:AutoCompleteBox VerticalAlignment="Top" Width="348" Height="30" x:Name="AutoCompleteBoxU" 
-                        ItemsSource="{Binding Source={StaticResource ViewLocations}}"
-                        ValueMemberBinding="{Binding Name}" Canvas.Left="54" Canvas.Top="315" Background="{x:Null}" />
+                    <controls:AutoCompleteBox Name="AutoCompleteBoxU" VerticalAlignment="Top" Width="432" Height="30" ItemsSource="{Binding Source={StaticResource ViewLocations}}" ValueMemberBinding="{Binding Name}" Canvas.Left="21" Canvas.Top="315" Background="{x:Null}">
+                        <controls:AutoCompleteBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </controls:AutoCompleteBox.ItemTemplate>
+                    </controls:AutoCompleteBox>
 
                     <Button x:Name="ButtonModifyPositionU" Width="19" Height="19" ToolTip="Add or Set Location" Click="AddOrSetLocation" Canvas.Left="410" Canvas.Top="320">
                         <Button.Template>
@@ -288,9 +292,22 @@
 
                     <TextBlock FontFamily="Mono" FontSize="20" Canvas.Left="23" Canvas.Top="369" Height="19" Width="69"><Run Language="it-it" Text="Actions"/></TextBlock>
 
-                    <controls:AutoCompleteBox VerticalAlignment="Top" Width="432" Height="30" x:Name="AutoCompleteBox" 
+                    <!--<controls:AutoCompleteBox VerticalAlignment="Top" Width="432" Height="30" x:Name="AutoCompleteBox" 
                         ItemsSource="{Binding Source={StaticResource ViewLocations}}"
-                        ValueMemberBinding="{Binding Name}" Canvas.Left="21" Canvas.Top="315" Background="{x:Null}" />
+                        ValueMemberBinding="{Binding Name}" Canvas.Left="21" Canvas.Top="315" Background="{x:Null}" >
+                    
+                    </controls:AutoCompleteBox>-->
+
+
+                    <controls:AutoCompleteBox Name="AutoCompleteBox" VerticalAlignment="Top" Width="432" Height="30" ItemsSource="{Binding Source={StaticResource ViewLocations}}" ValueMemberBinding="{Binding Name}" Canvas.Left="21" Canvas.Top="315" Background="{x:Null}">
+                        <controls:AutoCompleteBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </controls:AutoCompleteBox.ItemTemplate>
+                    </controls:AutoCompleteBox>
+
+
 
 
                     <Button x:Name="ButtonModifyPosition" Width="19" Height="19" ToolTip="Add or Set Location" Click="AddOrSetLocation" Canvas.Left="451" Canvas.Top="335" RenderTransformOrigin="0.598,1.055">
