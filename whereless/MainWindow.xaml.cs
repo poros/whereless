@@ -107,12 +107,13 @@ namespace whereless
             {
                 if (viewModel.Locations.Any(l => l.Name.Equals(locNameStatusKnown) == true))
                 {
-                    Console.Beep(1000, 2000);
                     viewModel.ForceLocation(locNameStatusKnown);
                     locNameStatusKnown = "";
+                    locNameStatusUnknown = "";
                     return;
                 }
-                viewModel.RegisterLocation(locNameStatusKnown); 
+                viewModel.RegisterLocation(locNameStatusKnown);
+                return;
             }
 
 
@@ -121,12 +122,13 @@ namespace whereless
             {
                 if (viewModel.Locations.Any(l => l.Name.Equals(locNameStatusUnknown) == true))
                 {
-                    Console.Beep(1000, 2000);
                     viewModel.ForceLocation(locNameStatusUnknown);
                     locNameStatusUnknown = "";
+                    locNameStatusKnown = "";
                     return;
                 }
-                viewModel.RegisterLocation(locNameStatusUnknown); 
+                viewModel.RegisterLocation(locNameStatusUnknown);
+                return;
             }   
             
         }
