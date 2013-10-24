@@ -108,6 +108,9 @@ namespace whereless
         {
             if (this.IsLoaded)
             {
+
+                System.Windows.Data.CollectionViewSource wherelessViewModelViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("wherelessViewModelViewSource")));
+
                 // set handlers if necessary
                 this.SetHandlers();
 
@@ -608,6 +611,46 @@ namespace whereless
             WherelessViewModel viewModel = WherelessViewModel.GetInstance();
             viewModel.PlayService();
         }
+
+
+        private void AddOrSetLocation(object sender, RoutedEventArgs e)
+        {
+            WherelessViewModel viewModel = WherelessViewModel.GetInstance();
+
+            string locNameStatusKnown = AutoCompleteBox.Text;
+            string locNameStatusUnknown = AutoCompleteBoxU.Text;
+
+            if (locNameStatusKnown.Equals("") == false)
+            {
+                if (viewModel.Locations.Any(l => l.Name.Equals(locNameStatusKnown) == true))
+                {
+                    viewModel.ForceLocation(locNameStatusKnown);
+                    locNameStatusKnown = "";
+                    locNameStatusUnknown = "";
+                    return;
+                }
+                viewModel.RegisterLocation(locNameStatusKnown);
+                return;
+            }
+
+
+
+            if (locNameStatusUnknown.Equals("") == false)
+            {
+                if (viewModel.Locations.Any(l => l.Name.Equals(locNameStatusUnknown) == true))
+                {
+                    viewModel.ForceLocation(locNameStatusUnknown);
+                    locNameStatusUnknown = "";
+                    locNameStatusKnown = "";
+                    return;
+                }
+                viewModel.RegisterLocation(locNameStatusUnknown);
+                return;
+            }
+
+        }
+
+
 
     }
 }
