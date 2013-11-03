@@ -386,23 +386,7 @@
 
                                    
                                    <Grid>
-
-                                        <Button Content="{Binding Name}" Width="15" Height="15" ToolTip="Delete Location" Margin="150,0,0,0" Click="DeleteLocation">
-                                            <Button.Template>
-                                                <ControlTemplate>
-                                                    <Image Source="pack://application:,,,/images/delete.png"/>
-                                                </ControlTemplate>
-                                            </Button.Template>
-                                        </Button>
-
-                                        <Button Content="{Binding Name}" Width="15" Height="15" ToolTip="Force this location" Margin="180,0,0,0" Click="LocationForce">
-                                            <Button.Template>
-                                                <ControlTemplate>
-                                                    <Image Source="pack://application:,,,/images/addLocation.png"/>
-                                                </ControlTemplate>
-                                            </Button.Template>
-                                        </Button>
-
+                                    
 
                                         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" 
             			                 Text="Location: " FontSize="14" FontWeight="Bold" FontFamily="Mono" TextAlignment="Center"/>
@@ -423,8 +407,23 @@
                                         <TextBlock TextWrapping="Wrap" Margin="15,50,0,0"
             			                 Text="{Binding TotalTime, Converter={StaticResource totalTimeConv}}" FontSize="14" FontWeight="Normal" FontFamily="Mono" TextAlignment="Center"/>
 
-                                       
-                                        
+                                        <Button Content="{Binding Name}" Width="15" Height="15" ToolTip="Delete Location" Margin="150,0,0,0" Click="DeleteLocation">
+                                            <Button.Template>
+                                                <ControlTemplate>
+                                                    <Image Source="pack://application:,,,/images/delete.png"/>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                        </Button>
+
+                                        <Button Content="{Binding Name}" Width="15" Height="15" ToolTip="Force this location" Margin="180,0,0,0" Click="LocationForce">
+                                            <Button.Template>
+                                                <ControlTemplate>
+                                                    <Image Source="pack://application:,,,/images/addLocation.png"/>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                        </Button>
+
+
 
                                         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Margin="0,70,0,0"
             			                    Text="Activities: " FontSize="14" FontWeight="Bold" FontFamily="Mono" TextAlignment="Center"/>
