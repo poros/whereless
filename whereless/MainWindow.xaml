@@ -386,6 +386,24 @@
 
                                    
                                    <Grid>
+
+                                        <Button Content="{Binding Name}" Width="15" Height="15" ToolTip="Delete Location" Margin="150,0,0,0" Click="DeleteLocation">
+                                            <Button.Template>
+                                                <ControlTemplate>
+                                                    <Image Source="pack://application:,,,/images/delete.png"/>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                        </Button>
+
+                                        <Button Content="{Binding Name}" Width="15" Height="15" ToolTip="Force this location" Margin="180,0,0,0" Click="LocationForce">
+                                            <Button.Template>
+                                                <ControlTemplate>
+                                                    <Image Source="pack://application:,,,/images/addLocation.png"/>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                        </Button>
+
+
                                         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" 
             			                 Text="Location: " FontSize="14" FontWeight="Bold" FontFamily="Mono" TextAlignment="Center"/>
 
@@ -406,21 +424,33 @@
             			                 Text="{Binding TotalTime, Converter={StaticResource totalTimeConv}}" FontSize="14" FontWeight="Normal" FontFamily="Mono" TextAlignment="Center"/>
 
                                        
-                                        <Button Content="{Binding Name}" Width="15" Height="15" ToolTip="Delete Location" Margin="0,70,0,0" Click="DeleteActionClicked">
-                                            <Button.Template>
-                                                <ControlTemplate>
-                                                    <Image Source="pack://application:,,,/images/delete.png"/>
-                                                </ControlTemplate>
-                                            </Button.Template>
-                                        </Button>
+                                        
 
-                                        <Button Content="{Binding Name}" Width="15" Height="15" ToolTip="Force this location" Margin="30,70,0,0" Click="LocationForce">
-                                            <Button.Template>
-                                                <ControlTemplate>
-                                                    <Image Source="pack://application:,,,/images/addLocation.png"/>
-                                                </ControlTemplate>
-                                            </Button.Template>
-                                        </Button>
+                                        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Margin="0,70,0,0"
+            			                    Text="Activities: " FontSize="14" FontWeight="Bold" FontFamily="Mono" TextAlignment="Center"/>
+                                       
+                                       
+                                        <ListBox ItemsSource="{Binding ActivityList}" BorderBrush="White" SelectionChanged="ListBox_SelectionChanged" Margin="0,90,0,0">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="{Binding Name}" />
+                                                        <Button Tag="{Binding Name, Source={StaticResource ViewLocations}}" Content="{Binding Id}" Width="15" Height="15" ToolTip="Delete Action" Margin="10,0,0,0" Click="DeleteActionClickedAllLocations">
+                                                            <Button.Template>
+                                                                <ControlTemplate>
+                                                                    <Image Source="pack://application:,,,/images/delete.png"/>
+                                                                </ControlTemplate>
+                                                            </Button.Template>
+                                                        </Button>
+
+
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+
+
+
 
                                     </Grid>
 

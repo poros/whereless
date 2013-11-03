@@ -155,5 +155,25 @@ namespace whereless
         {
             
         }
+
+
+        private void DeleteLocation(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        private void DeleteActionClickedAllLocations(object sender, RoutedEventArgs e)
+        {
+            WherelessViewModel viewModel = WherelessViewModel.GetInstance();
+
+            string location = ((Button)sender).Tag.ToString();
+
+            MessageBox.Show("Element id: " + ((Button)sender).Content.ToString()+ "loca: "+location, "Pressed delete element",
+                                 MessageBoxButtons.YesNo,
+                                 MessageBoxIcon.Question);
+
+            viewModel.DeleteActivityFromLocation(location, int.Parse(((Button)sender).Content.ToString()));
+        }
     }
 }
