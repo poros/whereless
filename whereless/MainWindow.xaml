@@ -35,6 +35,9 @@
         <TabItem Header="Current Location">
 
             <Grid Background="#FFE5E5E5" Margin="0,-2,-6,2" Width="525">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="10*"/>
                     <RowDefinition Height="533*"/>
@@ -44,7 +47,7 @@
 
 
                 <!-- Status: UNKNOWN -->
-                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="525" Height="548" Background="Beige" Margin="0,0,0,0" Grid.Row="0">
+                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="525" Height="548" Background="Beige" Margin="0,0,0,-6" Grid.Row="0" Grid.ColumnSpan="4" Grid.RowSpan="2">
 
                     <Canvas.Style>
                         <Style TargetType="{x:Type Canvas}">
@@ -123,7 +126,7 @@
 
 
                 <!-- Status: PAUSED -->
-                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="525" Height="548" Background="Beige" Margin="0,0,0,-6"  Grid.Row="0" Grid.RowSpan="2">
+                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="525" Height="548" Background="Beige" Margin="0,0,0,-6"  Grid.Row="0" Grid.RowSpan="2" Grid.ColumnSpan="4">
 
                     <Canvas.Style>
                         <Style TargetType="{x:Type Canvas}">
@@ -175,7 +178,7 @@
 
 
                 <!-- Status: RADIOOFF -->
-                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="524" Height="548" Background="Beige" Margin="0,0,0,-6" Grid.RowSpan="2">
+                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="524" Height="548" Background="Beige" Margin="0,0,0,-6" Grid.RowSpan="2" Grid.ColumnSpan="4">
 
                     <Canvas.Style>
                         <Style TargetType="{x:Type Canvas}">
@@ -224,7 +227,7 @@
 
                 <!-- Status: KNOWN -->
                 <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="526" Height="548" Background="Beige" Margin="-2,0,0,-6"
-                        Grid.Row="0" Grid.RowSpan="2">
+                        Grid.Row="0" Grid.RowSpan="2" Grid.ColumnSpan="4">
 
                     <Canvas.Style>
                         <Style TargetType="{x:Type Canvas}" >
@@ -368,20 +371,63 @@
         </TabItem>
 
 
-
         <TabItem Header="All Locations">
             <Grid Background="#FFE5E5E5">
 
-                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="526" Height="548" Background="Beige" Margin="-2,0,0,-6"
+                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="523" Height="570" Background="Beige" Margin="0,0,-7,-7"
                         Grid.Row="0" Grid.RowSpan="2">
 
-                   
-                    <ListBox ItemsSource="{Binding Source={StaticResource ViewLocations}}">
+
+                    <ListBox ItemsSource="{Binding Source={StaticResource ViewLocations}}" Height="330" Width="497" Canvas.Top="8" Canvas.Left="8">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                
+
                                 <Expander Header="{Binding Name}">
+
+                                   
+                                   <Grid>
+                                        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" 
+            			                 Text="Location: " FontSize="14" FontWeight="Bold" FontFamily="Mono" TextAlignment="Center"/>
+
+                                        <TextBlock TextWrapping="Wrap" Margin="0,0,0,0"
+            			                 Text="{Binding Name}" FontSize="14" FontWeight="Normal" FontFamily="Mono" TextAlignment="Center"/>
+
+                                        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Margin="0,25,0,0"
+            			                 Text="Last Time: " FontSize="14" FontWeight="Bold" FontFamily="Mono" TextAlignment="Center"/>
+
+                                        <TextBlock TextWrapping="Wrap" Margin="70,25,0,0"
+            			                 Text="{Binding ArrivedAt}" FontSize="14" FontWeight="Normal" FontFamily="Mono" TextAlignment="Center"/>
+
+                                        
+                                       <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Margin="0,50,0,0"
+            			                 Text="Total Time: " FontSize="14" FontWeight="Bold" FontFamily="Mono" TextAlignment="Center"/>
+
+                                        <TextBlock TextWrapping="Wrap" Margin="15,50,0,0"
+            			                 Text="{Binding TotalTime, Converter={StaticResource totalTimeConv}}" FontSize="14" FontWeight="Normal" FontFamily="Mono" TextAlignment="Center"/>
+
+                                       
+                                        <Button Content="{Binding Name}" Width="15" Height="15" ToolTip="Delete Location" Margin="0,70,0,0" Click="DeleteActionClicked">
+                                            <Button.Template>
+                                                <ControlTemplate>
+                                                    <Image Source="pack://application:,,,/images/delete.png"/>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                        </Button>
+
+                                        <Button Content="{Binding Name}" Width="15" Height="15" ToolTip="Force this location" Margin="30,70,0,0" Click="LocationForce">
+                                            <Button.Template>
+                                                <ControlTemplate>
+                                                    <Image Source="pack://application:,,,/images/addLocation.png"/>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                        </Button>
+
+                                    </Grid>
+
+                                   
                                     
+                                    
+
                                 </Expander>
                             </DataTemplate>
                         </ListBox.ItemTemplate>

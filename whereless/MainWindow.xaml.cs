@@ -134,6 +134,17 @@ namespace whereless
         }
 
 
+
+        private void LocationForce(object sender, RoutedEventArgs e)
+        {
+            WherelessViewModel viewModel = WherelessViewModel.GetInstance();
+
+            string loc = ((Button) sender).Content.ToString();
+            viewModel.ForceLocation(loc);
+            return;
+        }
+
+
         public void Connect(int connectionId, object target)
         {
             throw new NotImplementedException();
