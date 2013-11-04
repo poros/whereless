@@ -24,7 +24,7 @@
 
         <ObjectDataProvider x:Key="ViewModel" ObjectType="{x:Type vm:WherelessViewModel}" MethodName="GetInstance" />
         <CollectionViewSource x:Key="ViewLocations" Source="{Binding Locations, Source={StaticResource ViewModel}}" />
-        
+
         <CollectionViewSource x:Key="wherelessViewModelViewSource" d:DesignSource="{d:DesignInstance {x:Type vm:WherelessViewModel}, CreateList=True}"/>
 
 
@@ -185,7 +185,7 @@
                     </controls:AutoCompleteBox.ItemTemplate>
                 </controls:AutoCompleteBox>
 
-                <Button x:Name="ButtonModifyPosition" Width="19" Height="19" ToolTip="Add or Set Location" Click="AddOrSetLocation" Canvas.Left="193" Canvas.Top="264" RenderTransformOrigin="0.598,1.055">
+                <Button x:Name="ButtonModifyPosition" Width="19" Height="19" ToolTip="Add or Set Location" Click="AddOrSetLocation" Canvas.Left="198" Canvas.Top="275" RenderTransformOrigin="0.598,1.055">
                     <Button.Template>
                         <ControlTemplate>
                             <Image Source="pack://application:,,,/images\addLocation.png" Margin="0,-24,-24,0"/>
@@ -267,15 +267,15 @@
                     </controls:AutoCompleteBox.ItemTemplate>
                 </controls:AutoCompleteBox>
 
-                <Button x:Name="ButtonModifyPositionU" Width="19" Height="19" ToolTip="Add or Set Location" Click="AddOrSetLocation" Canvas.Left="193" Canvas.Top="264" RenderTransformOrigin="0.598,1.055">
+                <Button x:Name="ButtonModifyPositionU" Width="19" Height="19" ToolTip="Add or Set Location" Click="AddOrSetLocation" Canvas.Left="198" Canvas.Top="275" RenderTransformOrigin="0.598,1.055">
                     <Button.Template>
                         <ControlTemplate>
                             <Image Source="pack://application:,,,/images\addLocation.png" Margin="0,-24,-24,0"/>
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
-                
-                
+
+
 
             </Canvas>
 

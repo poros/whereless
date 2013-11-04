@@ -36,7 +36,8 @@
 
             <Grid Background="#FFE5E5E5" Margin="0,-2,-6,2" Width="525">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="41*"/>
+                    <ColumnDefinition Width="134*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="10*"/>
@@ -47,7 +48,7 @@
 
 
                 <!-- Status: UNKNOWN -->
-                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="525" Height="548" Background="Beige" Margin="0,0,0,-6" Grid.Row="0" Grid.ColumnSpan="4" Grid.RowSpan="2">
+                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="525" Height="548" Background="Beige" Margin="0,0,0,-6" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="2">
 
                     <Canvas.Style>
                         <Style TargetType="{x:Type Canvas}">
@@ -98,7 +99,7 @@
                         </controls:AutoCompleteBox.ItemTemplate>
                     </controls:AutoCompleteBox>
 
-                    <Button x:Name="ButtonModifyPositionU" Width="19" Height="19" ToolTip="Add or Set Location" Click="AddOrSetLocation" Canvas.Left="410" Canvas.Top="320">
+                    <Button x:Name="ButtonModifyPositionU" Width="19" Height="19" ToolTip="Add or Set Location" Click="AddOrSetLocation"  Canvas.Left="450" Canvas.Top="319">
                         <Button.Template>
                             <ControlTemplate>
                                 <Image Source="pack://application:,,,/images\addLocation.png" Margin="0,-24,-24,0"/>
@@ -126,7 +127,7 @@
 
 
                 <!-- Status: PAUSED -->
-                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="525" Height="548" Background="Beige" Margin="0,0,0,-6"  Grid.Row="0" Grid.RowSpan="2" Grid.ColumnSpan="4">
+                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="525" Height="548" Background="Beige" Margin="0,0,0,-6"  Grid.Row="0" Grid.RowSpan="2" Grid.ColumnSpan="2">
 
                     <Canvas.Style>
                         <Style TargetType="{x:Type Canvas}">
@@ -178,7 +179,7 @@
 
 
                 <!-- Status: RADIOOFF -->
-                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="524" Height="548" Background="Beige" Margin="0,0,0,-6" Grid.RowSpan="2" Grid.ColumnSpan="4">
+                <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="524" Height="548" Background="Beige" Margin="0,0,0,-6" Grid.RowSpan="2" Grid.ColumnSpan="2">
 
                     <Canvas.Style>
                         <Style TargetType="{x:Type Canvas}">
@@ -227,7 +228,7 @@
 
                 <!-- Status: KNOWN -->
                 <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="526" Height="548" Background="Beige" Margin="-2,0,0,-6"
-                        Grid.Row="0" Grid.RowSpan="2" Grid.ColumnSpan="4">
+                        Grid.Row="0" Grid.RowSpan="2" Grid.ColumnSpan="2">
 
                     <Canvas.Style>
                         <Style TargetType="{x:Type Canvas}" >
@@ -313,7 +314,7 @@
 
 
 
-                    <Button x:Name="ButtonModifyPosition" Width="19" Height="19" ToolTip="Add or Set Location" Click="AddOrSetLocation" Canvas.Left="451" Canvas.Top="335" RenderTransformOrigin="0.598,1.055">
+                    <Button x:Name="ButtonModifyPosition" Width="19" Height="19" ToolTip="Add or Set Location" Click="AddOrSetLocation" Canvas.Left="450" Canvas.Top="319" RenderTransformOrigin="0.598,1.055">
                         <Button.Template>
                             <ControlTemplate>
                                 <Image Source="pack://application:,,,/images\addLocation.png" Margin="0,-24,-24,0"/>
@@ -384,9 +385,9 @@
 
                                 <Expander Header="{Binding Name}">
 
-                                   
-                                   <Grid>
-                                    
+
+                                    <Grid>
+
 
                                         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" 
             			                 Text="Location: " FontSize="14" FontWeight="Bold" FontFamily="Mono" TextAlignment="Center"/>
@@ -400,8 +401,8 @@
                                         <TextBlock TextWrapping="Wrap" Margin="70,25,0,0"
             			                 Text="{Binding ArrivedAt}" FontSize="14" FontWeight="Normal" FontFamily="Mono" TextAlignment="Center"/>
 
-                                        
-                                       <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Margin="0,50,0,0"
+
+                                        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Margin="0,50,0,0"
             			                 Text="Total Time: " FontSize="14" FontWeight="Bold" FontFamily="Mono" TextAlignment="Center"/>
 
                                         <TextBlock TextWrapping="Wrap" Margin="15,50,0,0"
@@ -427,8 +428,8 @@
 
                                         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Margin="0,70,0,0"
             			                    Text="Activities: " FontSize="14" FontWeight="Bold" FontFamily="Mono" TextAlignment="Center"/>
-                                       
-                                       
+
+
                                         <ListBox ItemsSource="{Binding ActivityList}" BorderBrush="White" SelectionChanged="ListBox_SelectionChanged" Margin="0,90,0,0">
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
@@ -453,9 +454,9 @@
 
                                     </Grid>
 
-                                   
-                                    
-                                    
+
+
+
 
                                 </Expander>
                             </DataTemplate>
