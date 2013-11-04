@@ -164,7 +164,7 @@
 
 
 
-                    <Button x:Name="ButtonPlay" Content="Button" Canvas.Left="475" Canvas.Top="498" Width="33" Height="33" ToolTip="Pause Whereless" Click="Button_Click">
+                    <Button x:Name="ButtonPlay" Content="Button" Canvas.Left="475" Canvas.Top="498" Width="33" Height="33" ToolTip="Play Whereless" Click="Button_Click">
                         <Button.Template>
                             <ControlTemplate>
                                 <Image Source="pack://application:,,,/buttons\play.png"/>
