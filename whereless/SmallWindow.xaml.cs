@@ -625,11 +625,16 @@ namespace whereless
                 if (viewModel.Locations.Any(l => l.Name.Equals(locNameStatusKnown) == true))
                 {
                     viewModel.ForceLocation(locNameStatusKnown);
-                    locNameStatusKnown = "";
-                    locNameStatusUnknown = "";
+                    AutoCompleteBox.Text = "";
+                    AutoCompleteBoxU.Text = "";
+                    viewModel.UpdateLocations();
+
                     return;
                 }
                 viewModel.RegisterLocation(locNameStatusKnown);
+                viewModel.UpdateLocations();
+                AutoCompleteBox.Text = "";
+                AutoCompleteBoxU.Text = "";
                 return;
             }
 
@@ -640,11 +645,16 @@ namespace whereless
                 if (viewModel.Locations.Any(l => l.Name.Equals(locNameStatusUnknown) == true))
                 {
                     viewModel.ForceLocation(locNameStatusUnknown);
-                    locNameStatusUnknown = "";
-                    locNameStatusKnown = "";
+                    AutoCompleteBox.Text = "";
+                    AutoCompleteBoxU.Text = "";
+                    viewModel.UpdateLocations();
                     return;
                 }
                 viewModel.RegisterLocation(locNameStatusUnknown);
+                AutoCompleteBox.Text = "";
+                AutoCompleteBoxU.Text = "";
+
+                viewModel.UpdateLocations();
                 return;
             }
 

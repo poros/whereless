@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using whereless.ViewModel;
 
 namespace whereless
 {
@@ -17,6 +18,7 @@ namespace whereless
             timer.Interval = 1000; // 1 second updates
             timer.Elapsed += timer_Elapsed;
             timer.Start();
+  
         }
 
         public DateTime Now
@@ -28,6 +30,7 @@ namespace whereless
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs("Now"));
+                
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

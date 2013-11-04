@@ -90,6 +90,8 @@ namespace whereless
                 MessageBox.Show("Activity "+actionName+" added", "ACTIVITY ADDED",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
+                viewModel.UpdateLocations();
+
                 this.Close();
             }
 

@@ -65,6 +65,8 @@ namespace whereless
             //                     MessageBoxIcon.Question);
 
             viewModel.DeleteActivityFromLocation(viewModel.CurrentLocation.Name, int.Parse(((Button)sender).Content.ToString()));
+            
+            viewModel.UpdateLocations();
         }
 
 
@@ -91,6 +93,7 @@ namespace whereless
         private void Buotton_ForceUn(object sender, RoutedEventArgs e)
         {
             WherelessViewModel viewModel = WherelessViewModel.GetInstance();
+            viewModel.UpdateLocations();
 
             viewModel.ForceUnknown();
         }
@@ -108,12 +111,22 @@ namespace whereless
                 if (viewModel.Locations.Any(l => l.Name.Equals(locNameStatusKnown) == true))
                 {
                     viewModel.ForceLocation(locNameStatusKnown);
-                    locNameStatusKnown = "";
-                    locNameStatusUnknown = "";
+                    AutoCompleteBox.Text = "";
+                    AutoCompleteBoxU.Text = "";
+                    
+                    viewModel.UpdateLocations();
+
                     return;
                 }
                 viewModel.RegisterLocation(locNameStatusKnown);
+
+                AutoCompleteBox.Text = "";
+                AutoCompleteBoxU.Text = "";
+
+                viewModel.UpdateLocations();
+
                 return;
+
             }
 
 
@@ -123,11 +136,15 @@ namespace whereless
                 if (viewModel.Locations.Any(l => l.Name.Equals(locNameStatusUnknown) == true))
                 {
                     viewModel.ForceLocation(locNameStatusUnknown);
-                    locNameStatusUnknown = "";
-                    locNameStatusKnown = "";
+                    AutoCompleteBox.Text = "";
+                    AutoCompleteBoxU.Text = "";
+                    viewModel.UpdateLocations();
                     return;
                 }
                 viewModel.RegisterLocation(locNameStatusUnknown);
+                viewModel.UpdateLocations();
+                AutoCompleteBox.Text = "";
+                AutoCompleteBoxU.Text = "";
                 return;
             }   
             
@@ -141,6 +158,7 @@ namespace whereless
 
             string loc = ((Button) sender).Content.ToString();
             viewModel.ForceLocation(loc);
+            viewModel.UpdateLocations();
             return;
         }
 
@@ -159,7 +177,17 @@ namespace whereless
 
         private void DeleteLocation(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            WherelessViewModel viewModel = WherelessViewModel.GetInstance();
+
+            string loc = ((Button)sender).Content.ToString();
+            
+            viewModel.DeleteLocation(loc);
+           Thread.Sleep(100);
+            viewModel.UpdateLocations();
+            return;
+            
+            
+            
         }
 
 
@@ -174,6 +202,8 @@ namespace whereless
                                  MessageBoxIcon.Question);
 
             viewModel.DeleteActivityFromLocation(location, int.Parse(((Button)sender).Content.ToString()));
+            
+            viewModel.UpdateLocations();
         }
     }
 }
