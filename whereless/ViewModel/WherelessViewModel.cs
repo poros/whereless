@@ -279,6 +279,48 @@ namespace whereless.ViewModel
             ThreadPool.QueueUserWorkItem(new WaitCallback(DeleteActivityFromLocationCallback), info);
         }
 
+        public class DeleteLocationInfo
+        {
+            public string locationName;
+        
+            public DeleteLocationInfo(string locationName)
+            {
+                this.locationName = locationName;
+            }
+        }
+
+        public void DeleteLocationCallback(Object toCastInfo)
+        {
+            bool paused = false;
+            var info = (DeleteLocationInfo)toCastInfo;
+            if (info.locationName.Equals(CurrentLocation.Name))
+            {
+                ForceUnknown();
+                PauseService();
+                paused = true;
+            }
+            using (var uow = ModelHelper.GetUnitOfWork())
+            {
+                Location loc = uow.GetLocationByName(info.locationName);
+                if (loc != null)
+                {
+                    uow.Delete(loc);
+                }
+                uow.Commit();
+            }
+            if (paused)
+            {
+                PlayService();
+                ForceUnknown();
+            }
+        }
+
+        public void DeleteLocation(string locationName)
+        {
+            DeleteLocationInfo info = new DeleteLocationInfo(locationName);
+            ThreadPool.QueueUserWorkItem(new WaitCallback(DeleteLocationCallback), info);
+        }
+
 
         public void setWindowStatus(WindowsStat ws)
         {
