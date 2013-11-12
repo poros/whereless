@@ -14,7 +14,7 @@ namespace whereless.LocalizationService.Localizer
     public class BestLocalization : LocalizationAlgorithm
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(BestLocalization));
-        private static readonly ulong LearningTresh = 15UL;
+        private static readonly ulong LearningTresh = 15UL; //it was 15UL
 
         public override void Initialize(IList<IMeasure> input, ref Location currLocation, ref bool unknown)
         {

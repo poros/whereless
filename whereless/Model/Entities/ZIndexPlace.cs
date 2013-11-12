@@ -25,7 +25,7 @@ namespace whereless.Model.Entities
         // define the penalty in terms of standard deviation for just discovered networks
         private static readonly double bigZ = 2D;
         // defines the range of input acceptability (99.99% -> 1.96D, 68.2% -> 1)
-        private static readonly double k = 8D;
+        private static readonly double k = 4D;
         
 
         private IDictionary<string, Network> _networks;
