@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading;
+using System.Windows;
 using log4net;
 using System.Linq;
 using whereless.LocalizationService;
@@ -200,6 +201,7 @@ namespace whereless.ViewModel
                 this.pathfile = pathfile;
                 this.argument = argument;
                 this.activityType = activityType;
+
             }
         }
 
@@ -232,7 +234,7 @@ namespace whereless.ViewModel
         public void AddActivityToLocation(string locationName, string activityName, string pathfile, string argument, string activityType)
         {
             var info = new AddActivityToLocationInfo(
-                locationName, activityName, pathfile, argument, activityName);
+                locationName, activityName, pathfile, argument, activityType);
             ThreadPool.QueueUserWorkItem(new WaitCallback(AddActivityToLocationCallback), info);
         }
 

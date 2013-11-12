@@ -255,7 +255,7 @@
 
                         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" 
             			        Text="{Binding CurrentLocation.Name, Source={StaticResource ViewModel}}"
-            			        VerticalAlignment="Top" Height="50" Width="303" Canvas.Left="150" Canvas.Top="50" FontSize="46" FontWeight="Bold" FontFamily="Mono" TextAlignment="Left"/>
+            			        VerticalAlignment="Top" Height="50" Width="339" Canvas.Left="132" Canvas.Top="50" FontSize="46" FontWeight="Bold" FontFamily="Mono" TextAlignment="Left"/>
 
                     </Canvas>
 
